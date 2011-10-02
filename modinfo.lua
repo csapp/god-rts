@@ -3,7 +3,7 @@ local modinfo = {
 	shortname = "Gods",
 	game = "Gods RTS mod",
 	shortgame = "Gods",
-	description = "Team Not Enough Minerals SE 4GP6 Capstone game",
+	description = "Team Not Enough Minerals SE 4GP6 Capstone game.",
 	url = "",
 	
 	modtype = "1",
