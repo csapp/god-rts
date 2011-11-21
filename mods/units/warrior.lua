@@ -10,6 +10,15 @@ local unitDef  =  {
     TEDClass = "TANK",
     UnitName = "warrior",
     script = "warriorscript.lua",
+
+sounds = {
+  select = {
+		[1] = "whistle",
+	},
+  ok = {
+		[1] = "marching",
+	},
+},
     
 --Unit limitations and properties
     BuildTime = 1000,
@@ -59,3 +68,6 @@ local unitDef  =  {
 }
 
 return lowerkeys({ [unitName]  =  unitDef })
+
+
+
