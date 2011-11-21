@@ -1,0 +1,5 @@
+DELIVERABLE 3: Implementation of some basic in-game content
+
+Map
+- The map was made with the new style Lua format. This format includes the start positions in the mapinfo.lua file instead of in a .smd file, so they won't show up in the regular Spring lobby on the map preview. Please select "Random Start Positions" when playing the map.
+- Still needs some work (it's pretty hilly), but it's a start :)
