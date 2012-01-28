@@ -3,6 +3,7 @@ local maxXP = {
     priest = 10,
 }
 
+-- XXX until we get some more units in game
 local morph = {
     warrior = "priest",
     priest = "warrior",
@@ -27,6 +28,7 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
+-- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, unitDefName, teamID)
     morphing[unitID] = 1
     local myX, myY, myZ = Spring.GetUnitBasePosition(unitID)
@@ -49,6 +51,10 @@ local function Morph(unitID, unitDefName, teamID)
         { CMD.ONOFF,      { 1 }, {} },
         { CMD.TRAJECTORY, { states.trajectory and 1 or 0 }, {} },
     })
+
+    -- Make new unit face in the same direction
+    local h = Spring.GetUnitHeading(unitID)
+    Spring.SetUnitRotation(newUnitID, 0, -h * math.pi / 32768, 0)
 
     SendToUnsynced("unit_morph_finished", unitID, newUnitID)
     Spring.SpawnCEG("blacksmoke", myX, myY, myZ)
@@ -75,7 +81,6 @@ else
 ------------------------------------------------------------
 
 function SelectSwap(cmd, oldID, newID)
-    Spring.Echo("hi there")
     local selUnits = Spring.GetSelectedUnits()
     for i, unitID in ipairs(selUnits) do
         if (unitID == oldID) then
@@ -86,18 +91,12 @@ function SelectSwap(cmd, oldID, newID)
     end
 end
 
-function gadget:RecvFromSynced(id, arg1, arg2)
-    Spring.Echo("in recv")
-    if id == 'unit_morph_finished' then
-        SelectSwap(arg1, arg2)
-    end
+function gadget:Initialize()
+    gadgetHandler:AddSyncAction("unit_morph_finished", SelectSwap)
 end
---function gadget:Initialize()
-    --gadgetHandler:AddSyncAction("unit_morph_finished", SelectSwap)
---end
 
---function gadget:Shutdown()
-    --gadgetHandler:RemoveSyncAction("unit_morph_finished")
---end
+function gadget:Shutdown()
+    gadgetHandler:RemoveSyncAction("unit_morph_finished")
+end
 
 end
