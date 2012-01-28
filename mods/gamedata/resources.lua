@@ -14,6 +14,8 @@ local resources =
 --			flare  =  'flare.tga',
 --			lightning  =  'lightning.tga',
 --			flame  =  'flame.tga',
+            cartooncloud = 'effects/cartooncloud.png',
+            levelup = 'effects/levelup.png',
 		}
 	}
 }
