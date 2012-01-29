@@ -6,19 +6,21 @@ local unitDef  =  {
     Category = "TANK SMALL NOTAIR NOTSUB",
     ObjectName = "warrior.s3o",
     name = "Warrior",
-    Side = "TANKS",
-    TEDClass = "TANK",
-    UnitName = "warrior",
     script = "warriorscript.lua",
 
-sounds = {
-  select = {
-		[1] = "whistle",
-	},
-  ok = {
-		[1] = "marching",
-	},
-},
+    customParams = {
+        morph_into = "priest",
+        max_xp = 5,
+    },
+
+    sounds = {
+      select = {
+            [1] = "whistle",
+        },
+      ok = {
+            [1] = "marching",
+        },
+    },
     
 --Unit limitations and properties
     BuildTime = 1000,

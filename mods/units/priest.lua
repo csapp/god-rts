@@ -8,14 +8,19 @@ local unitDef  =  {
     name = "Priest",
     script = "priestscript.lua",
 
-sounds = {
-  select = {
-		[1] = "whistle",
-	},
-  ok = {
-		[1] = "marching",
-	},
-},
+    customParams = {
+        morph_into = "warrior",
+        max_xp = 10,
+    },
+
+    sounds = {
+      select = {
+            [1] = "whistle",
+        },
+      ok = {
+            [1] = "marching",
+        },
+    },
     
 --Unit limitations and properties
     BuildTime = 1000,
