@@ -4,6 +4,7 @@
 -- LuaRules/Gadgets/unit_transport_ai_buttons.lua
 
 include("LuaRules/Configs/customcmds.h.lua")
+include("LuaRules/Includes/utilities.lua")
 
 function gadget:GetInfo()
     return {
@@ -23,8 +24,6 @@ end
 
 
 -- Speed ups
-local EditUnitCmdDesc = Spring.EditUnitCmdDesc
-local FindUnitCmdDesc = Spring.FindUnitCmdDesc
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local GiveOrderToUnit = Spring.GiveOrderToUnit
 local GetGameSeconds = Spring.GetGameSeconds
@@ -40,22 +39,35 @@ local convertCmd = {
 }
 
 local converting = {}
-local VILLAGE_ID = UnitDefNames["warrior"].id -- XXX change to village when unitdef is added
+local convert_pending = {}
+
+-- XXX change to "village" when unitdef is added
+local VILLAGE_ID = UnitDefNames["warrior"].id 
+local CONVERT_DISTANCE = 50
 
 local function StartConvert(clergyID, villageID)
-    local villageX, villageY, villageZ = Spring.GetUnitBasePosition(villageID)
-    GiveOrderToUnit(clergyID, CMD.MOVE, {villageX, villageY, villageZ}, {}) 
-    -- wait til the unit gets there
+    convert_pending[clergyID] = nil
     converting[villageID] = {time = Spring.GetGameSeconds(),
                              clergyID = clergyID}
     Spring.Echo("Beginning convert")
-    -- Display some kind of status bar over the clergy's head
+    -- TODO Display some kind of status bar over the clergy's head
 end
 
 local function FinishConvert(clergyID, villageID)
     Spring.Echo("Convert finished!")
     converting[villageID] = nil
-    -- Align the village with the clergyman's team
+    -- Spring.TransferUnit(villageID, Spring.GetUnitTeam(clergyID))
+end
+
+local function CancelConvert(clergyID)
+    Spring.Echo("canceling convert")
+    convert_pending[clergyID] = nil
+    for villageID, info in pairs(converting) do
+        if info['clergyID'] == clergyID then
+            converting[villageID] = nil
+            break
+        end
+    end
 end
 
 function gadget:Initialize()
@@ -71,8 +83,20 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
     end
 end
 
+function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
+    if unitDefID ~= UnitDefNames["priest"].id then -- XXX add others
+        return true
+    end
+
+    if cmdID ~= CMD_CONVERT and convert_pending[unitID] == nil then
+        CancelConvert(unitID)
+    end
+
+    return true
+end
+
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
-    if (not cmdID == CMD_CONVERT) then
+    if cmdID ~= CMD_CONVERT then
         return false
     end
 
@@ -81,23 +105,45 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
         return false
     end
 
-    --if Spring.GetUnitNeutral(villageID) and not converting[villageID] then
-    if not converting[villageID] then
-        StartConvert(unitID, villageID)
-        return true, false
+    --if not Spring.GetUnitNeutral(villageID) or converting[villageID] then
+    if converting[villageID] then
+        return false
     end
 
-    return false
+    local villageX, villageY, villageZ = Spring.GetUnitBasePosition(villageID)
+
+    if distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
+        -- XXX If this happens, we start, cancel and start again.
+        -- Seems to be ok but I'm not sure why this happens
+        StartConvert(unitID, villageID)
+    else
+        convert_pending[unitID] = villageID
+        GiveOrderToUnit(unitID, CMD.MOVE, {villageX, villageY, villageZ}, {}) 
+    end
+    return true, false
 end
     
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
     if unitDefID == "priest" then -- XXX add other clergy
-        for villageID, info in pairs(converting) do
-            if info['clergyID'] == unitID then
-                converting[villageID] = nil
-                break
-            end
+        CancelConvert(unitID)
+    end
+end
+
+function gadget:UnitCmdDone(unitID, unitDefID, teamID, cmdID, cmdTag)
+    local villageID = convert_pending[unitID]
+    if not villageID then
+        return
+    end
+
+    if distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
+        --if not Spring.GetUnitNeutral(villageID) or converting[villageID] then
+        if converting[villageID] then
+            CancelConvert(unitID)
+        else
+            StartConvert(unitID, villageID)
         end
+    else
+        CancelConvert(unitID)
     end
 end
 
@@ -106,13 +152,12 @@ function gadget:GameFrame(n)
         return
     end
     local curTime = GetGameSeconds()
-    local startTime, clergyID = nil, nil
     for villageID, info in pairs(converting) do
         
         -- XXX should we get this value every time or save this value in the converting table?
         local villageConvertTime = 10 -- XXX change to individual village convert time
 
-        startTime, clergyID = info['time'], info['clergyID']
+        local startTime, clergyID = info['time'], info['clergyID']
         if curTime - startTime >= villageConvertTime then 
             FinishConvert(clergyID, villageID)
         end

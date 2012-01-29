@@ -97,3 +97,9 @@ function table.contains(table, element)
 	return false 
 end
 
+function distance_between_units(unitID1, unitID2)
+    local u1x, u1y, u1z = Spring.GetUnitBasePosition(unitID1)
+    local u2x, u2y, u2z = Spring.GetUnitBasePosition(unitID2)
+    local dx, dy, dz = u2x-u1x, u2y-u1y, u2z-u1z
+    return math.sqrt(dx^2 + dy^2 + dz^2)
+end
