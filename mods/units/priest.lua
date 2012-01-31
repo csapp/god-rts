@@ -4,12 +4,15 @@ local unitDef  =  {
 --Internal settings
     BuildPic = "filename.bmp",
     Category = "TANK SMALL NOTAIR NOTSUB",
-    ObjectName = "warrior.s3o",
+    ObjectName = "priest.s3o",
     name = "Priest",
     script = "priestscript.lua",
+    builder = true,
+    cancapture = true,
+    capturespeed = 900,
 
     customParams = {
-        morph_into = "warrior",
+        morph_into = "prophet",
         max_xp = 10,
     },
 

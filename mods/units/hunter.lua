@@ -1,15 +1,15 @@
-local unitName  =  "warrior"
+local unitName  =  "hunter"
 
 local unitDef  =  {
 --Internal settings
     BuildPic = "filename.bmp",
     Category = "TANK SMALL NOTAIR NOTSUB",
-    ObjectName = "warrior.s3o",
-    name = "Warrior",
-    script = "warriorscript.lua",
+    ObjectName = "hunter.s3o",
+    name = "hunter",
+    script = "hunterscript.lua",
 
     customParams = {
-        morph_into = "general",
+        morph_into = "marksman",
         max_xp = 5,
     },
 
@@ -24,7 +24,7 @@ local unitDef  =  {
     
 --Unit limitations and properties
     BuildTime = 1000,
-    Description = "An awesomely powerful warrior",
+    Description = "An awesomely powerful hunter",
     MaxDamage = 800,
     RadarDistance = 0,
     SightDistance = 400,
