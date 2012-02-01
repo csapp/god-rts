@@ -16,11 +16,9 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
-local morphing = {}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, morphInto, teamID)
-    morphing[unitID] = 1
     local myX, myY, myZ = Spring.GetUnitBasePosition(unitID)
     local newUnitID = Spring.CreateUnit(morphInto, myX, myY, myZ, 0, teamID)
 
@@ -50,16 +48,18 @@ local function Morph(unitID, morphInto, teamID)
     Spring.SpawnCEG("blacksmoke", myX, myY, myZ)
     Spring.SpawnCEG("levelup", myX, myY, myZ)
     Spring.DestroyUnit(unitID, false, true)
-    morphing[unitID] = nil 
 end
 
 local function AddXP(unitID, unitDefID, teamID)
     local curXP = Spring.GetUnitExperience(unitID)
-    curXP = curXP + 1
-    Spring.SetUnitExperience(unitID, curXP)
     local unitDef = UnitDefs[unitDefID]
     local max_xp = tonumber(unitDef.customParams.max_xp)
-    if max_xp and curXP >= max_xp and not morphing[unitID] then
+    if not max_xp or curXP >= max_xp then
+        return
+    end
+    curXP = curXP + 1
+    Spring.SetUnitExperience(unitID, curXP)
+    if max_xp and curXP >= max_xp then
         Morph(unitID, unitDef.customParams.morph_into, teamID)
         return
     end
