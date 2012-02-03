@@ -64,48 +64,8 @@ local Sounds = {
             maxconcurrent = 1,
         },
 
-        birdjunglebirds = {
-            file = "sounds/birdjunglebirds.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        birds canary = {
-            file = "sounds/birds canary.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        birdsmacaw = {
-            file = "sounds/birdsmacaw.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
         birdsong = {
             file = "sounds/birdsong.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        birdsongmorning = {
-            file = "sounds/birdsongmorning.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        birdtrill = {
-            file = "sounds/birdtrill.wav",
             gain = 1.0,
             pitch = 1.0,
             priority = 0,
@@ -176,38 +136,6 @@ local Sounds = {
             maxconcurrent = 1,
         },
 
-        crowdtalking1 = {
-            file = "sounds/crowdtalking1.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        crows = {
-            file = "sounds/crows.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        dogdrinking = {
-            file = "sounds/dogdrinking.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        dogsbarking = {
-            file = "sounds/dogsbarking.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
         doorslamming = {
             file = "sounds/doorslamming.wav",
             gain = 1.0,
@@ -240,14 +168,6 @@ local Sounds = {
             maxconcurrent = 1,
         },
 
-        fir3 = {
-            file = "sounds/fir3.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
         fire1 = {
             file = "sounds/fire1.wav",
             gain = 1.0,
@@ -258,30 +178,6 @@ local Sounds = {
 
         fire2 = {
             file = "sounds/fire2.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        footsteps1 = {
-            file = "sounds/footsteps1.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        footsteps2 = {
-            file = "sounds/footsteps2.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        footsteps3 = {
-            file = "sounds/footsteps3.wav",
             gain = 1.0,
             pitch = 1.0,
             priority = 0,
@@ -322,22 +218,6 @@ local Sounds = {
 
         hammermetal = {
             file = "sounds/hammermetal.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        icecracking = {
-            file = "sounds/icecracking.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        icefootsteps = {
-            file = "sounds/icefootsteps.wav",
             gain = 1.0,
             pitch = 1.0,
             priority = 0,
@@ -392,24 +272,8 @@ local Sounds = {
             maxconcurrent = 1,
         },
 
-        rain1 = {
-            file = "sounds/rain1.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
         rain2 = {
             file = "sounds/rain2.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        rain3 = {
-            file = "sounds/rain3.wav",
             gain = 1.0,
             pitch = 1.0,
             priority = 0,
@@ -434,22 +298,6 @@ local Sounds = {
 
         river2 = {
             file = "sounds/river2.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        river3 = {
-            file = "sounds/river3.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        river4 = {
-            file = "sounds/river4.wav",
             gain = 1.0,
             pitch = 1.0,
             priority = 0,
@@ -576,38 +424,6 @@ local Sounds = {
             maxconcurrent = 1,
         },
 
-        walking snow = {
-            file = "sounds/walking snow.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        waterdripping = {
-            file = "sounds/waterdripping.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        wave = {
-            file = "sounds/wave.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
-        wave2 = {
-            file = "sounds/wave2.wav",
-            gain = 1.0,
-            pitch = 1.0,
-            priority = 0,
-            maxconcurrent = 1,
-        },
-
         wave3 = {
             file = "sounds/wave3.wav",
             gain = 1.0,
@@ -634,6 +450,166 @@ local Sounds = {
 
         womancrying = {
             file = "sounds/womancrying.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        aahhh = {
+            file = "sounds/aahhh.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        bottle_pop_1 = {
+            file = "sounds/bottle_pop_1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        bottle_pop_2 = {
+            file = "sounds/bottle_pop_2.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        bottle_pop_3 = {
+            file = "sounds/bottle_pop_3.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        come_on_2 = {
+            file = "sounds/come_on_2.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        come_on_3 = {
+            file = "sounds/come_on_3.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        here-i-come = {
+            file = "sounds/here-i-come.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        hmmm1 = {
+            file = "sounds/hmmm1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        horse_1 = {
+            file = "sounds/horse_1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        huh_1 = {
+            file = "sounds/huh_1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        huh_2 = {
+            file = "sounds/huh_2.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        sawing-2 = {
+            file = "sounds/sawing-2.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        sharpening-knife-1 = {
+            file = "sounds/sharpening-knife-1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        whooosh = {
+            file = "sounds/whoosh.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        wine-glass-clink-1 = {
+            file = "sounds/wine-glass-clink-1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        wine-glass-clink-2 = {
+            file = "sounds/wine-glass-clink-2.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        yes_1 = {
+            file = "sounds/yes_1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        yes_2 = {
+            file = "sounds/yes_2.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        you_got_it_1 = {
+            file = "sounds/you_got_it_1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+        },
+
+        you_got_it_2 = {
+            file = "sounds/you_got_it_2.wav",
             gain = 1.0,
             pitch = 1.0,
             priority = 0,
