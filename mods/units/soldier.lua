@@ -4,23 +4,21 @@ local unitDef  =  {
 --Internal settings
     BuildPic = "filename.bmp",
     Category = "TANK SMALL NOTAIR NOTSUB",
-    ObjectName = "soldier.s3o",
-    name = "soldier",
+    ObjectName = "Soldier.S3O",
+    name = "Soldier",
+    Side = "TANKS",
+    TEDClass = "TANK",
+    UnitName = "soldier",
     script = "soldierscript.lua",
 
-    customParams = {
-        morph_into = "warrior",
-        max_xp = 5,
-    },
-
-    sounds = {
-      select = {
-            [1] = "whistle",
-        },
-      ok = {
-            [1] = "marching",
-        },
-    },
+sounds = {
+  select = {
+		[1] = "whistle",
+	},
+  ok = {
+		[1] = "marching",
+	},
+},
     
 --Unit limitations and properties
     BuildTime = 1000,
