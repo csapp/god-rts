@@ -4,7 +4,7 @@ local unitDef =
 {
 -- Internal settings	
 	Category = "LAND",
-	ObjectName = "warrior.s3o",	
+	ObjectName = "village.s3o",	
 	TEDClass = "PLANT",
 	script = "smallvillage.lua",
 	buildPic = "placeholder.png",
@@ -17,7 +17,6 @@ local unitDef =
 	SightDistance = 400,	
 	Upright = 1,	
 	levelground = 1,
-    capturable = true,
 	--cost
 	buildCostMetal = 0,
 	buildCostEnergy = 0,
