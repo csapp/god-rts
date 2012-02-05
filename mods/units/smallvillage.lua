@@ -4,7 +4,8 @@ local unitDef =
 {
 -- Internal settings	
 	Category = "LAND",
-	ObjectName = "village.s3o",	
+	ObjectName = "village.s3o",
+	name = "smallvillage",	
 	TEDClass = "PLANT",
 	script = "smallvillage.lua",
 	buildPic = "placeholder.png",
@@ -27,7 +28,7 @@ local unitDef =
 	MetalStorage = 0,
 	EnergyMake = 0, 
 	MakesMetal = 0, 
-	MetalMake = 10,	
+	--MetalMake = 10,
 -- Pathfinding and related
 	FootprintX = 5,
 	FootprintZ = 5,

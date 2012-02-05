@@ -26,12 +26,12 @@ local counterMaxValue = 5 --Denotes the maximum value for the counter,
 					      --since the counter starts at 0 and ends at 4 this 
 						  --interval will be 5 seconds long
 
-local teamID = {}						  
---local GetTeamResources = Spring.GetTeamResources(teamID)
+local playerID = {}						  
+--local GetTeamResources = Spring.GetTeamResources(playerID)
 
 local function getPlayerList()
 	for index, ID in pairs(Spring.GetPlayerList()) do
-		teamID[index] = ID
+		playerID[index] = ID
 		end
 end
 		
@@ -42,19 +42,19 @@ function gadget:Initialize()
 	getPlayerList()
 end
 
-local function getResources(teamID)
-	local eCurr, eStor = Spring.GetTeamResources(teamID, "energy")
-	local mCurr, mStor = Spring.GetTeamResources(teamID, "metal")
-	--Spring.Echo("Metal = " .. mCurr .. " Energy = " .. eCurr)
-	--Spring.Echo("MetalStorage = " .. mStor .. " EnergyStorage = " .. eStor)
+local function getResources(playerID)
+	local eCurr, eStor = Spring.GetTeamResources(playerID, "energy")
+	local mCurr, mStor = Spring.GetTeamResources(playerID, "metal")
+	Spring.Echo("Metal = " .. mCurr .. " Energy = " .. eCurr)
+	Spring.Echo("MetalStorage = " .. mStor .. " EnergyStorage = " .. eStor)
 end
 
-local function generateVillagers(teamID)
+local function generateVillagers(playerID)
 	return 5 --enter formula that calculates how much villagers to generate for the player
 	--Can't properly implement this until we have a list of villages under the players control
 end
 
---local function generateFaith(teamID)
+--local function generateFaith(playerID)
 	--idea is to add a certain amount of faith and then 
 	--add/subtract based on the outcome of several cases
 	
@@ -69,10 +69,10 @@ function gadget:GameFrame(n)
 	end
 	if (counter == counterMaxValue) then --every five seconds generate resources
 		--Spring.Echo("Adding Resources")
-		for i=1, #teamID do
-			Spring.AddTeamResource(teamID[i], "metal", generateVillagers(teamID[i]))
-			Spring.AddTeamResource(teamID[i], "energy", generateVillagers(teamID[i]))
-			--getResources(teamID[i]) For Debugging only
+		for i=1, #playerID do
+			Spring.AddTeamResource(playerID[i], "metal", generateVillagers(playerID[i]))
+			Spring.AddTeamResource(playerID[i], "energy", generateVillagers(playerID[i]))
+			getResources(playerID[i])-- For Debugging only
 		end
 		counter = 0
 	end
