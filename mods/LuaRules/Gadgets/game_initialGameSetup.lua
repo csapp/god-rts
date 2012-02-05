@@ -16,28 +16,30 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
-local teamID = {}	
-local sx, sy, sz = 0				  
-local listOfUnits = {"Soldier", "Warrior", "Knight"}
+local team_positions = {}	
+--local sx, sy, sz = 0				  
+local listOfUnits = {"Soldier", "hunter", "Knight"}
 
 local function getPlayerAndStartLocation()
 	for index, ID in pairs(Spring.GetPlayerList()) do
-        sx,sy,sz = Spring.GetTeamStartPosition(ID)
-		teamID[index] = {}
-			teamID[index][1] = ID
-			teamID[index][2] = sx
-			teamID[index][3] = sy
-			teamID[index][4] = sz
-			Spring.Echo("Index: ".. index)
+        Spring.Echo(index .. ' ' .. ID)
+        local sx,sy,sz = Spring.GetTeamStartPosition(ID)
+        team_positions[ID] = {sx,sy,sz}
+		--team_positions[index] = {}
+			--team_positions[index][1] = ID
+			--team_positions[index][2] = sx
+			--team_positions[index][3] = sy
+			--team_positions[index][4] = sz
+			--Spring.Echo("Index: ".. index)
 		end
     end
 
 
 
-local function spawnInitialUnits(teamID)
-	for i=1, #teamID do	--------- For each row
+local function spawnInitialUnits()
+	for team_id, start_pos in pairs(team_positions) do	--------- For each row
 		for j=1, #listOfUnits do	-- for each unit in this list
-			Spring.CreateUnit(listOfUnits[j], teamID[i][2] + 10*j, teamID[i][3], teamID[i][4] + 10*j, 0, teamID[i][1]) 		-- spawn unit at this location
+			Spring.CreateUnit(listOfUnits[j], start_pos[1], start_pos[2], start_pos[3], 0, team_id) 		-- spawn unit at this location
 		end
 	end
 end
