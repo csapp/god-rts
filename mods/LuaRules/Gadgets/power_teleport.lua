@@ -1,0 +1,62 @@
+include("LuaRules/Configs/customcmds.h.lua")
+
+function gadget:GetInfo()
+    return {
+        name = "God power: teleport",
+        desc = "Gadget to control god teleport power",
+        author = "cam",
+        date = "2012-02-04",
+        license = "Public Domain",
+        layer = 0,
+        enabled = true
+    }
+end
+
+------------------------------------------------------------
+-- SYNCED
+------------------------------------------------------------
+if (gadgetHandler:IsSyncedCode()) then
+
+local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
+
+local teleportCmd = {
+      id      = CMD_TELEPORT,
+      name    = "Teleport",
+      action  = "teleport",
+      type    = CMDTYPE.ICON_MAP,
+      tooltip = "Teleport to another location on the map",
+      params = {},
+}
+
+local god_unitdef_id = UnitDefNames["god"].id
+
+function gadget:Initialize()
+    gadgetHandler:RegisterCMDID(CMD_TELEPORT)
+end
+
+function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
+    if unitDefID == god_unitdef_id then
+        InsertUnitCmdDesc(unitID, CMD_TELEPORT, teleportCmd)
+    end
+end
+
+function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
+    if cmdID ~= CMD_TELEPORT then
+        return false
+    end
+
+    local destX, destY, destZ = cmdParams[1], cmdParams[2], cmdParams[3]
+    local curX, curY, curZ = Spring.GetUnitBasePosition(unitID)
+    Spring.SpawnCEG("blacksmoke", curX, curY, curZ)
+    Spring.SetUnitPosition(unitID, destX, destY, destZ)
+    Spring.SpawnCEG("blacksmoke", destX, destY, destZ)
+end
+
+else
+------------------------------------------------------------
+-- UNSYNCED
+------------------------------------------------------------
+
+return false
+
+end
