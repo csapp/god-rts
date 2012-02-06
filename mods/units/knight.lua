@@ -13,10 +13,11 @@ local unitDef  =  {
 
     sounds = {
       select = {
-            [1] = "whistle",
+            [1] = "horse_1",
+            [1] = "Horsesnorts4",
         },
       ok = {
-            [1] = "marching",
+            [1] = "Horsegrunt1",
         },
     },
     

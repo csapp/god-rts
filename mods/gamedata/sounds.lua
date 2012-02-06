@@ -614,6 +614,48 @@ local Sounds = {
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
+
+        fanfare = {
+            file = "sounds/fanfare.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+
+        Horsegrunt1 = {
+            file = "sounds/Horsegrunt1.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+
+        Horsesnorts4 = {
+            file = "sounds/Horsesnorts4.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+
+        Mansighing2 = {
+            file = "sounds/Mansighing2.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+
+        Grunt = {
+            file = "sounds/Grunt.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
+
+        Clearingthroat = {
+            file = "sounds/Clearingthroat.wav",
+            gain = 1.0,
+            pitch = 1.0,
+            priority = 0,
+            maxconcurrent = 1,
         },
 
 --WEAPONS
