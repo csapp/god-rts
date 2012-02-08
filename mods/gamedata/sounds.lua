@@ -614,6 +614,7 @@ local Sounds = {
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
+        },
 
         fanfare = {
             file = "sounds/fanfare.wav",
@@ -621,6 +622,7 @@ local Sounds = {
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
+        },
 
         Horsegrunt1 = {
             file = "sounds/Horsegrunt1.wav",
@@ -628,6 +630,7 @@ local Sounds = {
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
+        },
 
         Horsesnorts4 = {
             file = "sounds/Horsesnorts4.wav",
@@ -635,6 +638,7 @@ local Sounds = {
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
+        },
 
         Mansighing2 = {
             file = "sounds/Mansighing2.wav",
@@ -642,6 +646,7 @@ local Sounds = {
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
+        },
 
         Grunt = {
             file = "sounds/Grunt.wav",
@@ -649,6 +654,7 @@ local Sounds = {
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
+        },
 
         Clearingthroat = {
             file = "sounds/Clearingthroat.wav",
@@ -688,8 +694,10 @@ local Sounds = {
 			priority = 15, --- very high
 			maxconcurrent = 1, ---only once
 			--maxdist = 500, --- only when near
-		},]]
+		},]]--
+
 	},
+
 }
 
 return Sounds
