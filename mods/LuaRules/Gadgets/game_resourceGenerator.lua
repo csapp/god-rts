@@ -3,6 +3,7 @@ function gadget:GetInfo()
     return {
         name = "Resource Generator",
         desc = "Gadget that generates resources for players.",
+        tickets = "#60",
         author = "Mani",
         date = "2012-01-31",
         license = "Public Domain",

@@ -3,6 +3,7 @@ function gadget:GetInfo()
     return {
         name = "Unit XP handler",
         desc = "Gadget to handle unit XP and leveling up",
+        tickets = "#37, #41",
         author = "cam",
         date = "2012-01-25",
         license = "Public Domain",

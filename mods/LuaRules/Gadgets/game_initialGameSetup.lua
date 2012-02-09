@@ -3,6 +3,7 @@ function gadget:GetInfo()
     return {
         name = "Initial Setup",
         desc = "Gadget that sets up the initial state of the game.",
+        tickets = "#60, #61",
         author = "Mani",
         date = "2012-04-02",
         license = "Public Domain",
