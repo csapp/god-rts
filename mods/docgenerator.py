@@ -1,6 +1,6 @@
 """
-This will automatically generate docs that we can store
-for our widgets and gadgets that we can store in Trac
+This script will automatically generate docs for our
+Trac code overview.
 
 Run this file from your top-level mod directory
 """
@@ -8,9 +8,6 @@ Run this file from your top-level mod directory
 import os
 
 class SpringDocGenerator(object):
-
-    def __init__(self):
-        pass
 
     def get_info(self, filepath, doctype):
         info = {}
@@ -27,13 +24,11 @@ class SpringDocGenerator(object):
                     break
                 continue
             name, value = line_parts
-            #info[name.lower()] = value[1:-2]
             info[name.lower()] = value.strip(',').strip("'").strip('"')
         infile.close()
         return info
 
     def generate_docs(self, dir, doctype):
-        #self.docfile.write("== %ss ==\n" % doctype.title())
         outfile = open('%sdocs.txt' % doctype, 'w')
         for f in os.listdir(dir):
             if f.startswith('.') or not f.endswith('.lua'):
@@ -46,7 +41,7 @@ class SpringDocGenerator(object):
             
             for key in ["desc", "tickets"]:
                 try:
-                    outfile.write("* %s: %s\n" % (key.title(), info[key]))
+                    outfile.write("* '''%s''': %s\n" % (key.title(), info[key]))
                 except KeyError:
                     pass
             outfile.write("* source:src/trunk/mods/%s\n\n" % path)
