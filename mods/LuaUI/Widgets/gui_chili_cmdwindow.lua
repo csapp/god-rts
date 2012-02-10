@@ -1,3 +1,5 @@
+-- This code is responsible for the commands window.
+
 -- Based on the widget written by Sunspot for his Chili tutorial
 -- http://springrts.com/wiki/Lesson_3_:_Command_and_Build_commands_in_a_chili_window
 
@@ -13,6 +15,10 @@ function widget:GetInfo()
 		handler		= true,
 	}
 end
+
+-- Comment this out when you don't want to see debug messages.
+-- DEBUG = 0
+
 -- INCLUDES
 VFS.Include("LuaRules/Includes/utilities.lua")
 
@@ -48,14 +54,17 @@ function LayoutHandler(xIcons, yIcons, cmdCount, commands)
 	return "", xIcons, yIcons, {}, customCmds, {}, {}, {}, {}, reParamsCmds, {[1337]=9001}
 end
 
-function ClickFunc(chiliButton, x, y, button, mods) 
-	local index = Spring.GetCmdDescIndex(chiliButton.cmdid)
-	if (index) then
-		local left, right = (button == 1), (button == 3)
-		local alt, ctrl, meta, shift = mods.alt, mods.ctrl, mods.meta, mods.shift
-
-		if DEBUG then Spring.Echo("active command set to ", chiliButton.cmdid) end
-		Spring.SetActiveCommand(index, button, left, right, alt, ctrl, meta, shift)
+function ClickFunc(button) 
+	local _,_,left,_,right = Spring.GetMouseState()
+	local alt,ctrl,meta,shift = Spring.GetModKeyState()
+	local index = Spring.GetCmdDescIndex(button.cmdid)
+	if (left) then
+		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
+		Spring.SetActiveCommand(index,1,left,right,alt,ctrl,meta,shift)
+	end
+	if (right) then
+		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
+		Spring.SetActiveCommand(index,3,left,right,alt,ctrl,meta,shift)
 	end
 end
 
@@ -92,12 +101,18 @@ function createMyButton(cmd)
 			increaseRow = true
 		end	
 
+		local y_axis = 0;
+		if not texture then
+			y_axis = 38 * (container.ystep-1)
+		else
+			y_axis = 80 * (container.ystep-1)
+		end
 		
 		local color = {0,0,0,1}
 		local button = Chili.Button:New {
 			parent = container,
 			x = 80 * (result-1),
-			y = 38 * (container.ystep-1),
+			y = y_axis,
 			padding = {5, 5, 5, 5},
 			margin = {0, 0, 0, 0},
 			minWidth = 40,
@@ -161,7 +176,6 @@ function loadPanel()
 	end
 end
 
--- WIDGET CODE
 function widget:Initialize()
 	widgetHandler:ConfigLayoutHandler(LayoutHandler)
 	Spring.ForceLayoutUpdate()
@@ -215,16 +229,16 @@ function widget:Initialize()
 	}		
 	
 	window0 = Chili.Window:New{
-		x = '50%',
-		y = '15%',	
+		x = '80%',
+		y = '12%',	
 		dockable = true,
 		parent = screen0,
-		caption = "",
+		caption = "Commands",
 		draggable = true,
 		resizable = true,
 		dragUseGrip = true,
-		clientWidth = 400,
-		clientHeight = 200,
+		clientWidth = 250,
+		clientHeight = 400,
 		backgroundColor = {0,0,0,1},
 		skinName  = "DarkGlass",		
 		children = {commandWindow,stateCommandWindow,buildCommandWindow},
