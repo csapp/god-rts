@@ -44,10 +44,17 @@ local unitDef =
 	workerTime = 1,
 	buildoptions = 
 	{
-        --"soldier",
-        "warrior",
+        "soldier",
+        "horseman",
+        "hunter",
+        --"warrior",
         --"general",
 	},
+
+    -- Custom
+    customParams = {
+        convert_time = 10,
+    }
 }
 
 return lowerkeys({ [unitName] = unitDef })
