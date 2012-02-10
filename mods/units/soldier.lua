@@ -45,7 +45,7 @@ local unitDef  =  {
 	collisionVolumeTest = 1,
     
 --Energy and metal related
-    BuildCostEnergy = 100,
+    BuildCostEnergy = 0,
     BuildCostMetal = 0,
     
 --Pathfinding and related
