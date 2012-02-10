@@ -1,4 +1,3 @@
-include("LuaRules/Configs/customcmds.h.lua")
 
 function gadget:GetInfo()
     return {
@@ -18,6 +17,7 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
+include("LuaRules/Includes/customcmds.h.lua")
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 
 local teleportCmd = {

@@ -17,10 +17,15 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
+include("LuaRules/Includes/utilities.lua")
+include("LuaRules/Includes/msgs.h.lua")
+
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
 local GetUnitDefID = Spring.GetUnitDefID
 
+--local DEBUG = 1
+local morph_pending = {}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, morphInto, teamID)
@@ -55,31 +60,54 @@ local function Morph(unitID, morphInto, teamID)
     Spring.DestroyUnit(unitID, false, true)
 end
 
-local function AddXP(unitID, unitDefID, teamID)
+
+-- XXX polling like this sucks... hopefully there's a better way
+-- i'm doing it this way for now because there doesn't seem
+-- to be a message passing interface for synced code, so when
+-- i receive lua msgs for priest convert, etc. i can't morph
+-- because i'm in unsynced mode
+function gadget:GameFrame(n)
+    if n % 30 ~= 0 then return end
+    for unitID, morph_info in pairs(morph_pending) do
+        Morph(unitID, morph_info[1], morph_info[2])
+        morph_pending[unitID] = nil
+    end
+end
+
+local function AddXP(unitID, xp)
+    local unitDefID = GetUnitDefID(unitID)
+    local teamID = GetUnitTeam(unitID)
+    if unitDefID == nil or teamID == nil then return end
+
     local curXP = Spring.GetUnitExperience(unitID)
     local unitDef = UnitDefs[unitDefID]
     local max_xp = tonumber(unitDef.customParams.max_xp)
     if not max_xp or curXP >= max_xp then
         return
     end
-    curXP = curXP + 1
+    curXP = curXP + xp 
     Spring.SetUnitExperience(unitID, curXP)
+    if DEBUG then Spring.Echo("Unit XP at " .. curXP) end
     if max_xp and curXP >= max_xp then
-        Morph(unitID, unitDef.customParams.morph_into, teamID)
+        --Morph(unitID, unitDef.customParams.morph_into, teamID)
+        morph_pending[unitID] = {unitDef.customParams.morph_into, teamID}
         return
     end
-    if DEBUG then Spring.Echo("Unit XP at " .. curXP) end
 end
 
 function gadget:UnitDamaged(unitID, unitDefID, teamID, damage, paralyzer,
                             weaponID, attackerID)
-    local attackerDef = GetUnitDefID(attackerID)
-    local attackerTeam = GetUnitTeam(attackerID)
-    if attackerDef == nil or attackerTeam == nil then return end
-    AddXP(attackerID, attackerDef, attackerTeam)
+    AddXP(attackerID, damage)
 end
 
---TODO add XP for priest conversion
+function gadget:RecvLuaMsg(msg, playerID)
+    msg = split(msg, ",")
+    local msg_type = msg[1]
+    if msg_type == MSGS.CONVERT_FINISHED then
+        local clergyID = tonumber(msg[2])
+        AddXP(clergyID, 15) -- XXX get the XP to add from somewhere
+    end
+end
 
 else
 ------------------------------------------------------------

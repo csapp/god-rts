@@ -3,8 +3,6 @@
 -- and a gadget in zero-k
 -- LuaRules/Gadgets/unit_transport_ai_buttons.lua
 
-include("LuaRules/Configs/customcmds.h.lua")
-include("LuaRules/Includes/utilities.lua")
 
 function gadget:GetInfo()
     return {
@@ -23,6 +21,9 @@ if (not gadgetHandler:IsSyncedCode()) then
   return false
 end
 
+include("LuaRules/Includes/customcmds.h.lua")
+include("LuaRules/Includes/utilities.lua")
+include("LuaRules/Includes/msgs.h.lua")
 
 -- Speed ups
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
@@ -66,6 +67,7 @@ local function FinishConvert(clergyID, villageID)
     Spring.Echo("Convert finished!")
     converting[villageID] = nil
     Spring.TransferUnit(villageID, Spring.GetUnitTeam(clergyID))
+    Spring.SendLuaRulesMsg(MSGS.CONVERT_FINISHED..','..clergyID..","..villageID)
 end
 
 local function CancelConvert(clergyID)
