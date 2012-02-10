@@ -277,26 +277,9 @@ end
 
 
 function Object:ClearChildren()
-  --self:CallChildrenInverse("Dispose")
-
-  --FIXME instead of disposing perhaps just unlink from parent?
-  --FIXME clear hidden children too!
-
-  --// maske it faster
-  local old = self.preserveChildrenOrder
-  self.preserveChildrenOrder = false
-
-  --// remove all children  
-    for i=1,#self.children_hidden do
-      self:ShoweChild(self.children_hidden[i])
-    end
-
-    for i=1,#self.children do
-      self:RemoveChild(self.children[i])
-    end
-
-  --// restore old state
-  self.preserveChildrenOrder = old
+    -- From the Zero-K object.lua
+    self:CallChildrenInverse("Dispose")
+    self.children = {}
 end
 
 
