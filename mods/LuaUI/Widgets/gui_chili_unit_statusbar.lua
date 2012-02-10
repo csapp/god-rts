@@ -2,7 +2,7 @@
 function widget:GetInfo()
 	return {
 		name		= "Unit status bar",
-		desc		= "ChiliUi show status of the unit you are hovering over",
+		desc		= "ChiliUi show status of the unit you have selected",
 		author		= "Sunspot",
 		date		= "2011-06-18",
 		license     = "GNU GPL v2",
@@ -13,13 +13,13 @@ function widget:GetInfo()
 end
 
 -- Uncomment this to display debug messages:
-DEBUG = 0
+--DEBUG = 0
 
 -- INCLUDES
 VFS.Include("LuaRules/Includes/utilities.lua")
 
 -- CONSTANTS
-local XY = true
+local XY = false
 local Chili
 local Label
 local Window
@@ -34,54 +34,47 @@ local spGetMouseState			= Spring.GetMouseState
 local spTraceScreenRay			= Spring.TraceScreenRay
 local spGetUnitHealth			= Spring.GetUnitHealth
 local spGetUnitExp			    = Spring.GetUnitExperience
-local selected_units = Spring.GetSelectedUnits()
 
 -- SCRIPT FUNCTIONS
 function setUnitInfo(unit,x,y)
-
-	for _, unitID in pairs(selected_units) do
-		Spring.Echo("Unit ID:", unitID)
-		local health = Spring.GetUnitHealth(unitID)
-		Spring.Echo("Unit health:", health)
-	end
-
-
 	local unitInfoString = ""
-	--[[
 	local health, maxHealth, _, cpProgress, bProgress = spGetUnitHealth(unit)
 	if health and health ~= nil then
 		if DEBUG then Spring.Echo("health appended") end
-		unitInfoString = "HP: " .. unitInfoString .. math.floor(health) .. " / " .. maxHealth .. "      "
+		unitInfoString = "HP: " .. unitInfoString .. math.floor(health) .. " / " .. math.floor(maxHealth) .. "      "
 	end
-	]]--
-	if cpProgress ~= 0 and cpProgress ~= nil then
-		if DEBUG then Spring.Echo("capture appended") end
-		unitInfoString = unitInfoString .. "cpt " .. math.floor(cpProgress*100) .. "%" .. "      "
-	end
-	if bProgress ~= 1 and bProgress ~= nil then
-		if DEBUG then Spring.Echo("building appended") end
-		unitInfoString = unitInfoString .. "bld " .. math.floor(bProgress*100) .. "%"
-	end
+	--if cpProgress ~= 0 and cpProgress ~= nil then
+		--if DEBUG then Spring.Echo("capture appended") end
+		--unitInfoString = unitInfoString .. "cpt " .. math.floor(cpProgress*100) .. "%" .. "      "
+	--end
+	--if bProgress ~= 1 and bProgress ~= nil then
+		--if DEBUG then Spring.Echo("building appended") end
+		--unitInfoString = unitInfoString .. "bld " .. math.floor(bProgress*100) .. "%"
+	--end
 	local defId = Spring.GetUnitDefID(unit)
 	if(defId ~= nil) then
-		local weapons = UnitDefs[defId]["weapons"]
-		if DEBUG then Spring.Echo("units amount of weapons", #weapons) end
-		for i=1, #weapons do
-			local weaponDef = WeaponDefs[weapons[i]["weaponDef"]]
-			local damage = 0
-			local range = 0
-			for name,param in weaponDef:pairs() do
-				if(name == "range")then
-					range = param
-				end
-				if(name == "damages")then
-					damage = param[0]
-				end
-			end
-			unitInfoString = unitInfoString .. "      wp" .. i .. " D:" .. damage .. "-R:" .. range
-		end
-	end
-	if XY then unitInfoString = unitInfoString .. "      x:" .. x .. "   y:" .. y end
+        local unitDef = UnitDefs[defId]
+        unitInfoString = unitInfoString .. unitDef.name
+    end
+
+		--local weapons = UnitDefs[defId]["weapons"]
+		--if DEBUG then Spring.Echo("units amount of weapons", #weapons) end
+		--for i=1, #weapons do
+			--local weaponDef = WeaponDefs[weapons[i]["weaponDef"]]
+			--local damage = 0
+			--local range = 0
+			--for name,param in weaponDef:pairs() do
+				--if(name == "range")then
+					--range = param
+				--end
+				--if(name == "damages")then
+					--damage = param[0]
+				--end
+			--end
+			--unitInfoString = unitInfoString .. "      wp" .. i .. " D:" .. damage .. "-R:" .. range
+		--end
+	--end
+	--if XY then unitInfoString = unitInfoString .. "      x:" .. x .. "   y:" .. y end
 	test:SetCaption(unitInfoString)
 end
 
@@ -122,21 +115,40 @@ function widget:Initialize()
 	}	
 end
 
-function widget:Update(dt)
-	old_mx, old_my = mx,my
-	alt,_,meta,_ = spGetModKeyState()
-	mx,my = spGetMouseState()
-	local mousemoved = (mx ~= old_mx or my ~= old_my)
-	if mousemoved then
-		local type, data = spTraceScreenRay(mx, my)
-		if(type == "unit")then
-			setUnitInfo(data,mx,my)
-		else
-			if(test.caption ~= "") then
-				test:SetCaption("x:" .. mx .. "   y:" .. my)
-			end
-		end
-	end
+--function widget:Update(dt)
+	--old_mx, old_my = mx,my
+	--alt,_,meta,_ = spGetModKeyState()
+	--mx,my = spGetMouseState()
+	--local mousemoved = (mx ~= old_mx or my ~= old_my)
+	--if mousemoved then
+		--local type, data = spTraceScreenRay(mx, my)
+		--if(type == "unit")then
+			--setUnitInfo(data,mx,my)
+		--else
+			--if(test.caption ~= "") then
+				--test:SetCaption("x:" .. mx .. "   y:" .. my)
+			--end
+		--end
+	--end
+--end
+
+local game_start = false
+
+function widget:GameStart()
+    game_start = true
+end
+
+function widget:CommandsChanged()
+    if not game_start then
+        return
+    end
+    if Spring.GetSelectedUnitsCount() == 0 then
+        test:SetCaption("")
+        return
+    end
+    local selected_units = Spring.GetSelectedUnits()
+    -- XXX need to decide what to do if multiple units are selected
+    setUnitInfo(selected_units[1], 0, 0)
 end
 
 function widget:Shutdown()
