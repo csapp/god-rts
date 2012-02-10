@@ -18,23 +18,24 @@ local unitDef =
 	SightDistance = 400,	
 	Upright = 1,	
 	levelground = 1,
-	--cost
+	
+--Cost
 	buildCostMetal = 0,
 	buildCostEnergy = 0,
 	buildTime = 10,
-	--economy	
-	EnergyStorage = 0,
-	EnergyUse = 0,
-	MetalStorage = 0,
-	EnergyMake = 0, 
-	MakesMetal = 0, 
-	--MetalMake = 10,
+
 -- Pathfinding and related
 	FootprintX = 5,
 	FootprintZ = 5,
 	MaxSlope = 10,	
 	YardMap ="ooooo occco occco occco occco",
 
+--Hitbox
+	collisionVolumeOffsets = "0 0 0",
+	collisionVolumeScales = "75	50 75",
+	collisionVolumeType = "Box",
+	collisionVolumeTest = 1,
+	
 -- Building	
 	Builder = true,
     Reclaimable = false,

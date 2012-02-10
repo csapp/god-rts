@@ -14,6 +14,9 @@ local leg_movespeed = 10
 local leg_movedistance = 3
 local arm_turndistance = 0.5
 local arm_movespeed = 3
+local attacking = false
+local atkAnimCounter = 0
+local pi = 3.1415
 
 local RESTORE_DELAY = Spring.UnitScript.GetLongestReloadTime(unitID) * 2
 -- picks a sensible time to wait before trying to turn the turret back to default.
@@ -72,3 +75,71 @@ function script.StopMoving()
 		legs_down ()
 		arms_down ()
 end
+
+
+function script.QueryWeapon1 ()
+	return sword
+end
+
+
+function script.AimFromWeapon1()
+	return body
+end
+
+function script.AimWeapon1(heading, pitch)
+	Sleep(50)
+	Signal(SIG_AIM)
+	SetSignalMask(SIG_AIM)
+	return true
+end
+
+function script.Shot1()
+	attacking = true
+	StartThread(MeleeAnimations)
+end
+
+function MeleeAnimations()
+	if attacking then
+	atkAnimCounter = math.random(3)
+		if atkAnimCounter == 1 then
+			Turn (rarm, x_axis, -pi, arm_movespeed)
+			WaitForTurn (rarm, x_axis)
+			Sleep(50)
+			Turn (rarm, x_axis, 0, arm_movespeed)
+			WaitForTurn (rarm, x_axis)
+			Sleep(50)
+		elseif atkAnimCounter == 2 then
+			Turn (rarm, z_axis, -pi/2, arm_movespeed)
+			Turn (rarm, y_axis, pi/2, arm_movespeed)
+			WaitForTurn (rarm, x_axis)
+			WaitForTurn (rarm, y_axis)
+			Sleep(50)
+			Turn (rarm, y_axis, 0, arm_movespeed)
+			WaitForTurn (rarm, y_axis)
+			Sleep(50)
+			Turn (rarm, z_axis, 0, arm_movespeed)
+			WaitForTurn (rarm, z_axis)
+			Sleep(50)
+		elseif atkAnimCounter == 3 then
+			Turn (rarm, x_axis, pi/4, arm_movespeed)
+			WaitForTurn (rarm, x_axis)
+			Sleep(50)
+			Turn (rarm, x_axis, 0, arm_movespeed)
+			WaitForTurn (rarm, x_axis)
+			Sleep(50)
+		end
+	end
+	
+	Sleep(300)	
+	attacking=false
+	return(1)
+end
+	
+function script.Killed(damage, health)
+	
+	Turn (body, x_axis, -pi/2, arm_movespeed)
+	Move (body, y_axis, -30, leg_movespeed)
+	Sleep(1000)
+	return(1)
+end	
+	
