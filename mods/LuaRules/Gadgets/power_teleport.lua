@@ -4,7 +4,7 @@ function gadget:GetInfo()
     return {
         name = "God power: teleport",
         desc = "Gadget to control god teleport power",
-        tickets = "#19"
+        tickets = "#19",
         author = "cam",
         date = "2012-02-04",
         license = "Public Domain",
