@@ -21,9 +21,15 @@ end
 
 function gadget:Initialize()
 
+    if not VFS.FileExists("mapinfo.lua") then
+        Spring.Echo("Village spawner gadget: Can't find mapinfo.lua!")
+        gadgetHandler:RemoveGadget()
+        return
+    end
+
     local mapcfg = VFS.Include("mapinfo.lua")
     if (not mapcfg) or (not mapcfg.custom) or (not mapcfg.custom.villages) then
-        error("Village spawner gadget: Can't find village locations in mapinfo.lua!")
+        Spring.Echo("Village spawner gadget: Can't find village locations in mapinfo.lua!")
         gadgetHandler:RemoveGadget()
         return
     end
