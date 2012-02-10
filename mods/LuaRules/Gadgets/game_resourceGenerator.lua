@@ -89,7 +89,12 @@ function gadget:RecvLuaMsg(msg, playerID)
     end
 end
 
-function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
+function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, adefID, ateamID)
+    if attackerID == nil then 
+    -- Unit is leveling up, don't remove faith
+        return 
+    end
+
     _, maxHealth = GetUnitHealth(unitID)
     removeFaith(teamID, maxHealth/10)
 end
