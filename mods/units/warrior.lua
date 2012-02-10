@@ -35,6 +35,7 @@ local unitDef  =  {
     BuildTime = 1000,
     Description = "An awesomely powerful soldier",
     MaxDamage = HP,
+    idleAutoHeal = 0,
 	mass = 500,
     RadarDistance = 0,
     SightDistance = 400,	--This may be too high

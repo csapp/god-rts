@@ -17,7 +17,7 @@ local unitDef  =  {
 
     customParams = {
         morph_into = "warrior",
-        max_xp = 5,
+        max_xp = 500,
         level = 1,
     },
 
@@ -44,6 +44,7 @@ local unitDef  =  {
 	collisionVolumeScales = "10 25 10",
 	collisionVolumeType = "Box",
 	collisionVolumeTest = 1,
+    idleAutoHeal = 0,
     
 --Energy and metal related
     BuildCostEnergy = 0,

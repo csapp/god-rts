@@ -25,6 +25,7 @@ local unitDef  =  {
     BuildTime = 1000,
     Description = "An awesomely powerful god",
     MaxDamage = 800,
+    idleAutoHeal = 0,
     RadarDistance = 0,
     SightDistance = 400,
     SoundCategory = "TANK",
