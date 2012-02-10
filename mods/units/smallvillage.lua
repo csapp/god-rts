@@ -54,6 +54,7 @@ local unitDef =
     -- Custom
     customParams = {
         convert_time = 10,
+        level = 1,
     }
 }
 

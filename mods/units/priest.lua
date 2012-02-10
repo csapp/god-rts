@@ -14,6 +14,7 @@ local unitDef  =  {
     customParams = {
         morph_into = "prophet",
         max_xp = 10,
+        level = 1,
     },
 
     sounds = {

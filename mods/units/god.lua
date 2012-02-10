@@ -9,6 +9,7 @@ local unitDef  =  {
     script = "godscript.lua",
 
     customParams = {
+        level = 1, -- XXX remove this when we have persistent god info
     },
 
     sounds = {

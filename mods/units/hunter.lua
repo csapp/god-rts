@@ -11,6 +11,7 @@ local unitDef  =  {
     customParams = {
         morph_into = "marksman",
         max_xp = 5,
+        level = 1,
     },
 
     sounds = {

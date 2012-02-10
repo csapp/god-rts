@@ -9,6 +9,7 @@ local unitDef  =  {
     script = "knightscript.lua",
 
     customParams = {
+        level = 3,
     },
 
     sounds = {

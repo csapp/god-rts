@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "generalscript.lua",
 
     customParams = {
+        level = 3,
     },
 
     sounds = {

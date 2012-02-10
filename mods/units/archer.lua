@@ -9,6 +9,7 @@ local unitDef  =  {
     script = "archerscript.lua",
 
     customParams = {
+        level = 3,
     },
 
     sounds = {

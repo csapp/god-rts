@@ -12,6 +12,7 @@ local unitDef  =  {
     capturespeed = 900,
 
     customParams = {
+        level = 2,
     },
 
     sounds = {
