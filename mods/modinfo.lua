@@ -11,7 +11,13 @@ local modinfo = {
 	depend = {
 		"cursors.sdz",
 		"springcontent.sdz",
-	}
+	},
+
+    experience = {
+        powerScale = 0,
+        healthScale = 0,
+        reloadScale = 0,
+    }
 }
 
 return modinfo

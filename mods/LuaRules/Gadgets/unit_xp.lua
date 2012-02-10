@@ -17,6 +17,10 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
+-- Speed ups
+local GetUnitTeam = Spring.GetUnitTeam
+local GetUnitDefID = Spring.GetUnitDefID
+
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, morphInto, teamID)
@@ -64,12 +68,18 @@ local function AddXP(unitID, unitDefID, teamID)
         Morph(unitID, unitDef.customParams.morph_into, teamID)
         return
     end
-    Spring.Echo("Unit XP at " .. curXP)
+    if DEBUG then Spring.Echo("Unit XP at " .. curXP) end
 end
 
-function gadget:UnitCmdDone(unitID, unitDefID, teamID, cmdID, cmdTag) -- XXX For testing
-    AddXP(unitID, unitDefID, teamID)
+function gadget:UnitDamaged(unitID, unitDefID, teamID, damage, paralyzer,
+                            weaponID, attackerID)
+    local attackerDef = GetUnitDefID(attackerID)
+    local attackerTeam = GetUnitTeam(attackerID)
+    if attackerDef == nil or attackerTeam == nil then return end
+    AddXP(attackerID, attackerDef, attackerTeam)
 end
+
+--TODO add XP for priest conversion
 
 else
 ------------------------------------------------------------
