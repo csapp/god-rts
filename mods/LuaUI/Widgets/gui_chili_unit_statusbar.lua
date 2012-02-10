@@ -13,7 +13,7 @@ function widget:GetInfo()
 end
 
 -- Uncomment this to display debug messages:
--- DEBUG = 0
+DEBUG = 0
 
 -- INCLUDES
 VFS.Include("LuaRules/Includes/utilities.lua")
@@ -34,17 +34,26 @@ local spGetMouseState			= Spring.GetMouseState
 local spTraceScreenRay			= Spring.TraceScreenRay
 local spGetUnitHealth			= Spring.GetUnitHealth
 local spGetUnitExp			    = Spring.GetUnitExperience
-local spGetUnitID				= Spring.GetSelectedUnits 
+local selected_units = Spring.GetSelectedUnits()
 
 -- SCRIPT FUNCTIONS
 function setUnitInfo(unit,x,y)
-	if DEBUG then Spring.Echo("Unit ID ", spGetUnitID) end
+
+	for _, unitID in pairs(selected_units) do
+		Spring.Echo("Unit ID:", unitID)
+		local health = Spring.GetUnitHealth(unitID)
+		Spring.Echo("Unit health:", health)
+	end
+
+
 	local unitInfoString = ""
+	--[[
 	local health, maxHealth, _, cpProgress, bProgress = spGetUnitHealth(unit)
 	if health and health ~= nil then
 		if DEBUG then Spring.Echo("health appended") end
 		unitInfoString = "HP: " .. unitInfoString .. math.floor(health) .. " / " .. maxHealth .. "      "
 	end
+	]]--
 	if cpProgress ~= 0 and cpProgress ~= nil then
 		if DEBUG then Spring.Echo("capture appended") end
 		unitInfoString = unitInfoString .. "cpt " .. math.floor(cpProgress*100) .. "%" .. "      "
