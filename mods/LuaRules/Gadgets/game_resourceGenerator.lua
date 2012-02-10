@@ -17,6 +17,15 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
+include("LuaRules/Includes/utilities.lua")
+include("LuaRules/Includes/msgs.h.lua")
+
+-- Speed ups
+local AddTeamResource = Spring.AddTeamResource
+local UseTeamResource = Spring.UseTeamResource
+local GetUnitHealth = Spring.GetUnitHealth
+
+
 local timeInterval = 30 --Denotes the number of frames per second
 local counter = -1 -- When the game begins, this value will be -1 
                    -- because at n = 0 it would normally increment the 
@@ -39,15 +48,15 @@ end
 
 
 function gadget:Initialize()
-    Spring.Echo("RESOURCE GENERATION ON!")
+    if DEBUG then Spring.Echo("RESOURCE GENERATION ON!") end
 	getPlayerList()
 end
 
 local function getResources(playerID)
 	local eCurr, eStor = Spring.GetTeamResources(playerID, "energy")
 	local mCurr, mStor = Spring.GetTeamResources(playerID, "metal")
-	Spring.Echo("Metal = " .. mCurr .. " Energy = " .. eCurr)
-	Spring.Echo("MetalStorage = " .. mStor .. " EnergyStorage = " .. eStor)
+    Spring.Echo("Metal = " .. mCurr .. " Energy = " .. eCurr)
+    Spring.Echo("MetalStorage = " .. mStor .. " EnergyStorage = " .. eStor)
 end
 
 local function generateVillagers(playerID)
@@ -62,6 +71,29 @@ end
 	--Can't properly implement this until we have a list of villages under the players control
 --end
 
+local function addFaith(teamID, amt)
+    AddTeamResource(teamID, "energy", amt)
+end
+
+local function removeFaith(teamID, amt)
+    UseTeamResource(teamID, "energy", amt)
+end
+
+function gadget:RecvLuaMsg(msg, playerID)
+    msg = split(msg, ",")
+    local msg_type = msg[1]
+    if msg_type == MSGS.CONVERT_FINISHED then
+        local clergyID = tonumber(msg[2])
+        -- XXX is this a static value or should we get it from somewhere?
+        addFaith(Spring.GetUnitTeam(clergyID), 1000)
+    end
+end
+
+function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
+    _, maxHealth = GetUnitHealth(unitID)
+    removeFaith(teamID, maxHealth/10)
+end
+
 function gadget:GameFrame(n)
 	--Spring.Echo("Value of N is " .. n) For Debugging only
 	if (n % timeInterval == 0) then --denotes one second
@@ -71,9 +103,9 @@ function gadget:GameFrame(n)
 	if (counter == counterMaxValue) then --every five seconds generate resources
 		--Spring.Echo("Adding Resources")
 		for i=1, #playerID do
-			Spring.AddTeamResource(playerID[i], "metal", generateVillagers(playerID[i]))
-			Spring.AddTeamResource(playerID[i], "energy", generateVillagers(playerID[i]))
-			getResources(playerID[i])-- For Debugging only
+			AddTeamResource(playerID[i], "metal", generateVillagers(playerID[i]))
+			--AddTeamResource(playerID[i], "energy", generateVillagers(playerID[i]))
+			if DEBUG then getResources(playerID[i]) end
 		end
 		counter = 0
 	end
