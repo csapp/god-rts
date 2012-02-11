@@ -38,8 +38,9 @@ function gadget:Initialize()
     local GetGroundHeight = Spring.GetGroundHeight
     local gaiaTeamID = Spring.GetGaiaTeamID()
     for _, village in pairs(mapcfg.custom.villages) do
-        CreateUnit(village.vtype, village.x, GetGroundHeight(village.x, village.z),
+        local v = CreateUnit(village.vtype, village.x, GetGroundHeight(village.x, village.z),
                    village.z, 0, gaiaTeamID)
+        Spring.SetUnitNeutral(v, true)
     end
     gadgetHandler:RemoveGadget()
 end
