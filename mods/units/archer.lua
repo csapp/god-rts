@@ -30,7 +30,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 1000,
+    BuildTime = 15,
     Description = "An awesomely powerful archer",
     MaxDamage = HP,
 	mass = 500,

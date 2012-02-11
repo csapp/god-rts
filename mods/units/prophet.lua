@@ -32,7 +32,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 1000,
+    BuildTime = 30,
     Description = "An awesome evangelist",
     MaxDamage = HP,
 	mass = 500,

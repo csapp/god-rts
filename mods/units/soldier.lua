@@ -9,7 +9,7 @@ local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
 
 local unitDef  =  {
 --Internal settings
-    BuildPic = "filename.bmp",
+    BuildPic = "placeholder.png",
     Category = "TANK SMALL NOTAIR NOTSUB",
     ObjectName = "soldier.s3o",
     name = "soldier",
@@ -32,7 +32,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 1000,
+    BuildTime = 5,
     Description = "An awesomely powerful soldier",
     MaxDamage = HP,
 	mass = 500,
@@ -44,7 +44,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 0,
+    BuildCostMetal = 3,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],

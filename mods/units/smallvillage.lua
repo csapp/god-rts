@@ -5,15 +5,14 @@ local unitDef =
 -- Internal settings	
 	Category = "LAND",
 	ObjectName = "village.s3o",
-	name = "smallvillage",	
 	TEDClass = "PLANT",
-	script = "smallvillage.lua",
+	Name = "Small Village",
+	script = "villagescript.lua",
 	buildPic = "placeholder.png",
 
 -- Unit limitations and properties
 	Description = "A small village that can build Level 1 units",
 	MaxDamage = 1500,
-	Name = "Small Village",
 	RadarDistance = 0,
 	SightDistance = 400,	
 	Upright = 1,	
@@ -28,7 +27,7 @@ local unitDef =
 	FootprintX = 5,
 	FootprintZ = 5,
 	MaxSlope = 10,	
-	YardMap ="ooooo occco occco occco occco",
+    yardMap ="ooooo occco ccccc ccccc ccccc",
 
 --Hitbox
 	collisionVolumeOffsets = "0 0 0",
@@ -39,17 +38,15 @@ local unitDef =
 -- Building	
 	Builder = true,
     Reclaimable = false,
-	ShowNanoSpray = true,
+	ShowNanoSpray = false,
 	CanBeAssisted = false,	
 	workerTime = 1,
 	buildoptions = 
-	{
-        "soldier",
-        "horseman",
-        "hunter",
-        --"warrior",
-        --"general",
-	},
+        {
+            "soldier",
+            "horseman",
+            "hunter",
+        },
 
     -- Custom
     customParams = {
