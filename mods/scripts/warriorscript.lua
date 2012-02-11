@@ -101,14 +101,14 @@ end
 function MeleeAnimations()
 	if attacking then
 	atkAnimCounter = math.random(3)
-		if atkAnimCounter == 1 then
+		if atkAnimCounter == 1 then	--vertical slash
 			Turn (rarm, x_axis, -pi, arm_movespeed)
 			WaitForTurn (rarm, x_axis)
 			Sleep(50)
 			Turn (rarm, x_axis, 0, arm_movespeed)
 			WaitForTurn (rarm, x_axis)
 			Sleep(50)
-		elseif atkAnimCounter == 2 then
+		elseif atkAnimCounter == 2 then --horizontal slash
 			Turn (rarm, z_axis, -pi/2, arm_movespeed)
 			Turn (rarm, y_axis, pi/2, arm_movespeed)
 			WaitForTurn (rarm, x_axis)
@@ -120,7 +120,7 @@ function MeleeAnimations()
 			Turn (rarm, z_axis, 0, arm_movespeed)
 			WaitForTurn (rarm, z_axis)
 			Sleep(50)
-		elseif atkAnimCounter == 3 then
+		elseif atkAnimCounter == 3 then --thrust forward
 			Turn (rarm, x_axis, pi/4, arm_movespeed)
 			WaitForTurn (rarm, x_axis)
 			Sleep(50)
