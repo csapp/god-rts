@@ -17,7 +17,7 @@ local unitDef  =  {
 
     customParams = {
         morph_into = "general",
-        max_xp = 5,
+        max_xp = 1000,
         level = 2,
     },
 

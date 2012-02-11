@@ -17,7 +17,7 @@ local unitDef  =  {
 
     customParams = {
         morph_into = "scout",
-        max_xp = 5,
+        max_xp = 750,
         level = 1,
     },
 

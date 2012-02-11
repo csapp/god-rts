@@ -10,7 +10,7 @@ local unitDef  =  {
 
     customParams = {
         morph_into = "marksman",
-        max_xp = 5,
+        max_xp = 500,
         level = 1,
     },
 

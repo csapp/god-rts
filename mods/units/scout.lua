@@ -17,7 +17,7 @@ local unitDef  =  {
 
     customParams = {
         morph_into = "knight",
-        max_xp = 5,
+        max_xp = 1500,
         level = 2,
     },
 
