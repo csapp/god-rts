@@ -1,10 +1,14 @@
+-- This code is reponsible for displaying the status bar along the bottom of the screen and the information displayed in it.
+-- This code is based on code from Alpha Domination (http://www.gravegast.be/~sunspot/temp/)
+-- Help with strings is from http://lua-users.org/wiki/StringRecipes
+
 -- WIDGET CODE
 function widget:GetInfo()
 	return {
-		name		= "Unit status bar",
-		desc		= "ChiliUi show status of the unit you have selected",
-		author		= "Sunspot",
-		date		= "2011-06-18",
+		name		= "Unit Status Bar",
+		desc		= "Shows various stats for the selected unit, such as name, level, and health.",
+		author		= "Kaitlin",
+		date		= "February 2012",
 		license     = "GNU GPL v2",
 		layer		= math.huge,
 		enabled   	= true,
@@ -19,14 +23,11 @@ end
 VFS.Include("LuaRules/Includes/utilities.lua")
 
 -- CONSTANTS
-local XY = false
 local Chili
 local Label
 local Window
 
 -- MEMBERS
-local old_mx, old_my = -1,-1
-local mx, my = -1,-1
 
 -- CONTROLS
 local spGetModKeyState			= Spring.GetModKeyState
@@ -35,47 +36,13 @@ local spTraceScreenRay			= Spring.TraceScreenRay
 local spGetUnitHealth			= Spring.GetUnitHealth
 local spGetUnitExp			    = Spring.GetUnitExperience
 
--- SCRIPT FUNCTIONS
-function setUnitInfo(unit,x,y)
-	local unitInfoString = ""
-	local health, maxHealth, _, cpProgress, bProgress = spGetUnitHealth(unit)
-	if health and health ~= nil then
-		if DEBUG then Spring.Echo("health appended") end
-		unitInfoString = "HP: " .. unitInfoString .. math.floor(health) .. " / " .. math.floor(maxHealth) .. "      "
-	end
-	--if cpProgress ~= 0 and cpProgress ~= nil then
-		--if DEBUG then Spring.Echo("capture appended") end
-		--unitInfoString = unitInfoString .. "cpt " .. math.floor(cpProgress*100) .. "%" .. "      "
-	--end
-	--if bProgress ~= 1 and bProgress ~= nil then
-		--if DEBUG then Spring.Echo("building appended") end
-		--unitInfoString = unitInfoString .. "bld " .. math.floor(bProgress*100) .. "%"
-	--end
-	local defId = Spring.GetUnitDefID(unit)
-	if(defId ~= nil) then
-        local unitDef = UnitDefs[defId]
-        unitInfoString = unitInfoString .. unitDef.name
-    end
+local game_start = false
 
-		--local weapons = UnitDefs[defId]["weapons"]
-		--if DEBUG then Spring.Echo("units amount of weapons", #weapons) end
-		--for i=1, #weapons do
-			--local weaponDef = WeaponDefs[weapons[i]["weaponDef"]]
-			--local damage = 0
-			--local range = 0
-			--for name,param in weaponDef:pairs() do
-				--if(name == "range")then
-					--range = param
-				--end
-				--if(name == "damages")then
-					--damage = param[0]
-				--end
-			--end
-			--unitInfoString = unitInfoString .. "      wp" .. i .. " D:" .. damage .. "-R:" .. range
-		--end
-	--end
-	--if XY then unitInfoString = unitInfoString .. "      x:" .. x .. "   y:" .. y end
-	test:SetCaption(unitInfoString)
+-- SCRIPT FUNCTIONS
+function setUnitInfo(unit)
+	local unitInfoString = printUnitHealth(unit) .. "      " .. printUnitName(unit) .. "      " .. printUnitLevel(unit) .. "      " .. printEXP(unit)
+
+	unitInfo:SetCaption(unitInfoString)
 end
 
 function widget:Initialize()
@@ -103,7 +70,7 @@ function widget:Initialize()
 		skinName  = "DarkGlass",
 	}	
 
-	test = Label:New{
+	unitInfo = Label:New{
 		parent = statusBar,
 		width = 1000,
 		caption = "0",
@@ -115,25 +82,6 @@ function widget:Initialize()
 	}	
 end
 
---function widget:Update(dt)
-	--old_mx, old_my = mx,my
-	--alt,_,meta,_ = spGetModKeyState()
-	--mx,my = spGetMouseState()
-	--local mousemoved = (mx ~= old_mx or my ~= old_my)
-	--if mousemoved then
-		--local type, data = spTraceScreenRay(mx, my)
-		--if(type == "unit")then
-			--setUnitInfo(data,mx,my)
-		--else
-			--if(test.caption ~= "") then
-				--test:SetCaption("x:" .. mx .. "   y:" .. my)
-			--end
-		--end
-	--end
---end
-
-local game_start = false
-
 function widget:GameStart()
     game_start = true
 end
@@ -143,15 +91,65 @@ function widget:CommandsChanged()
         return
     end
     if Spring.GetSelectedUnitsCount() == 0 then
-        test:SetCaption("")
+        unitInfo:SetCaption("")
         return
     end
     local selected_units = Spring.GetSelectedUnits()
     -- XXX need to decide what to do if multiple units are selected
-    setUnitInfo(selected_units[1], 0, 0)
+	-- This just handles showing the first unit selected in a group
+    setUnitInfo(selected_units[1])
 end
 
 function widget:Shutdown()
   widgetHandler:ConfigLayoutHandler(nil)
   Spring.ForceLayoutUpdate()
+end
+
+
+-- String-building functions
+
+function printUnitLevel(unitID)
+	local level = UnitDefs[Spring.GetUnitDefID(unitID)].customParams.level
+	
+	if level ~= nil then
+		levelString = "Level: " .. level
+		return levelString
+	else
+		return ""
+	end
+end
+
+function printUnitName(unitID)
+	local defId = Spring.GetUnitDefID(unitID)
+	
+	if(defId ~= nil) then
+        local unitDef = UnitDefs[defId]
+		unitName = unitDef.name:gsub("^%l", string.upper)
+        return unitName
+	else
+		return ""
+    end
+end
+
+function printUnitHealth(unitID)
+	local health, maxHealth, _, _, _ = spGetUnitHealth(unitID)
+	
+	if health and health ~= nil then
+		healthString = "HP: " .. math.floor(health) .. " / " .. math.floor(maxHealth)
+		return healthString
+	else
+		return ""
+	end
+end
+
+function printEXP(unitID)
+	local currentXP = Spring.GetUnitExperience(unitID)
+	local maxXP = UnitDefs[Spring.GetUnitDefID(unitID)].customParams.max_xp
+	
+	if currentXP ~= nil and maxXP ~= nil then
+		expString = "Experience Points: " .. currentXP .. " / " .. maxXP
+		return expString
+	else
+		return ""
+	end
 end
