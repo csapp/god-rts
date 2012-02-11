@@ -97,6 +97,7 @@ end
 
 function gadget:UnitDamaged(unitID, unitDefID, teamID, damage, paralyzer,
                             weaponID, attackerID)
+    if attackerID == nil or attackerID < 0 then return end
     AddXP(attackerID, damage)
 end
 
