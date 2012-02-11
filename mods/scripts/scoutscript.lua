@@ -213,6 +213,9 @@ function MeleeAnimations()
 			Turn (rarm, x_axis, -pi/4, arm_movespeed)
 			WaitForTurn (rarm, x_axis)
 			Sleep(50)
+			Turn (rarm, x_axis, 0, arm_movespeed)
+			WaitForTurn (rarm, x_axis)
+			Sleep(50)
 		elseif atkAnimCounter == 2 then
 			--Turn bodies backward and back legs forward
 			Turn(hbody, x_axis, -(3*pi)/8, arm_movespeed)

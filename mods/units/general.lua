@@ -39,10 +39,6 @@ local unitDef  =  {
     SightDistance = 400,	--This may be too high
     SoundCategory = "TANK",
     Upright = 0,
-	collisionVolumeOffsets = "0 0 0",
-	collisionVolumeScales = "10 25 10",
-	collisionVolumeType = "Box",
-	collisionVolumeTest = 1,
     
 --Energy and metal related
     BuildCostEnergy = 0,

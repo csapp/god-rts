@@ -39,10 +39,6 @@ local unitDef  =  {
     SightDistance = 400,	--This may be too high
     SoundCategory = "TANK",
     Upright = 0,
-	collisionVolumeOffsets = "0 0 -4",
-	collisionVolumeScales = "25 25 25",
-	collisionVolumeType = "Box",
-	collisionVolumeTest = 1,
     
 --Energy and metal related
     BuildCostEnergy = 0,
@@ -71,7 +67,7 @@ local unitDef  =  {
     Reclaimable = 0,
     
 --Hitbox
-	collisionVolumeOffsets = "0 0 0",
+	collisionVolumeOffsets = "0 0 -4",
 	collisionVolumeScales = "10 25 10",
 	collisionVolumeType = "Box",
 	collisionVolumeTest = 1,
@@ -80,17 +76,17 @@ local unitDef  =  {
 
 	weapons = {
 		[1] = {
-			def = "SWORD",
+			def = "LANCE",
 			mainDir = "0 0 1",
 			maxAngleDif = 180,
 		},
 	},
 	
 	weaponDefs = {
-	SWORD = {
+	LANCE = {
 		avoidFriendly = 0,
 		collideFriendly = false,
-		name = "Sword",
+		name = "Lance",
 		cylinderTargetting = 1,
 		energypershot = 0,
 		endsmoke = "0",
