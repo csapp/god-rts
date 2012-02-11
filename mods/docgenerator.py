@@ -20,11 +20,11 @@ class SpringDocGenerator(object):
                 continue
             line_parts = [part.strip() for part in line.split('=', 1)]
             if len(line_parts) < 2:
-                if line.lower() == "end":
+                if line.lower().strip() == "end":
                     break
                 continue
             name, value = line_parts
-            info[name.lower()] = value.strip(',').strip("'").strip('"')
+            info[name.lower()] = value.strip(",'").strip('"')
         infile.close()
         return info
 

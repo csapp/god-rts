@@ -1,4 +1,5 @@
---the logo of the spring engine flashing in various colors
+-- Based on the spring logo flash explosion from the Spring tutorial game,
+-- written by knorke
 return {
   ["levelup"] = {
     tpsmallsmoke = {
