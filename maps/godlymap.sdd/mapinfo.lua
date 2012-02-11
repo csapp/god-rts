@@ -9,7 +9,7 @@ local mapinfo = {
 	description = "",
 	author      = "",
 	version     = "",
-	--mutator   = "deployment";
+	--mutator   = "deployment",
 	--mapfile   = "", --// location of smf/sm3 file (optional)
 	modtype     = 3, --// 1=primary, 0=hidden, 3=map
 	depend      = {"Map Helper v1"},
@@ -240,12 +240,19 @@ local mapinfo = {
 			texture   = 'LuaGaia/effects/snowflake.png',
 		},
         villages = {
-            {vtype='smallvillage', x=426, z=582},
-            {vtype='smallvillage', x=3097, z=623},
-            {vtype='smallvillage', x=508, z=3498},
-            {vtype='smallvillage', x=3138, z=3432},
+            {vtype="smallvillage", x=672, z=295},
+            {vtype="smallvillage", x=1516, z=1221},
+            {vtype="smallvillage", x=3596, z=991},
+            {vtype="smallvillage", x=2449, z=1917},
+            {vtype="smallvillage", x=303, z=2376},
+            {vtype="smallvillage", x=344, z=3572},
+            {vtype="smallvillage", x=1409, z=3744},
+            {vtype="smallvillage", x=2458, z=3588},
+            {vtype="smallvillage", x=3826, z=3654},
         },
+
 	},
+
 }
 
 --------------------------------------------------------------------------------
