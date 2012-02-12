@@ -25,7 +25,6 @@ local GetUnitTeam = Spring.GetUnitTeam
 local GetUnitDefID = Spring.GetUnitDefID
 
 --local DEBUG = 1
-local morph_pending = {}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, morphInto, teamID)
@@ -60,20 +59,6 @@ local function Morph(unitID, morphInto, teamID)
     Spring.DestroyUnit(unitID, false, true)
 end
 
-
--- XXX polling like this sucks... hopefully there's a better way
--- i'm doing it this way for now because there doesn't seem
--- to be a message passing interface for synced code, so when
--- i receive lua msgs for priest convert, etc. i can't morph
--- because i'm in unsynced mode
-function gadget:GameFrame(n)
-    if n % 30 ~= 0 then return end
-    for unitID, morph_info in pairs(morph_pending) do
-        Morph(unitID, morph_info[1], morph_info[2])
-        morph_pending[unitID] = nil
-    end
-end
-
 local function AddXP(unitID, xp)
     local unitDefID = GetUnitDefID(unitID)
     local teamID = GetUnitTeam(unitID)
@@ -89,8 +74,7 @@ local function AddXP(unitID, xp)
     Spring.SetUnitExperience(unitID, curXP)
     if DEBUG then Spring.Echo("Unit XP at " .. curXP) end
     if max_xp and curXP >= max_xp then
-        --Morph(unitID, unitDef.customParams.morph_into, teamID)
-        morph_pending[unitID] = {unitDef.customParams.morph_into, teamID}
+        Morph(unitID, unitDef.customParams.morph_into, teamID)
         return
     end
 end
@@ -106,7 +90,9 @@ function gadget:RecvLuaMsg(msg, playerID)
     local msg_type = msg[1]
     if msg_type == MSGS.CONVERT_FINISHED then
         local clergyID = tonumber(msg[2])
-        AddXP(clergyID, 15) -- XXX get the XP to add from somewhere
+        local xp_gained = 500 -- XXX
+        GG.Delay.DelayCall(AddXP, {clergyID, xp_gained})
+
     end
 end
 
