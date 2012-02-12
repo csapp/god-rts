@@ -45,10 +45,13 @@ local converting = {}
 local convert_pending = {}
 
 -- XXX move to config file?
-local VILLAGE_IDS = {UnitDefNames["smallvillage"].id}
-local CLERGY_IDS = {UnitDefNames["priest"].id}
+local VILLAGE_IDS = {UnitDefNames["smallvillage"].id,
+                     UnitDefNames["mediumvillage"].id,
+                     UnitDefNames["largevillage"].id}
+local CLERGY_IDS = {UnitDefNames["priest"].id,
+                    UnitDefNames["prophet"].id}
 
-local CONVERT_DISTANCE = 75
+local CONVERT_DISTANCE = 100 
 
 local gaiaTeamID = Spring.GetGaiaTeamID()
 local function GetUnitNeutral(unitID)

@@ -57,6 +57,7 @@ local unitDef =
         convert_time = 60,
         level = 2,
         max_xp = 5000,
+        morph_into = "largevillage",
     }
 }
 

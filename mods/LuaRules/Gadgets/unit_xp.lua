@@ -23,8 +23,14 @@ include("LuaRules/Includes/msgs.h.lua")
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
 local GetUnitDefID = Spring.GetUnitDefID
+local GetUnitHealth = Spring.GetUnitHealth
+local GetUnitExperience = Spring.GetUnitExperience
+local SetUnitExperience = Spring.SetUnitExperience
 
 --local DEBUG = 1
+local VILLAGE_IDS = {UnitDefNames["smallvillage"].id,
+                     UnitDefNames["mediumvillage"].id,
+                     UnitDefNames["largevillage"].id}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, morphInto, teamID)
@@ -64,14 +70,14 @@ local function AddXP(unitID, xp)
     local teamID = GetUnitTeam(unitID)
     if unitDefID == nil or teamID == nil then return end
 
-    local curXP = Spring.GetUnitExperience(unitID)
+    local curXP = GetUnitExperience(unitID)
     local unitDef = UnitDefs[unitDefID]
     local max_xp = tonumber(unitDef.customParams.max_xp)
     if not max_xp or curXP >= max_xp then
         return
     end
     curXP = curXP + xp 
-    Spring.SetUnitExperience(unitID, curXP)
+    SetUnitExperience(unitID, curXP)
     if DEBUG then Spring.Echo("Unit XP at " .. curXP) end
     if max_xp and curXP >= max_xp then
         Morph(unitID, unitDef.customParams.morph_into, teamID)
@@ -83,6 +89,15 @@ function gadget:UnitDamaged(unitID, unitDefID, teamID, damage, paralyzer,
                             weaponID, attackerID)
     if attackerID == nil or attackerID < 0 then return end
     AddXP(attackerID, damage)
+end
+
+function gadget:UnitFromFactory(unitID, unitDefID, unitTeam, builderID, builderDefID, _)
+    if not builderID then return end
+    if not table.contains(VILLAGE_IDS, builderDefID) then
+        return 
+    end
+    local _, max_health = GetUnitHealth(unitID)
+    AddXP(builderID, max_health*10)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
