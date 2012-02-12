@@ -84,6 +84,7 @@ local unitDef  =  {
 	
 	weaponDefs = {
 	BOW = {
+        soundStart = "archery-arrowflyby.wav",
 		avoidFriendly = 0,
 		burst = 3,
 		burstrate = 0.3,

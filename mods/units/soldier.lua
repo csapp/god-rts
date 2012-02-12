@@ -106,7 +106,7 @@ local unitDef  =  {
 		damage = {
 			default = ATKDMG,
 		},
-		
+        soundStart = "swordhit2.wav",
 	},
 	
 	},

@@ -86,6 +86,7 @@ local unitDef  =  {
 	
 	weaponDefs = {
 	LANCE = {
+        soundStart = "swordhit2.wav",
 		avoidFriendly = 0,
 		collideFriendly = false,
 		name = "Lance",
