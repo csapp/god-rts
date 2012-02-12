@@ -1,4 +1,4 @@
-local unitName = "smallvillage"
+local unitName = "largevillage"
 
 local unitDef =
 {
@@ -6,13 +6,13 @@ local unitDef =
 	Category = "LAND",
 	ObjectName = "village.s3o",
 	TEDClass = "PLANT",
-	Name = "Small Village",
+	Name = "Large Village",
 	script = "villagescript.lua",
 	buildPic = "placeholder.png",
 
 -- Unit limitations and properties
-	Description = "A small village that can build Level 1 units",
-	MaxDamage = 1500,
+	Description = "A large village that can build all units",
+	MaxDamage = 5000,
 	RadarDistance = 0,
 	SightDistance = 400,	
 	Upright = 1,	
@@ -46,13 +46,20 @@ local unitDef =
             "soldier",
             "horseman",
             "hunter",
+
+            "warrior",
+            "scout",
+            "marksman",
+
+            "general",
+            "knight",
+            "archer",
         },
 
     -- Custom
     customParams = {
-        convert_time = 10,
-        level = 1,
-        max_xp = 2000,
+        convert_time = 120,
+        level = 3,
     }
 }
 
