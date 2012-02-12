@@ -97,7 +97,7 @@ function gadget:UnitFromFactory(unitID, unitDefID, unitTeam, builderID, builderD
         return 
     end
     local _, max_health = GetUnitHealth(unitID)
-    AddXP(builderID, max_health*10)
+    AddXP(builderID, max_health/10)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
