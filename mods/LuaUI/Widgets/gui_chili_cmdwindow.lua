@@ -17,7 +17,7 @@ function widget:GetInfo()
 end
 
 -- Comment this out when you don't want to see debug messages.
-DEBUG = 0
+--DEBUG = 0
 
 -- INCLUDES
 VFS.Include("LuaRules/Includes/utilities.lua")
@@ -84,7 +84,9 @@ function findButtonData(cmd)
 		container = stateCommandWindow
 	elseif isBuild then
 		container = buildCommandWindow
-		texture = '#'..-cmd.id
+		buttontext = cmd.name:gsub("^%l", string.upper)
+		-- For some reason, buildpics are not working. When they magically work again, uncomment the following line.
+		-- texture = '#'..-cmd.id
 	else
 		texture = cmd.texture
 	end
