@@ -86,7 +86,7 @@ local unitDef  =  {
 	
 	weaponDefs = {
 	SWORD = {
-		avoidFriendly = 0,
+		avoidFriendly = 1,
 		collideFriendly = false,
 		name = "Sword",
 		cylinderTargetting = 1,
