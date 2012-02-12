@@ -13,12 +13,6 @@ local unitDef  =  {
     },
 
     sounds = {
-      select = {
-            [1] = "whistle",
-        },
-      ok = {
-            [1] = "marching",
-        },
     },
     
 --Unit limitations and properties

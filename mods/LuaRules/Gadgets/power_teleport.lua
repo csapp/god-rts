@@ -54,6 +54,7 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
 
     -- XXX is this synced?
     Spring.PlaySoundFile("sounds/teleport.wav")
+    Spring.PlaySoundFile("wine-glass-clink-1.wav") 
 end
 
 else
