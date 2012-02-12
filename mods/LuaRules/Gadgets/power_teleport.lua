@@ -48,9 +48,12 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
 
     local destX, destY, destZ = cmdParams[1], cmdParams[2], cmdParams[3]
     local curX, curY, curZ = Spring.GetUnitBasePosition(unitID)
-    Spring.SpawnCEG("blacksmoke", curX, curY, curZ)
+    Spring.SpawnCEG("whitesmoke", curX, curY, curZ)
     Spring.SetUnitPosition(unitID, destX, destY, destZ)
-    Spring.SpawnCEG("blacksmoke", destX, destY, destZ)
+    Spring.SpawnCEG("whitesmoke", destX, destY, destZ)
+
+    -- XXX is this synced?
+    Spring.PlaySoundFile("sounds/teleport.wav")
 end
 
 else
