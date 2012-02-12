@@ -9,7 +9,7 @@ local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
 
 local unitDef  =  {
 --Internal settings
-    BuildPic = "filename.bmp",
+    BuildPic = "hunter.PNG",
     Category = "TANK SMALL NOTAIR NOTSUB",
     ObjectName = "hunter.s3o",
     name = "hunter",

@@ -17,7 +17,7 @@ function widget:GetInfo()
 end
 
 -- Comment this out when you don't want to see debug messages.
--- DEBUG = 0
+DEBUG = 0
 
 -- INCLUDES
 VFS.Include("LuaRules/Includes/utilities.lua")
@@ -82,9 +82,11 @@ function findButtonData(cmd)
 		local indexChoice = cmd.params[1] + 2
 		buttontext = cmd.params[indexChoice]
 		container = stateCommandWindow
-	else
+	elseif isBuild then
 		container = buildCommandWindow
 		texture = '#'..-cmd.id
+	else
+		texture = cmd.texture
 	end
 	return buttontext, container, isState, isBuild, texture	
 end
@@ -126,14 +128,14 @@ function createMyButton(cmd)
 		if texture then
 			if DEBUG then Spring.Echo("texture",texture) end
 			button:Resize(80,80)
-			image= Chili.Image:New {
+			image = Chili.Image:New {
 				width="100%";
 				height="90%";
 				y="6%";
 				keepAspect = true,	--isState;
 				file = texture;
 				parent = button;
-			}		
+			}
 		end
 		
 		if(increaseRow)then
@@ -240,7 +242,7 @@ function widget:Initialize()
 		clientWidth = 250,
 		clientHeight = 400,
 		backgroundColor = {0,0,0,1},
-		skinName  = "DarkGlass",		
+		skinName  = "Robocracy",		
 		children = {commandWindow,stateCommandWindow,buildCommandWindow},
 	}
 	
