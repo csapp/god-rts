@@ -24,6 +24,9 @@ end
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+-- XXX we need one location for these message constants
+include("msgs.h.lua")
+
 local barHeight = 3
 local barWidth  = 14  --// (barWidth)x2 total width!!!
 local barAlpha  = 0.9
@@ -229,6 +232,14 @@ function widget:Initialize()
     end
   end
 
+end
+
+function widget:RecvLuaMsg(msg, playerID)
+    msg = parse_message(msg)
+    local msg_type = msg[1]
+    if msg_type == MSGS.CONVERT_PROGRESS then
+        local clergyID, villageID, progress = msg[2], msg[3], msg[4]
+    end
 end
 
 function widget:Shutdown()

@@ -31,6 +31,7 @@ local GiveOrderToUnit = Spring.GiveOrderToUnit
 local GetGameSeconds = Spring.GetGameSeconds
 local GetUnitDefID = Spring.GetUnitDefID
 local GetUnitHealth = Spring.GetUnitHealth
+local SendLuaUIMsg = Spring.SendLuaUIMsg
 
 local convertCmd = {
       id      = CMD_CONVERT,
@@ -179,6 +180,9 @@ function gadget:GameFrame(n)
         local startTime, clergyID = info['time'], info['clergyID']
         if curTime - startTime >= convertTime then 
             FinishConvert(clergyID, villageID)
+        else
+            local progress = (curTime-startTime)/convertTime
+            SendLuaUIMsg(MSGS.CONVERT_PROGRESS .. "," .. clergyID .. "," .. villageID .. "," .. progress)
         end
     end
 end
