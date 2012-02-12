@@ -105,7 +105,8 @@ function gadget:RecvLuaMsg(msg, playerID)
     local msg_type = msg[1]
     if msg_type == MSGS.CONVERT_FINISHED then
         local clergyID = tonumber(msg[2])
-        local xp_gained = 500 -- XXX
+        local villageID = tonumber(msg[3])
+        local xp_gained = UnitDefs[GetUnitDefID(villageID)].customParams.convert_xp
         GG.Delay.DelayCall(AddXP, {clergyID, xp_gained})
 
     end

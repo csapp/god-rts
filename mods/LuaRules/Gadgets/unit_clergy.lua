@@ -30,6 +30,7 @@ local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local GiveOrderToUnit = Spring.GiveOrderToUnit
 local GetGameSeconds = Spring.GetGameSeconds
 local GetUnitDefID = Spring.GetUnitDefID
+local GetUnitHealth = Spring.GetUnitHealth
 
 local convertCmd = {
       id      = CMD_CONVERT,
@@ -70,6 +71,7 @@ local function FinishConvert(clergyID, villageID)
     Spring.Echo("Convert finished!")
     converting[villageID] = nil
     Spring.TransferUnit(villageID, Spring.GetUnitTeam(clergyID))
+    Spring.SetUnitNeutral(villageID, false)
     Spring.SendLuaRulesMsg(MSGS.CONVERT_FINISHED..','..clergyID..","..villageID)
 end
 
@@ -108,6 +110,21 @@ end
     --return true
 --end
 
+local function CanConvert(clergyID, villageID)
+    if converting[villageID] then
+        return false
+    end
+
+    if not GetUnitNeutral(villageID) then
+        local curHealth, maxHealth = GetUnitHealth(villageID)
+        if curHealth / maxHealth > 0.1 then
+            return false
+        end
+    end
+
+    return true
+end
+
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
     if cmdID ~= CMD_CONVERT then
         return false
@@ -118,8 +135,8 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
         return false
     end
 
-    if not GetUnitNeutral(villageID) or converting[villageID] then
-        return false
+    if not CanConvert(unitID, villageID) then 
+        return false 
     end
 
     local villageX, villageY, villageZ = Spring.GetUnitBasePosition(villageID)
@@ -146,7 +163,7 @@ function gadget:GameFrame(n)
     local curTime = GetGameSeconds()
     for clergyID, villageID in pairs(convert_pending) do
         if distance_between_units(clergyID, villageID) < CONVERT_DISTANCE then
-            if not GetUnitNeutral(villageID) or converting[villageID] then
+            if not CanConvert(clergyID, villageID) then
                 CancelConvert(clergyID)
             else
                 StartConvert(clergyID, villageID)

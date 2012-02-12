@@ -55,6 +55,7 @@ local unitDef =
     -- Custom
     customParams = {
         convert_time = 60,
+        convert_xp = 750,
         level = 2,
         max_xp = 5000,
         morph_into = "largevillage",

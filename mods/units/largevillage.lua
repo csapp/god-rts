@@ -59,6 +59,7 @@ local unitDef =
     -- Custom
     customParams = {
         convert_time = 120,
+        convert_xp = 1000,
         level = 3,
     }
 }
