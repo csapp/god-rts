@@ -155,6 +155,8 @@ end
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
     if table.contains(CLERGY_IDS, unitDefID) then
         CancelConvert(unitID)
+        local x,y,z = Spring.GetTeamStartPosition(teamID)
+        Spring.CreateUnit("priest", x, y, z, 0, teamID) 
     end
 end
 
