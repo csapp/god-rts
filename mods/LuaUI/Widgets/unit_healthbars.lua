@@ -237,8 +237,15 @@ end
 function widget:RecvLuaMsg(msg, playerID)
     msg = LuaMessages.deserialize(msg)
     local msg_type = msg[1]
+    Spring.Echo(msg)
     if msg_type == MSG_TYPES.CONVERT_PROGRESS then
         local clergyID, villageID, progress = msg[2], msg[3], msg[4]
+    elseif msg_type == MSG_TYPES.CONVERT_STARTED then
+        local clergyID, villageID = msg[2], msg[3]
+    elseif msg_type == MSG_TYPES.CONVERT_FINISHED then
+        local clergyID, villageID = msg[2], msg[3]
+    elseif msg_type == MSG_TYPES.CONVERT_CANCELLED then
+        local clergyID, villageID = msg[2], msg[3]
     end
 end
 

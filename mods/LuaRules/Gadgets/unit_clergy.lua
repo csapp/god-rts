@@ -64,17 +64,17 @@ local function StartConvert(clergyID, villageID)
     convert_pending[clergyID] = nil
     converting[villageID] = {time = Spring.GetGameSeconds(),
                              clergyID = clergyID}
-    Spring.Echo("Beginning convert")
-    -- TODO Display some kind of status bar over the clergy's head
+    local message = LuaMessages.serialize(MSG_TYPES.CONVERT_STARTED, {clergyID, villageID})
+    Spring.SendLuaUIMsg(message)
 end
 
 local function FinishConvert(clergyID, villageID)
-    Spring.Echo("Convert finished!")
     converting[villageID] = nil
     Spring.TransferUnit(villageID, Spring.GetUnitTeam(clergyID))
     Spring.SetUnitNeutral(villageID, false)
     local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
     Spring.SendLuaRulesMsg(message)
+    Spring.SendLuaUIMsg(message)
 end
 
 local function CancelConvert(clergyID)
@@ -83,6 +83,8 @@ local function CancelConvert(clergyID)
     for villageID, info in pairs(converting) do
         if info['clergyID'] == clergyID then
             converting[villageID] = nil
+            local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
+            Spring.SendLuaUIMsg(message)
             break
         end
     end
