@@ -39,7 +39,10 @@ local spGetUnitExp			    = Spring.GetUnitExperience
 local game_start = false
 
 local imageName = ''
-local fileName = 'LuaUI/Widgets/images/' .. imageName .. '.png'
+local filePath = ''
+local unitPic
+
+local updateRequired = true
 
 -- SCRIPT FUNCTIONS
 -- Returns the caption, parent container and commandtype of the button	
@@ -57,6 +60,11 @@ function setUnitStats(unit)
 	unitStats:SetCaption(unitStatString)
 end
 ]]
+
+function resetWindow(container)
+	container:ClearChildren()
+	
+end
 
 function widget:Initialize()
 	if (not WG.Chili) then
@@ -99,12 +107,13 @@ function widget:Initialize()
 		caption = "",
 	}
 	]]
-
-	unitPic = Image:New {
+	
+	imageWindow = Control:New{
 		x = 10,
 		width = 96,
 		height = 96,
-		file = 'unitpics/soldier.png',
+		padding = {0, 0, 0, 0},
+		margin = {0, 0, 0, 0},
 	}
 
 	statusBar = Window:New{
@@ -118,7 +127,7 @@ function widget:Initialize()
 		dragUseGrip = false,		
 		anchors = {left=true,bottom=true,right=true,top=false},
 		skinName  = "DarkGlass",
-		children = {unitInfo,unitPic,--[[unitStats]]},
+		children = {unitInfo,imageWindow,--[[unitStats]]},
 	}
 end
 
@@ -134,6 +143,7 @@ function widget:CommandsChanged()
     if Spring.GetSelectedUnitsCount() == 0 then
         unitInfo:SetCaption("")
 		--unitStats:SetCaption("")
+		resetWindow(imageWindow)
         return
     end
     -- XXX need to decide what to do if multiple units are selected
@@ -141,6 +151,24 @@ function widget:CommandsChanged()
     setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
 	-- setUnitStats(selected_units[1])
+	resetWindow(imageWindow)
+	drawPortrait()
+	updateRequired = true
+end
+
+function drawPortrait()
+	unitPic = Image:New {
+		parent = imageWindow,
+		width = '100%',
+		height = '100%',
+		file = filePath,
+	}
+end
+
+function widget:DrawScreen()
+    if updateRequired then
+        updateRequired = false
+    end
 end
 	
 function widget:Shutdown()
@@ -150,9 +178,10 @@ end
 
 function setUnitName(unitID)
 	imageName = string.lower(printUnitName(unitID))
+	filePath = 'unitpics/' .. imageName .. '.png'
 end
 
--- String-building functions
+-- STRING BUILDING FUNCTIONS
 
 function printUnitLevel(unitID)
 	local level = UnitDefs[Spring.GetUnitDefID(unitID)].customParams.level
