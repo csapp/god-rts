@@ -128,7 +128,6 @@ end
 
 function widget:CommandsChanged()
     local selected_units = Spring.GetSelectedUnits()
-	Spring.Echo('Commands changed')
 	if not game_start then
         return
     end
@@ -142,7 +141,6 @@ function widget:CommandsChanged()
     setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
 	-- setUnitStats(selected_units[1])
-	Spring.Echo('Unit name again: ', imageName)
 end
 	
 function widget:Shutdown()
