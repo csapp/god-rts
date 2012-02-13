@@ -18,13 +18,11 @@ end
 if (gadgetHandler:IsSyncedCode()) then
 
 local team_positions = {}				  
-local listOfUnits = {"smallVillage", "Soldier"}
---local listOfUnits = {"Soldier", "Warrior", "General", "Hunter", "Marksman", "Archer", "Horseman", "Scout", "Knight", "Priest", "Prophet", "God"}
+local listOfUnits = {"smallVillage", "priest"}
 local spawnOffset = 50
 
 local function getPlayerAndStartLocation()
 	for index, ID in pairs(Spring.GetPlayerList()) do
-        --Spring.Echo(index .. ' ' .. ID)
         local sx,sy,sz = Spring.GetTeamStartPosition(ID)
         team_positions[ID] = {sx,sy,sz}
 		end
@@ -48,7 +46,6 @@ local function setDefaultResources()
 end
 	
 function gadget:Initialize()
-    Spring.Echo("SPAWNING INITIAL UNITS")
 	getPlayerAndStartLocation()
 end
 
