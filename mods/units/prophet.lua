@@ -15,8 +15,8 @@ local unitDef  =  {
     name = "Prophet",
     script = "prophetscript.lua",
     builder = true,
-    cancapture = true,
-    capturespeed = 900,
+    --cancapture = true,
+    --capturespeed = 900,
 
     customParams = {
         level = 2,

@@ -15,8 +15,8 @@ local unitDef  =  {
     name = "Priest",
     script = "priestscript.lua",
     builder = true,
-    cancapture = true,
-    capturespeed = 900,
+    --cancapture = true,
+    --capturespeed = 900,
 
     customParams = {
         morph_into = "prophet",
@@ -31,6 +31,7 @@ local unitDef  =  {
       ok = {
             [1] = "Mansighing2",
         },
+      underattack = "manscreaming2",
     },
     
 --Unit limitations and properties
