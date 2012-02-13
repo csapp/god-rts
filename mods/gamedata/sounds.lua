@@ -586,7 +586,7 @@ local Sounds = {
 
         yes_1 = {
             file = "sounds/yes_1.wav",
-            gain = 1.0,
+            gain = 3.0,
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
@@ -594,7 +594,7 @@ local Sounds = {
 
         yes_2 = {
             file = "sounds/yes_2.wav",
-            gain = 1.0,
+            gain = 3.0,
             pitch = 1.0,
             priority = 0,
             maxconcurrent = 1,
