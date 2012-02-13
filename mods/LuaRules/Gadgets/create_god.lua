@@ -17,8 +17,7 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
-include("LuaRules/Includes/utilities.lua")
-include("LuaRules/Includes/msgs.h.lua")
+include("LuaUI/Headers/msgs.h.lua")
 
 -- Speed ups
 
@@ -39,9 +38,9 @@ function gadget:Initialize()
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
-	msg = split(msg, ",")
+    msg = LuaMessages.deserialize(msg)
 	local msg_type = msg[1]
-	if msg_type == "godselected" then
+	if msg_type == MSG_TYPES.GOD_SELECTED then
 		ID = 1--playerID --TEMPORARY UNTIL I CAN GET PLAYER ID PROPERLY
 		p1 = msg[2]
 		p2 = msg[3]

@@ -22,6 +22,8 @@ function widget:GetInfo()
  local godselLabel
  local godselWindow
  
+include("msgs.h.lua")
+
  -- SCRIPT FUNCTIONS
 function selectPower(row, power, button)
 	listOfPowers[row] = power
@@ -37,7 +39,8 @@ function done()
 	--spawn god unit	
 	for index, ID in pairs(Spring.GetPlayerList()) do
         --sx,sy,sz = Spring.GetTeamStartPosition(ID)
-		Spring.SendLuaRulesMsg("godselected,"..listOfPowers[1]..","..listOfPowers[2]..","..listOfPowers[3])
+        local message = LuaMessages.serialize(MSG_TYPES.GOD_SELECTED, listOfPowers)
+        Spring.SendLuaRulesMsg(message)
 	    --Spring.CreateUnit("God", sx, sy, sz, 0, 1)
 	end
 	Spring.Echo("Done")

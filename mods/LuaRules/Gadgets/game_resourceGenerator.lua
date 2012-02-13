@@ -17,8 +17,7 @@ end
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
-include("LuaRules/Includes/utilities.lua")
-include("LuaRules/Includes/msgs.h.lua")
+include("LuaUI/Headers/msgs.h.lua")
 
 -- Speed ups
 local AddTeamResource = Spring.AddTeamResource
@@ -80,9 +79,9 @@ local function removeFaith(teamID, amt)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
-    msg = split(msg, ",")
+    msg = LuaMessages.deserialize(msg)
     local msg_type = msg[1]
-    if msg_type == MSGS.CONVERT_FINISHED then
+    if msg_type == MSG_TYPES.CONVERT_FINISHED then
         local clergyID = tonumber(msg[2])
         -- XXX is this a static value or should we get it from somewhere?
         addFaith(Spring.GetUnitTeam(clergyID), 1000)

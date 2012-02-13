@@ -22,8 +22,8 @@ if (not gadgetHandler:IsSyncedCode()) then
 end
 
 include("LuaRules/Includes/customcmds.h.lua")
-include("LuaRules/Includes/utilities.lua")
-include("LuaRules/Includes/msgs.h.lua")
+include("LuaUI/Headers/utilities.lua")
+include("LuaUI/Headers/msgs.h.lua")
 
 -- Speed ups
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
@@ -73,7 +73,8 @@ local function FinishConvert(clergyID, villageID)
     converting[villageID] = nil
     Spring.TransferUnit(villageID, Spring.GetUnitTeam(clergyID))
     Spring.SetUnitNeutral(villageID, false)
-    Spring.SendLuaRulesMsg(MSGS.CONVERT_FINISHED..','..clergyID..","..villageID)
+    local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
+    Spring.SendLuaRulesMsg(message)
 end
 
 local function CancelConvert(clergyID)
@@ -142,7 +143,7 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
 
     local villageX, villageY, villageZ = Spring.GetUnitBasePosition(villageID)
 
-    if distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
+    if utils.distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
         StartConvert(unitID, villageID)
     else
         GiveOrderToUnit(unitID, CMD.MOVE, {villageX, villageY, villageZ}, {}) 
@@ -163,7 +164,7 @@ function gadget:GameFrame(n)
     end
     local curTime = GetGameSeconds()
     for clergyID, villageID in pairs(convert_pending) do
-        if distance_between_units(clergyID, villageID) < CONVERT_DISTANCE then
+        if utils.distance_between_units(clergyID, villageID) < CONVERT_DISTANCE then
             if not CanConvert(clergyID, villageID) then
                 CancelConvert(clergyID)
             else
@@ -182,7 +183,9 @@ function gadget:GameFrame(n)
             FinishConvert(clergyID, villageID)
         else
             local progress = (curTime-startTime)/convertTime
-            SendLuaUIMsg(MSGS.CONVERT_PROGRESS .. "," .. clergyID .. "," .. villageID .. "," .. progress)
+            local message = LuaMessages.serialize(MSG_TYPES.CONVERT_PROGRESS,
+                                                  {clergyID, villageID, progress}) 
+            SendLuaUIMsg(message)
         end
     end
 end

@@ -235,9 +235,9 @@ function widget:Initialize()
 end
 
 function widget:RecvLuaMsg(msg, playerID)
-    msg = parse_message(msg)
+    msg = LuaMessages.deserialize(msg)
     local msg_type = msg[1]
-    if msg_type == MSGS.CONVERT_PROGRESS then
+    if msg_type == MSG_TYPES.CONVERT_PROGRESS then
         local clergyID, villageID, progress = msg[2], msg[3], msg[4]
     end
 end

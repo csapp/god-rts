@@ -1,4 +1,6 @@
-local function split(pString, pPattern)
+--include("utilities.lua")
+
+function split(pString, pPattern)
 	local tableIndex = 1
 	local Table = {} -- NOTE: use {n = 0} in Lua-5.0
 	local fpat = "(.-)" .. pPattern
@@ -20,15 +22,21 @@ local function split(pString, pPattern)
 	return Table
 end
 
-MSGS = {}
+LuaMessages = {}
 
-function parse_message(message)
+function LuaMessages.serialize(msg_type, params)
+    return msg_type .. "," .. table.concat(params, ",")
+end
+
+function LuaMessages.deserialize(message)
     return split(message, ',')
 end
 
-MSGS = {
+MSG_TYPES = {
     CONVERT_PROGRESS = "convert_progress",
+    CONVERT_FINISHED = "convert_finished",
+    GOD_SELECTED = "godselected",
 }
 
-ACTIONS = {
+ACTION_TYPES = {
 }
