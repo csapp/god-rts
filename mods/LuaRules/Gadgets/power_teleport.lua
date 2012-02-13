@@ -37,7 +37,7 @@ end
 
 function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
     if unitDefID == god_unitdef_id then
-        InsertUnitCmdDesc(unitID, CMD_TELEPORT, teleportCmd)
+        --InsertUnitCmdDesc(unitID, CMD_TELEPORT, teleportCmd)
     end
 end
 

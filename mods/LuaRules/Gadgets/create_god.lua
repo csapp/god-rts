@@ -18,13 +18,45 @@ end
 if (gadgetHandler:IsSyncedCode()) then
 
 include("LuaUI/Headers/msgs.h.lua")
+include("LuaRules/Includes/customcmds.h.lua")
+
+local volcanicCmd = {
+      id      = CMD_VOLCANIC_BLAST,
+      name    = "Volcanic Blast",
+      action  = "volcanic_blast",
+      type    = CMDTYPE.ICON_MAP,
+      tooltip = "Cause massive fire damage to units within a certain radius",
+      params = {},
+}
+
+local teleportCmd = {
+      id      = CMD_TELEPORT,
+      name    = "Teleport",
+      action  = "teleport",
+      type    = CMDTYPE.ICON_MAP,
+      tooltip = "Teleport to another location on the map",
+      params = {},
+}
+
+local pow1,pow2,pow3 = "","",""
 
 local function SpawnGod(teamID)
     local sx,sy,sz = Spring.GetTeamStartPosition(teamID)
     sx = sx-50
     Spring.SpawnCEG("whitesmoke", sx, Spring.GetGroundHeight(sx, sz) + 10, sz)
-    Spring.CreateUnit("God", sx, sy, sz, 0, teamID)
+    local god = Spring.CreateUnit("God", sx, sy, sz, 0, teamID)
+	AddPowers(god)
     gadgetHandler:RemoveGadget()
+end
+
+function AddPowers(godID)
+	--Power One
+	if pow1 == "Volcanic Blast" then Spring.InsertUnitCmdDesc(tonumber(godID), volcanicCmd) end
+	--Power Two
+	if pow2 == "Teleport" then Spring.InsertUnitCmdDesc(tonumber(godID), teleportCmd) end
+	--Power Three
+	--if pow3 == "Something" then Spring.InsertUnitCmdDesc(tonumber(godID), somethingCmd) end
+	return
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
@@ -32,10 +64,10 @@ function gadget:RecvLuaMsg(msg, playerID)
 	local msg_type = msg[1]
 	if msg_type == MSG_TYPES.GOD_SELECTED then
         local _, _, _, teamID = Spring.GetPlayerInfo(playerID)
+		pow1 = msg[2]
+		pow2 = msg[3]
+		pow3 = msg[4]
         GG.Delay.DelayCall(SpawnGod, {teamID})
-		--p1 = msg[2]
-		--p2 = msg[3]
-		--p3 = msg[4]
 	end
 end
 

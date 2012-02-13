@@ -39,7 +39,7 @@ end
 
 function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
     if unitDefID == god_unitdef_id then
-        InsertUnitCmdDesc(unitID, CMD_VOLCANIC_BLAST, volcanicCmd)
+        --InsertUnitCmdDesc(unitID, CMD_VOLCANIC_BLAST, volcanicCmd)
     end
 end
 
