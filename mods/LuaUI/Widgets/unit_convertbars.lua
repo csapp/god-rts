@@ -95,7 +95,6 @@ function widget:RecvLuaMsg(msg, playerID)
     msg_type = msg[1]
     if msg_type == MSG_TYPES.CONVERT_PROGRESS then
         clergyID, villageID, convertProgress = msg[2], msg[3], msg[4]
-		Spring.Echo("MESSAGE RECEIVED"..convertProgress)
     elseif msg_type == MSG_TYPES.CONVERT_STARTED then
         clergyID, villageID = msg[2], msg[3]
 		createBar()

@@ -15,7 +15,7 @@ end
 ------------------------------------------------------------
 -- SYNCED
 ------------------------------------------------------------
-if (gadgetHandler:IsSyncedCode()) then
+
 
 include("LuaUI/Headers/msgs.h.lua")
 
@@ -23,7 +23,6 @@ include("LuaUI/Headers/msgs.h.lua")
 local AddTeamResource = Spring.AddTeamResource
 local UseTeamResource = Spring.UseTeamResource
 local GetUnitHealth = Spring.GetUnitHealth
-
 
 local timeInterval = 30 --Denotes the number of frames per second
 local counter = -1 -- When the game begins, this value will be -1 
@@ -35,32 +34,39 @@ local counterMaxValue = 5 --Denotes the maximum value for the counter,
 					      --since the counter starts at 0 and ends at 4 this 
 						  --interval will be 5 seconds long
 
-local playerID = {}						  
---local GetTeamResources = Spring.GetTeamResources(playerID)
-
-local function getPlayerList()
-	for index, ID in pairs(Spring.GetPlayerList()) do
-		playerID[index] = ID
-		end
-end
-		
-
-
+local villageID = 13 	--THIS IS BASED ON THE POSITION IN THE GLOBAL UNIT DEF TABLE,
+						--UNIT DEFS ARE ENTERED ALPHABETICALLY
+						--CHANGE THIS VALUE WHEN NEW UNITDEFS ARE ADDED TO THE POSITION
+						--IN THE LIST OF UNITDEFS LISTED ALPHABETICALLY
+local teams = {}
+				  
 function gadget:Initialize()
     if DEBUG then Spring.Echo("RESOURCE GENERATION ON!") end
-	getPlayerList()
+	teams = Spring.GetTeamList()
 end
 
-local function getResources(playerID)
+--[[local function getResources(playerID)
 	local eCurr, eStor = Spring.GetTeamResources(playerID, "energy")
 	local mCurr, mStor = Spring.GetTeamResources(playerID, "metal")
     Spring.Echo("Metal = " .. mCurr .. " Energy = " .. eCurr)
     Spring.Echo("MetalStorage = " .. mStor .. " EnergyStorage = " .. eStor)
-end
+end]]--
 
-local function generateVillagers(playerID)
-	return 5 --enter formula that calculates how much villagers to generate for the player
-	--Can't properly implement this until we have a list of villages under the players control
+local function generateVillagers(teamID)
+	local unitTable = {}
+	local villagersGenerated = 0
+	
+	unitTable = Spring.GetTeamUnits(teamID)
+	for i = 1, #unitTable do
+		local unitDefID = Spring.GetUnitDefID(unitTable[i])
+		if(unitDefID == villageID) then
+			local villageLevel = UnitDefs[unitDefID].customParams.level
+			villagersGenerated = villagersGenerated + villageLevel
+		end
+	end
+	
+	return villagersGenerated -- formula that calculates how much villagers to generate for the player
+							  -- Formula: Sum of all village * level of village)
 end
 
 --local function generateFaith(playerID)
@@ -106,21 +112,13 @@ function gadget:GameFrame(n)
 	end
 	if (counter == counterMaxValue) then --every five seconds generate resources
 		--Spring.Echo("Adding Resources")
-		for i=1, #playerID do
-			AddTeamResource(playerID[i], "metal", generateVillagers(playerID[i]))
+		for i=1, #teams do
+			AddTeamResource(teams[i], "metal", generateVillagers(teams[i]))
 			--AddTeamResource(playerID[i], "energy", generateVillagers(playerID[i]))
-			if DEBUG then getResources(playerID[i]) end
+			if DEBUG then getResources(teams[i]) end
 		end
 		counter = 0
 	end
 	
 end
 
-
-else
-------------------------------------------------------------
--- UNSYNCED
-------------------------------------------------------------
-	return false
-
-end

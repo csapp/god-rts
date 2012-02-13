@@ -186,7 +186,7 @@ function widget:GameFrame(n)
         local eCurr, eStor, ePull, eInco, eExpe, eShar, eSent, eReci = GetTeamResources(myTeamID, "energy")
         local mCurr, mStor, mPull, mInco, mExpe, mShar, mSent, mReci = GetTeamResources(myTeamID, "metal")
         
-        eStor = eStor - 10000 -- reduce by hidden storage
+        --eStor = eStor - 10000 -- reduce by hidden storage
         if eCurr > eStor then eCurr = eStor end -- cap by storage
 
         if options.onlyShowExpense.value then
