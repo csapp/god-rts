@@ -37,6 +37,7 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
     local radius = 200 -- XXX
     local affected_units = Spring.GetUnitsInSphere(center_x, center_y, center_z, radius)
     Spring.SpawnCEG("flames", center_x, center_y, center_z)
+    Spring.PlaySoundFile("sounds/cannonshot.wav")
     local damage = 400 -- XXX
     for _, affected_unit in pairs(affected_units) do
         if Spring.GetUnitTeam(affected_unit) ~= teamID then
