@@ -37,7 +37,7 @@ MSG_TYPES = {
     CONVERT_PROGRESS = "convert_progress",
     CONVERT_FINISHED = "convert_finished",
     CONVERT_CANCELLED = "convert_cancelled",
-    GOD_SELECTED = "god_selected",
+    GOD_SELECTED = "godselected",
 }
 
 ACTION_TYPES = {
