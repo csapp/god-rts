@@ -26,7 +26,7 @@ GG.Delay.DelayCall = DelayCall
 if (gadgetHandler:IsSyncedCode()) then
 
 function gadget:GameFrame(n)
-    if n % 30 ~= 0 then return end
+    if n % 30 ~= 10 then return end
     for i, delayed_call in ipairs(delayed_calls) do
         f, args = delayed_call[1], delayed_call[2]
         f(unpack(args))
