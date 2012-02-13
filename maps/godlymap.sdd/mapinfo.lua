@@ -4,7 +4,7 @@
 --
 
 local mapinfo = {
-	name        = "Godly Map v2",
+	name        = "Godly Map v0.1",
 	shortname   = "",
 	description = "",
 	author      = "",
