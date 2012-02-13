@@ -19,36 +19,23 @@ if (gadgetHandler:IsSyncedCode()) then
 
 include("LuaUI/Headers/msgs.h.lua")
 
--- Speed ups
-
-local playerID = {}		
-local create = false
-local PID = 1
-local p1,p2,p3 = "","",""				  
-
-local function getPlayerList()
-	for index, ID in pairs(Spring.GetPlayerList()) do
-		playerID[index] = ID
-		end
-end
-
-function gadget:Initialize()
-    if DEBUG then Spring.Echo("RESOURCE GENERATION ON!") end
-	getPlayerList()
+local function SpawnGod(teamID)
+    local sx,sy,sz = Spring.GetTeamStartPosition(teamID)
+    sx = sx-50
+    Spring.SpawnCEG("whitesmoke", sx, Spring.GetGroundHeight(sx, sz) + 10, sz)
+    Spring.CreateUnit("God", sx, sy, sz, 0, teamID)
+    gadgetHandler:RemoveGadget()
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
     msg = LuaMessages.deserialize(msg)
 	local msg_type = msg[1]
 	if msg_type == MSG_TYPES.GOD_SELECTED then
-		p1 = msg[2]
-		p2 = msg[3]
-		p3 = msg[4]
-		PID = 1--tonumber(msg[5]) TEMPORARY UNTIL I CAN GET PLAYER ID PROPERLY in ui widget
-		create = true
-		--Spring.Echo("CREATE",p1,p2,p3,PID)
-		--local sx,sy,sz = Spring.GetTeamStartPosition(playerID)
-		--Spring.CreateUnit("God", sx, sy, sz, 0, playerID)
+        local _, _, _, teamID = Spring.GetPlayerInfo(playerID)
+        GG.Delay.DelayCall(SpawnGod, {teamID})
+		--p1 = msg[2]
+		--p2 = msg[3]
+		--p3 = msg[4]
 	end
 end
 
