@@ -20,25 +20,10 @@ if (gadgetHandler:IsSyncedCode()) then
 include("LuaRules/Includes/customcmds.h.lua")
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 
-local teleportCmd = {
-      id      = CMD_TELEPORT,
-      name    = "Teleport",
-      action  = "teleport",
-      type    = CMDTYPE.ICON_MAP,
-      tooltip = "Teleport to another location on the map",
-      params = {},
-}
-
 local god_unitdef_id = UnitDefNames["god"].id
 
 function gadget:Initialize()
     gadgetHandler:RegisterCMDID(CMD_TELEPORT)
-end
-
-function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
-    if unitDefID == god_unitdef_id then
-        --InsertUnitCmdDesc(unitID, CMD_TELEPORT, teleportCmd)
-    end
 end
 
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)

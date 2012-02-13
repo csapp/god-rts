@@ -22,25 +22,10 @@ include("LuaRules/Includes/customcmds.h.lua")
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local AddUnitDamage = Spring.AddUnitDamage
 
-local volcanicCmd = {
-      id      = CMD_VOLCANIC_BLAST,
-      name    = "Volcanic Blast",
-      action  = "volcanic_blast",
-      type    = CMDTYPE.ICON_MAP,
-      tooltip = "Cause massive fire damage to units within a certain radius",
-      params = {},
-}
-
 local god_unitdef_id = UnitDefNames["god"].id
 
 function gadget:Initialize()
     gadgetHandler:RegisterCMDID(CMD_VOLCANIC_BLAST)
-end
-
-function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
-    if unitDefID == god_unitdef_id then
-        --InsertUnitCmdDesc(unitID, CMD_VOLCANIC_BLAST, volcanicCmd)
-    end
 end
 
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
