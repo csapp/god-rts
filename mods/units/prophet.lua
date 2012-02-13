@@ -43,8 +43,8 @@ local unitDef  =  {
     idleAutoHeal = 0,
     
 --Energy and metal related
-    BuildCostEnergy = 0,
-    BuildCostMetal = 0,
+    BuildCostEnergy = 30,
+    BuildCostMetal = 10,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],

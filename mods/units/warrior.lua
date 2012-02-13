@@ -44,7 +44,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 0,
+    BuildCostMetal = 6,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],
