@@ -18,12 +18,10 @@ function widget:GetInfo()
  -- MEMBERS
  local listOfPowers = {"","",""}
  local team_positions = {}
- local sx,sy,sz = 1450, -100, 450
+ local ID = Spring.GetMyPlayerID()
  local godselLabel
  local godselWindow
  
-include("msgs.h.lua")
-
  -- SCRIPT FUNCTIONS
 function selectPower(row, power, button)
 	listOfPowers[row] = power
@@ -36,13 +34,8 @@ function done()
     if(listOfPowers[1] == "" or listOfPowers[2] == "" or listOfPowers[3] == "") then
 	    return false
     end
-	--spawn god unit	
-	for index, ID in pairs(Spring.GetPlayerList()) do
-        --sx,sy,sz = Spring.GetTeamStartPosition(ID)
-        local message = LuaMessages.serialize(MSG_TYPES.GOD_SELECTED, listOfPowers)
-        Spring.SendLuaRulesMsg(message)
-	    --Spring.CreateUnit("God", sx, sy, sz, 0, 1)
-	end
+	ID = Spring.GetMyPlayerID()
+	Spring.SendLuaRulesMsg("godselected,"..listOfPowers[1]..","..listOfPowers[2]..","..listOfPowers[3]..","..ID)
 	Spring.Echo("Done")
 	widgetHandler:RemoveWidget()
 end
@@ -66,8 +59,8 @@ end
  	local screen0 = Chili.Screen0
 
  	godselWindow = Chili.Window:New{
- 		x = '50%',
- 		y = '50%',	
+ 		x = '25%',
+ 		y = '25%',	
  		dockable = true,
  		parent = screen0,
  		caption = "",
