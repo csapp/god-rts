@@ -222,7 +222,7 @@ function printEXP(unitID)
 	local maxXP = UnitDefs[Spring.GetUnitDefID(unitID)].customParams.max_xp
 	
 	if currentXP ~= nil and maxXP ~= nil then
-		expString = "Experience Points: " .. currentXP .. " / " .. maxXP
+		expString = "Experience Points: " .. math.floor(currentXP) .. " / " .. maxXP
 		return expString
 	else
 		return ""
