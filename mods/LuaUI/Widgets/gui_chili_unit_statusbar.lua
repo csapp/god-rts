@@ -17,10 +17,10 @@ function widget:GetInfo()
 end
 
 -- Uncomment this to display debug messages:
-DEBUG = 0
+--DEBUG = 0
 
 -- INCLUDES
-VFS.Include("LuaRules/Includes/utilities.lua")
+include("msgs.h.lua")
 
 -- CONSTANTS
 local Chili
@@ -43,12 +43,20 @@ local filePath = ''
 local unitPic
 
 local updateRequired = true
+local progressBars = {}
+local statusBar = nil
+local pbarWindow = nil
+local current_progress_bar = nil
 
 -- SCRIPT FUNCTIONS
 -- Returns the caption, parent container and commandtype of the button	
 
 function setUnitInfo(unit)
-	local unitInfoString = printUnitName(unit) .. "\n" .. printDescription(unit) .. "\n" .. printUnitLevel(unit) .. "\n" .. printUnitHealth(unit) .. "\n" .. printEXP(unit)
+	local unitInfoString = --printUnitName(unit) .. "\n"..
+                           printDescription(unit) .. "\n"..
+                           printUnitLevel(unit) .. "\n"..
+                           printUnitHealth(unit) .. "\n"..
+                           printEXP(unit)
 
 	unitInfo:SetCaption(unitInfoString)
 end
@@ -80,6 +88,19 @@ function widget:Initialize()
 	
 	local screen0 = Chili.Screen0	
 
+	statusBar = Window:New{
+		parent = screen0,
+		x = 0,
+		y = -150,
+		width = "100%",
+		height = 150,
+		draggable = false,
+		resizable = false,
+		dragUseGrip = false,		
+		anchors = {left=true,bottom=true,right=true,top=false},
+		skinName  = "DarkGlass",
+		--children = {unitInfo,imageWindow,[>unitStats<]},
+	}
 	unitInfo = Label:New{
 		parent = statusBar,
 		x = 110,
@@ -109,6 +130,7 @@ function widget:Initialize()
 	]]
 	
 	imageWindow = Control:New{
+        parent = statusBar,
 		x = 10,
 		width = 96,
 		height = 96,
@@ -116,19 +138,16 @@ function widget:Initialize()
 		margin = {0, 0, 0, 0},
 	}
 
-	statusBar = Window:New{
-		parent = screen0,
-		x = 0,
-		y = -150,
-		width = "100%",
-		height = 150,
-		draggable = false,
-		resizable = false,
-		dragUseGrip = false,		
-		anchors = {left=true,bottom=true,right=true,top=false},
-		skinName  = "DarkGlass",
-		children = {unitInfo,imageWindow,--[[unitStats]]},
+	pbarWindow = Control:New{
+        parent = statusBar,
+        x = statusBar.width/2 - 100,
+		width = 200,
+		height = 50,
+		padding = {0, 0, 0, 0},
+		margin = {0, 0, 0, 0},
 	}
+
+
 end
 
 function widget:GameStart()
@@ -140,7 +159,12 @@ function widget:CommandsChanged()
 	if not game_start then
         return
     end
+
     if Spring.GetSelectedUnitsCount() == 0 then
+        if current_progress_bar ~= nil then
+            pbarWindow:RemoveChild(current_progress_bar)
+            current_progress_bar = nil
+        end
         unitInfo:SetCaption("")
 		--unitStats:SetCaption("")
 		resetWindow(imageWindow)
@@ -153,6 +177,16 @@ function widget:CommandsChanged()
 	-- setUnitStats(selected_units[1])
 	resetWindow(imageWindow)
 	drawPortrait()
+    
+    if current_progress_bar ~= nil then
+        pbarWindow:RemoveChild(current_progress_bar)
+        current_progress_bar = nil
+    end
+    current_progress_bar = progressBars[selected_units[1]]
+    if current_progress_bar ~= nil then
+        pbarWindow:AddChild(current_progress_bar)
+    end
+
 	updateRequired = true
 end
 
@@ -229,11 +263,8 @@ function printEXP(unitID)
 	end
 end
 
--- This doesn't work right now. Possible workaround:
--- http://springrts.com/phpbb/viewtopic.php?f=14&t=27554&p=512504&hilit=unit+description#p512504
--- However I can't get that to work either
 function printDescription(unitID)
-	local desc = UnitDefs[Spring.GetUnitDefID(unitID)].description
+	local desc = Spring.GetUnitTooltip(unitID)
 	
 	if desc ~= nil then
 		return desc
@@ -259,3 +290,83 @@ end
 	--local range = WeaponDefs[Spring.GetUnitDefID(unitID)].range
 	--local damage = WeaponDefs[Spring.GetUnitDefID(unitID)].damge
 	--local attackSpeed = WeaponDefs[Spring.GetUnitDefID(unitID)].reloadtime
+    --
+    --
+
+local function createProgressBar(unitID, caption)
+
+	local bars = 2
+	local function p(a)
+        return tostring(a).."%"
+    end
+	
+	local bar_convert = Chili.Progressbar:New{
+                parent = pbarWindow,
+                color  = {0,0,1,1},
+                --height = p(100/bars),
+                --right  = 0,
+                min = 0,
+                max = 100,
+                --x      = statusBar.width/2,
+                --align = "center",
+                --valign = "center",
+                --y      = p(100/bars),
+				value = 0,
+                width = "100%",
+                height = "100%",
+                tooltip = "This shows your current conversion progress.",
+                font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
+        }
+	
+	local lbl_convert = Chili.Label:New{
+		parent = bar_convert,
+		height = p(100/bars),
+		right  = 26,
+		width  = 40,
+        x      = 0,
+		caption = caption,
+		valign  = "center",
+		align   = "center",
+		autosize = false,
+		font   = {size = 12, outline = true, color = {0,1,0,1}},
+		tooltip = "Amount of time until conversion is complete.",
+	}
+
+    progressBars[unitID] = bar_convert
+    current_progress_bar = bar_convert
+		
+end
+
+function destroyProgressBar(unitID)
+    local progressBar = progressBars[unitID] 
+    if not progressBar then
+        return 
+    end
+    progressBar:Dispose()
+    progressBars[unitID] = nil
+end
+
+local function updateProgressBar(unitID, progress)
+    -- progress given as a decimal e.g. for 10% pass 0.1, not 10
+    local progressBar = progressBars[unitID] 
+    if not progressBar then
+        return
+    end
+    progressBar:SetValue(progress*100)
+end
+
+function widget:RecvLuaMsg(msg, playerID)
+    msg = LuaMessages.deserialize(msg)
+    msg_type = msg[1]
+    if msg_type == MSG_TYPES.PBAR_CREATE then
+        unitID, caption = tonumber(msg[2]), msg[3]
+		createProgressBar(unitID, caption)
+    elseif msg_type == MSG_TYPES.PBAR_PROGRESS then
+        unitID, progress = tonumber(msg[2]), tonumber(msg[3])
+        updateProgressBar(unitID, progress)
+    elseif msg_type == MSG_TYPES.PBAR_DESTROY then
+        unitID = tonumber(msg[2])
+		destroyProgressBar(unitID)
+    end
+end
+

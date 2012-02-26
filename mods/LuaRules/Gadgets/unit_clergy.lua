@@ -64,8 +64,8 @@ local function StartConvert(clergyID, villageID)
     convert_pending[clergyID] = nil
     converting[villageID] = {time = Spring.GetGameSeconds(),
                              clergyID = clergyID}
-    local message = LuaMessages.serialize(MSG_TYPES.CONVERT_STARTED, {clergyID, villageID})
-    Spring.SendLuaUIMsg(message)
+    local message = LuaMessages.serialize(MSG_TYPES.PBAR_CREATE, {clergyID, "Converting..."})
+    SendLuaUIMsg(message)
 end
 
 local function FinishConvert(clergyID, villageID)
@@ -74,17 +74,18 @@ local function FinishConvert(clergyID, villageID)
     Spring.SetUnitNeutral(villageID, false)
     local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
     Spring.SendLuaRulesMsg(message)
-    Spring.SendLuaUIMsg(message)
+    message = LuaMessages.serialize(MSG_TYPES.PBAR_DESTROY, {clergyID})
+    SendLuaUIMsg(message)
 end
 
 local function CancelConvert(clergyID)
-    Spring.Echo("canceling convert")
+    if DEBUG then Spring.Echo("Canceling convert") end
     convert_pending[clergyID] = nil
     for villageID, info in pairs(converting) do
         if info['clergyID'] == clergyID then
             converting[villageID] = nil
-            local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
-            Spring.SendLuaUIMsg(message)
+            local message = LuaMessages.serialize(MSG_TYPES.PBAR_DESTROY, {clergyID})
+            SendLuaUIMsg(message)
             break
         end
     end
@@ -187,8 +188,8 @@ function gadget:GameFrame(n)
             FinishConvert(clergyID, villageID)
         else
             local progress = (curTime-startTime)/convertTime
-            local message = LuaMessages.serialize(MSG_TYPES.CONVERT_PROGRESS,
-                                                  {clergyID, villageID, progress}) 
+            local message = LuaMessages.serialize(MSG_TYPES.PBAR_PROGRESS,
+                                                  {clergyID, progress}) 
             SendLuaUIMsg(message)
         end
     end

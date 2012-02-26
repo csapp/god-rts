@@ -33,10 +33,12 @@ function LuaMessages.deserialize(message)
 end
 
 MSG_TYPES = {
-    CONVERT_STARTED = "convert_started",
-    CONVERT_PROGRESS = "convert_progress",
+    -- Progress bars
+    PBAR_CREATE = "pbar_create",
+    PBAR_PROGRESS = "pbar_progress",
+    PBAR_DESTROY = "pbar_destroy",
+
     CONVERT_FINISHED = "convert_finished",
-    CONVERT_CANCELLED = "convert_cancelled",
     GOD_SELECTED = "godselected",
 }
 
