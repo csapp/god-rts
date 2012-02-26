@@ -28,7 +28,6 @@ include("LuaUI/Headers/msgs.h.lua")
 -- Speed ups
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local GiveOrderToUnit = Spring.GiveOrderToUnit
-local GetGameSeconds = Spring.GetGameSeconds
 local GetUnitDefID = Spring.GetUnitDefID
 local GetUnitHealth = Spring.GetUnitHealth
 local SendLuaUIMsg = Spring.SendLuaUIMsg
@@ -60,35 +59,40 @@ local function GetUnitNeutral(unitID)
     return Spring.GetUnitTeam(unitID) == gaiaTeamID
 end
 
-local function StartConvert(clergyID, villageID)
-    convert_pending[clergyID] = nil
-    converting[villageID] = {time = Spring.GetGameSeconds(),
-                             clergyID = clergyID}
-    local message = LuaMessages.serialize(MSG_TYPES.PBAR_CREATE, {clergyID, "Converting..."})
-    SendLuaUIMsg(message)
-end
+local function FinishConvert(clergyID)
+    local villageID = nil
+    for vID, cID in pairs(converting) do
+        if cID == clergyID then
+            villageID = vID
+            break
+        end
+    end
+    if villageID == nil then return end
 
-local function FinishConvert(clergyID, villageID)
     converting[villageID] = nil
     Spring.TransferUnit(villageID, Spring.GetUnitTeam(clergyID))
     Spring.SetUnitNeutral(villageID, false)
     local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
     Spring.SendLuaRulesMsg(message)
-    message = LuaMessages.serialize(MSG_TYPES.PBAR_DESTROY, {clergyID})
-    SendLuaUIMsg(message)
+end
+
+local function StartConvert(clergyID, villageID)
+    convert_pending[clergyID] = nil
+    converting[villageID] = clergyID
+    local convert_time = tonumber(UnitDefs[GetUnitDefID(villageID)].customParams.convert_time)
+    GG.ProgressBars.AddProgressBar(clergyID, "Converting...", convert_time, FinishConvert)
 end
 
 local function CancelConvert(clergyID)
     if DEBUG then Spring.Echo("Canceling convert") end
     convert_pending[clergyID] = nil
-    for villageID, info in pairs(converting) do
-        if info['clergyID'] == clergyID then
+    for villageID, cID in pairs(converting) do
+        if cID == clergyID then
             converting[villageID] = nil
-            local message = LuaMessages.serialize(MSG_TYPES.PBAR_DESTROY, {clergyID})
-            SendLuaUIMsg(message)
             break
         end
     end
+    GG.ProgressBars.CancelProgressBar(clergyID)
 end
 
 function gadget:Initialize()
@@ -167,7 +171,6 @@ function gadget:GameFrame(n)
     if n % 30 ~= 0 then
         return
     end
-    local curTime = GetGameSeconds()
     for clergyID, villageID in pairs(convert_pending) do
         if utils.distance_between_units(clergyID, villageID) < CONVERT_DISTANCE then
             if not CanConvert(clergyID, villageID) then
@@ -176,21 +179,6 @@ function gadget:GameFrame(n)
                 StartConvert(clergyID, villageID)
             end
             GiveOrderToUnit(clergyID, CMD.STOP, {}, {}) 
-        end
-    end
-    for villageID, info in pairs(converting) do
-        
-        -- XXX should we get this value every time or save this value in the converting table?
-        local convertTime = tonumber(UnitDefs[GetUnitDefID(villageID)].customParams.convert_time)
-
-        local startTime, clergyID = info['time'], info['clergyID']
-        if curTime - startTime >= convertTime then 
-            FinishConvert(clergyID, villageID)
-        else
-            local progress = (curTime-startTime)/convertTime
-            local message = LuaMessages.serialize(MSG_TYPES.PBAR_PROGRESS,
-                                                  {clergyID, progress}) 
-            SendLuaUIMsg(message)
         end
     end
 end
