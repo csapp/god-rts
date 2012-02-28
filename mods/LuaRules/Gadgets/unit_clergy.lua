@@ -89,10 +89,10 @@ local function CancelConvert(clergyID)
     for villageID, cID in pairs(converting) do
         if cID == clergyID then
             converting[villageID] = nil
+            GG.ProgressBars.CancelProgressBar(clergyID)
             break
         end
     end
-    GG.ProgressBars.CancelProgressBar(clergyID)
 end
 
 function gadget:Initialize()
