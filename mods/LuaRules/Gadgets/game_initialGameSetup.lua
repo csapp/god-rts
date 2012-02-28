@@ -22,10 +22,13 @@ local listOfUnits = {"smallVillage", "priest"}
 local spawnOffset = 50
 
 local function getPlayerAndStartLocation()
-	for index, ID in pairs(Spring.GetPlayerList()) do
-        local sx,sy,sz = Spring.GetTeamStartPosition(ID)
-        team_positions[ID] = {sx,sy,sz}
-		end
+    local gaia = Spring.GetGaiaTeamID()
+	for index, ID in ipairs(Spring.GetTeamList()) do
+        if ID ~= gaia then
+            local sx,sy,sz = Spring.GetTeamStartPosition(ID)
+            team_positions[ID] = {sx,sy,sz}
+        end
+    end
 end
 
 local function spawnInitialUnits()
