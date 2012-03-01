@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "soldierscript.lua",
 
     customParams = {
+        class = "infantry",
         morph_into = "warrior",
         max_xp = 500,
         level = 1,

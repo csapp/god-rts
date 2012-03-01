@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "knightscript.lua",
 
     customParams = {
+        class = "cavalry",
         level = 3,
     },
 

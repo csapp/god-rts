@@ -1,5 +1,5 @@
 -- Power functions are synced code
-include("LuaRules/Includes/customcmds.h.lua")
+include("LuaUI/Headers/customcmds.h.lua")
 
 POWERS = {
     TYPES = {

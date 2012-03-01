@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "generalscript.lua",
 
     customParams = {
+        class = "infantry",
         level = 3,
     },
 

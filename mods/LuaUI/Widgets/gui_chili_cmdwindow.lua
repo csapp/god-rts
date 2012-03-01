@@ -20,7 +20,7 @@ end
 --DEBUG = 0
 
 -- INCLUDES
-VFS.Include("LuaRules/Includes/utilities.lua")
+VFS.Include("LuaUI/Headers/utilities.lua")
 
 -- CONSTANTS
 local MAXBUTTONSONROW = 3

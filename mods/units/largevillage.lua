@@ -58,6 +58,7 @@ local unitDef =
 
     -- Custom
     customParams = {
+        class = "village",
         convert_time = 120,
         convert_xp = 1000,
         level = 3,

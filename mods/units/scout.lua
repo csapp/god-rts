@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "scoutscript.lua",
 
     customParams = {
+        class = "cavalry",
         morph_into = "knight",
         max_xp = 1500,
         level = 2,

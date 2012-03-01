@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "archerscript.lua",
 
     customParams = {
+        class = "ranged",
         level = 3,
     },
 

@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "marksmanscript.lua",
 
     customParams = {
+        class = "ranged",
         morph_into = "archer",
         max_xp = 1000,
         level = 2,

@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "hunterscript.lua",
 
     customParams = {
+        class = "ranged",
         morph_into = "marksman",
         max_xp = 500,
         level = 1,

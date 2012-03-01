@@ -3,7 +3,6 @@
 -- and a gadget in zero-k
 -- LuaRules/Gadgets/unit_transport_ai_buttons.lua
 
-
 function gadget:GetInfo()
     return {
         name = "Clergy units",
@@ -21,9 +20,10 @@ if (not gadgetHandler:IsSyncedCode()) then
   return false
 end
 
-include("LuaRules/Includes/customcmds.h.lua")
 include("LuaUI/Headers/utilities.lua")
+include("LuaUI/Headers/customcmds.h.lua")
 include("LuaUI/Headers/msgs.h.lua")
+include("LuaUI/Headers/units.h.lua")
 
 -- Speed ups
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
@@ -31,6 +31,7 @@ local GiveOrderToUnit = Spring.GiveOrderToUnit
 local GetUnitDefID = Spring.GetUnitDefID
 local GetUnitHealth = Spring.GetUnitHealth
 local SendLuaUIMsg = Spring.SendLuaUIMsg
+local GetUnitTeam = Spring.GetUnitTeam
 
 local convertCmd = {
       id      = CMD_CONVERT,
@@ -45,18 +46,11 @@ local convertCmd = {
 local converting = {}
 local convert_pending = {}
 
--- XXX move to config file?
-local VILLAGE_IDS = {UnitDefNames["smallvillage"].id,
-                     UnitDefNames["mediumvillage"].id,
-                     UnitDefNames["largevillage"].id}
-local CLERGY_IDS = {UnitDefNames["priest"].id,
-                    UnitDefNames["prophet"].id}
-
 local CONVERT_DISTANCE = 100 
 
 local gaiaTeamID = Spring.GetGaiaTeamID()
 local function GetUnitNeutral(unitID)
-    return Spring.GetUnitTeam(unitID) == gaiaTeamID
+    return GetUnitTeam(unitID) == gaiaTeamID
 end
 
 local function FinishConvert(clergyID)
@@ -70,7 +64,7 @@ local function FinishConvert(clergyID)
     if villageID == nil then return end
 
     converting[villageID] = nil
-    Spring.TransferUnit(villageID, Spring.GetUnitTeam(clergyID))
+    Spring.TransferUnit(villageID, GetUnitTeam(clergyID))
     Spring.SetUnitNeutral(villageID, false)
     local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
     Spring.SendLuaRulesMsg(message)
@@ -102,13 +96,13 @@ function gadget:Initialize()
 end
 
 function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
-    if table.contains(CLERGY_IDS, unitDefID) then
+    if Units.IsClergyUnit(unitID) then
         InsertUnitCmdDesc(unitID, CMD_CONVERT, convertCmd)
     end
 end
 
 --function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
-    --if not table.contains(CLERGY_IDS, GetUnitDefID(unitID)) then
+    --if Units.IsClergyUnit(unitID) then
         --return true
     --end
 
@@ -123,6 +117,11 @@ local function CanConvert(clergyID, villageID)
     if converting[villageID] then
         return false
     end
+
+    -- FIXME this is throwing a weird error sometimes for some reason
+    --if GetUnitTeam(clergyID) == GetUnitTeam(villageID) then
+        --return false
+    --end
 
     if not GetUnitNeutral(villageID) then
         local curHealth, maxHealth = GetUnitHealth(villageID)
@@ -140,7 +139,7 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
     end
 
     local villageID = cmdParams[1]
-    if not table.contains(VILLAGE_IDS, Spring.GetUnitDefID(villageID)) then
+    if Units.IsVillageUnit(unitID) then
         return false
     end
 
@@ -160,7 +159,7 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
 end
     
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
-    if table.contains(CLERGY_IDS, unitDefID) then
+    if Units.IsClergyUnit(unitID) then
         CancelConvert(unitID)
         local x,y,z = Spring.GetTeamStartPosition(teamID)
         Spring.CreateUnit("priest", x, y, z, 0, teamID) 

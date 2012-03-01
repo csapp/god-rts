@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "horsemanscript.lua",
 
     customParams = {
+        class = "cavalry",
         morph_into = "scout",
         max_xp = 750,
         level = 1,
