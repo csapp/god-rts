@@ -83,10 +83,61 @@ function table.contains(table, element)
 	return false 
 end
 
+function table:merge(table2)
+  for i,v in pairs(table2) do
+    if (type(v)=='table') then
+      local sv = type(self[i])
+      if (sv == 'table')or(sv == 'nil') then
+        if (sv == 'nil') then self[i] = {} end
+        table.merge(self[i],v)
+      end
+    elseif (self[i] == nil) then
+      self[i] = v
+    end
+  end
+end
+
+function table:shallowcopy()
+  local newTable = {}
+  for k, v in pairs(self) do
+    newTable[k] = v
+  end
+  return newTable
+end
+
 function utils.distance_between_units(unitID1, unitID2)
     local u1x, u1y, u1z = Spring.GetUnitBasePosition(unitID1)
     local u2x, u2y, u2z = Spring.GetUnitBasePosition(unitID2)
     local dx, dy, dz = u2x-u1x, u2y-u1y, u2z-u1z
     return math.sqrt(dx^2 + dy^2 + dz^2)
+end
+
+function IsObject(v)
+  return ((type(v)=="metatable")or(type(v)=="userdata")) and(v.classname)
+end
+
+function IsNumber(v)
+  return (type(v)=="number")
+end
+
+function isnumber(v)
+  return (type(v)=="number")
+end
+
+function istable(v)
+  return (type(v)=="table")
+end
+
+function isstring(v)
+  return (type(v)=="string")
+end
+
+function isindexable(v)
+  local t = type(v)
+  return (t=="table")or(t=="metatable")or(t=="userdata")
+end
+
+function isfunc(v)
+  return (type(v)=="function")
 end
 
