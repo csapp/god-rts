@@ -24,6 +24,12 @@ local god_unitdef_id = UnitDefNames["god"].id
 
 local POWERS_DIR = "LuaRules/Classes/Powers/"
 
+local power_bases = {
+    "power.lua",
+    "activepower.lua",
+    "rangedpower.lua",
+}
+
 local power_filepaths = {
     "volcanicblast.lua",
     "teleport.lua",
@@ -35,8 +41,9 @@ PowerNames = {}
 PowerManagers = {}
 
 local function PopulatePowerTables()
-    VFS.Include(POWERS_DIR .. "power.lua")
-    VFS.Include(POWERS_DIR .. "activepower.lua")
+    for _, filepath in pairs(power_bases) do
+        VFS.Include(POWERS_DIR .. filepath)
+    end
     for _, filepath in pairs(power_filepaths) do
         local power = VFS.Include(POWERS_DIR .. filepath)
         local id = power:GetID()

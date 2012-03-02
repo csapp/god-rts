@@ -77,7 +77,7 @@ end
 function ActivePower:_RechargeFinished()
 end
 
-function ActivePower:CanUse()
+function ActivePower:CanUse(cmdParams, cmdOptions)
     return self:GetCharge() >= self:GetCost()
 end
 
@@ -87,7 +87,7 @@ end
 
 function ActivePower:Use(cmdParams, cmdOptions)
     -- do not override this in subclasses, override _Use instead
-    if self:CanUse() then
+    if self:CanUse(cmdParams, cmdOptions) then
         self:SpendCharge(self:GetCost())
         self:_Use(cmdParams, cmdOptions)
         self:Recharge()

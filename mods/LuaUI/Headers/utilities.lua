@@ -105,11 +105,18 @@ function table:shallowcopy()
   return newTable
 end
 
+function utils.distance_between_points(p1, p2)
+    local x1, y1, z1 = unpack(p1)
+    local x2, y2, z2 = unpack(p2)
+    return math.sqrt((x2-x1)^2+(y2-y1)^2+(z2-z1)^2)
+end
+
 function utils.distance_between_units(unitID1, unitID2)
     local u1x, u1y, u1z = Spring.GetUnitBasePosition(unitID1)
     local u2x, u2y, u2z = Spring.GetUnitBasePosition(unitID2)
-    local dx, dy, dz = u2x-u1x, u2y-u1y, u2z-u1z
-    return math.sqrt(dx^2 + dy^2 + dz^2)
+    return utils.distance_between_points({u1x,u1y,u1z}, {u2x,u2y,u2z})
+    --local dx, dy, dz = u2x-u1x, u2y-u1y, u2z-u1z
+    --return math.sqrt(dx^2 + dy^2 + dz^2)
 end
 
 function IsObject(v)

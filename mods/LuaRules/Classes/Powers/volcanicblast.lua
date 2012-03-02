@@ -12,7 +12,7 @@
 local GetUnitTeam = Spring.GetUnitTeam
 local AddUnitDamage = Spring.AddUnitDamage
 
-VolcanicBlast = ActivePower:Inherit{
+VolcanicBlast = RangedPower:Inherit{
     classname = "VolcanicBlast",
     id = CMD_VOLCANIC_BLAST,
     powerName = "Volcanic Blast",

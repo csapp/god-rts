@@ -1,7 +1,7 @@
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
 
-Teleport = ActivePower:Inherit{
+Teleport = RangedPower:Inherit{
     classname = "Teleport",
     id = CMD_TELEPORT,
     powerName = "Teleport",
