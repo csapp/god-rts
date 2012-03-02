@@ -14,7 +14,6 @@ local unitDef  =  {
     ObjectName = "Prophet.s3o",
     name = "Prophet",
     script = "prophetscript.lua",
-    builder = true,
     --cancapture = true,
     --capturespeed = 900,
 
@@ -59,7 +58,12 @@ local unitDef  =  {
     TurnRate = 900,
     
 --Abilities
-    Builder = 0,
+    Builder = true,
+    Reclaimable = false,
+    workerTime = 1,
+    CanRepair = true,
+    CanReclaim = false,
+    RepairSpeed = 1, 
     canAttack = false,
 	canFight = false,
     CanGuard = 1,
@@ -67,7 +71,6 @@ local unitDef  =  {
     CanPatrol = 1,
     CanStop = 1,
     LeaveTracks = 0,
-    Reclaimable = 0,
     
 --Hitbox
 	collisionVolumeOffsets = "0 0 0",
