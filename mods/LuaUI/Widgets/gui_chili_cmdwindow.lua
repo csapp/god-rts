@@ -115,11 +115,11 @@ function createMyButton(cmd)
 		local color = {0,0,0,1}
 		local button = Chili.Button:New {
 			parent = container,
-			x = 80 * (result-1),
+			x = 110 * (result-1),
 			y = y_axis,
 			padding = {5, 5, 5, 5},
 			margin = {0, 0, 0, 0},
-			minWidth = 40,
+			minWidth = 110,
 			minHeight = 40,
 			caption = buttontext,
 			isDisabled = false,
@@ -233,7 +233,7 @@ function widget:Initialize()
 	}		
 	
 	window0 = Chili.Window:New{
-		x = '80%',
+		x = '70%',
 		y = '12%',	
 		dockable = true,
 		parent = screen0,
@@ -241,7 +241,7 @@ function widget:Initialize()
 		draggable = true,
 		resizable = true,
 		dragUseGrip = true,
-		clientWidth = 250,
+		clientWidth = 350,
 		clientHeight = 400,
 		backgroundColor = {0,0,0,1},
 		skinName  = "Robocracy",		
