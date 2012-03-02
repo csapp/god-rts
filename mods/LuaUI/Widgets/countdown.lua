@@ -46,6 +46,7 @@ local defaultClockUsed = 0
 
 function widget:Initialize()
   defaultClockUsed = Spring.GetConfigInt("ShowClock", 1)
+  -- Hides the default countdown clock, change "0" to "1" to show it
   Spring.SendCommands({"clock 0"})
 end
 
@@ -60,6 +61,8 @@ end
 --
 --  Rendering
 --
+
+--[[
 local function GetTimeString()
   local secs = math.floor(Spring.GetGameSeconds())
   if (timeSecs ~= secs) then
@@ -122,7 +125,7 @@ function widget:ViewResize(viewSizeX, viewSizeY)
   UpdateGeometry()
 end
 
-
+]]
 
 
 
