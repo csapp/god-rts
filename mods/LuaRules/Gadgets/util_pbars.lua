@@ -19,7 +19,6 @@ if (gadgetHandler:IsSyncedCode()) then
 
 include("LuaUI/Headers/msgs.h.lua")
 
-local SendLuaUIMsg = Spring.SendLuaUIMsg
 local GetGameSeconds = Spring.GetGameSeconds
 
 GG.ProgressBars = {}
@@ -28,21 +27,15 @@ local progress_bars = {}
 
 local function AddProgressBar(unitID, caption, duration, callback)
     progress_bars[unitID] = {GetGameSeconds(), duration, callback}
-    local message = LuaMessages.serialize(MSG_TYPES.PBAR_CREATE,
-                                          {unitID, caption})
-    SendLuaUIMsg(message)
+    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_CREATE, {unitID, caption})
 end
 
 local function UpdateProgressBar(unitID, progress)
-    local message = LuaMessages.serialize(MSG_TYPES.PBAR_PROGRESS,
-                                          {unitID, progress})
-    SendLuaUIMsg(message)
+    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_PROGRESS, {unitID, progress})
 end
 
 local function FinishProgressBar(unitID)
-    local message = LuaMessages.serialize(MSG_TYPES.PBAR_DESTROY,
-                                          {unitID, progress})
-    SendLuaUIMsg(message)
+    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_DESTROY, {unitID, progress})
     callback = progress_bars[unitID][3]
     if callback then callback(unitID) end
     progress_bars[unitID] = nil

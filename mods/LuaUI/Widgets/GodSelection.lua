@@ -36,11 +36,9 @@ function done()
 	    return false
     end
 	ID = Spring.GetMyPlayerID()
-	--Spring.SendLuaRulesMsg("godselected,"..listOfPowers[1]..","..listOfPowers[2]..","..listOfPowers[3]..","..ID)
     table.insert(listOfPowers, ID)
-    local message = LuaMessages.serialize(MSG_TYPES.GOD_SELECTED, listOfPowers)
-    Spring.SendLuaRulesMsg(message)
-        --Spring.Echo("Done")
+    LuaMessages.SendLuaRulesMsg(MSG_TYPES.GOD_SELECTED, listOfPowers)
+    --Spring.Echo("Done")
 	widgetHandler:RemoveWidget()
 end
 

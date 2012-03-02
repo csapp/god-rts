@@ -85,10 +85,9 @@ local function removeFaith(teamID, amt)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
-    msg = LuaMessages.deserialize(msg)
-    local msg_type = msg[1]
+    local msg_type, params = LuaMessages.deserialize(msg)
     if msg_type == MSG_TYPES.CONVERT_FINISHED then
-        local clergyID = tonumber(msg[2])
+        local clergyID = tonumber(params[1])
         -- XXX is this a static value or should we get it from somewhere?
         addFaith(Spring.GetUnitTeam(clergyID), 1000)
     end

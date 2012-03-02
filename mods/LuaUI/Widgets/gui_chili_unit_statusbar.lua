@@ -356,16 +356,15 @@ local function updateProgressBar(unitID, progress)
 end
 
 function widget:RecvLuaMsg(msg, playerID)
-    msg = LuaMessages.deserialize(msg)
-    msg_type = msg[1]
+    local msg_type, params = LuaMessages.deserialize(msg)
     if msg_type == MSG_TYPES.PBAR_CREATE then
-        unitID, caption = tonumber(msg[2]), msg[3]
+        unitID, caption = tonumber(params[1]), params[2]
 		createProgressBar(unitID, caption)
     elseif msg_type == MSG_TYPES.PBAR_PROGRESS then
-        unitID, progress = tonumber(msg[2]), tonumber(msg[3])
+        unitID, progress = tonumber(params[1]), tonumber(params[2])
         updateProgressBar(unitID, progress)
     elseif msg_type == MSG_TYPES.PBAR_DESTROY then
-        unitID = tonumber(msg[2])
+        unitID = tonumber(params[1])
 		destroyProgressBar(unitID)
     end
 end

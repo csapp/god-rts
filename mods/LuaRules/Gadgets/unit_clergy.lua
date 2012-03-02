@@ -30,7 +30,6 @@ local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local GiveOrderToUnit = Spring.GiveOrderToUnit
 local GetUnitDefID = Spring.GetUnitDefID
 local GetUnitHealth = Spring.GetUnitHealth
-local SendLuaUIMsg = Spring.SendLuaUIMsg
 local GetUnitTeam = Spring.GetUnitTeam
 
 local convertCmd = {
@@ -66,8 +65,7 @@ local function FinishConvert(clergyID)
     converting[villageID] = nil
     Spring.TransferUnit(villageID, GetUnitTeam(clergyID))
     Spring.SetUnitNeutral(villageID, false)
-    local message = LuaMessages.serialize(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
-    Spring.SendLuaRulesMsg(message)
+    LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
 end
 
 local function StartConvert(clergyID, villageID)

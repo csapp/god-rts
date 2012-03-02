@@ -1,5 +1,8 @@
 --include("utilities.lua")
 
+local SendLuaUIMsg = Spring.SendLuaUIMsg
+local SendLuaRulesMsg = Spring.SendLuaRulesMsg
+
 function split(pString, pPattern)
 	local tableIndex = 1
 	local Table = {} -- NOTE: use {n = 0} in Lua-5.0
@@ -24,14 +27,6 @@ end
 
 LuaMessages = {}
 
-function LuaMessages.serialize(msg_type, params)
-    return msg_type .. "," .. table.concat(params, ",")
-end
-
-function LuaMessages.deserialize(message)
-    return split(message, ',')
-end
-
 MSG_TYPES = {
     -- Progress bars
     PBAR_CREATE = "pbar_create",
@@ -44,3 +39,28 @@ MSG_TYPES = {
 
 ACTION_TYPES = {
 }
+
+function LuaMessages.serialize(msg_type, params)
+    return msg_type .. "," .. table.concat(params, ",")
+end
+
+function LuaMessages.deserialize(message)
+    local msg_table = split(message, ',')
+    local msg_type = msg_table[1]
+    table.remove(msg_table, 1)
+    return msg_type, msg_table
+end
+
+function LuaMessages.SendLuaUIMsg(msg_type, params)
+    SendLuaUIMsg(LuaMessages.serialize(msg_type, params))
+end
+
+function LuaMessages.SendLuaRulesMsg(msg_type, params)
+    SendLuaRulesMsg(LuaMessages.serialize(msg_type, params))
+end
+
+function LuaMessages.SendMsgToAll(msg_type, params)
+    local msg = LuaMessages.serialize(msg_type, params)
+    SendLuaUIMsg(msg)
+    SendLuaRulesMsg(msg)
+end

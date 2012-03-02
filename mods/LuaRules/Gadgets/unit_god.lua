@@ -104,18 +104,17 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
-    msg = LuaMessages.deserialize(msg)
-	local msg_type = msg[1]
+    local msg_type, params = LuaMessages.deserialize(msg)
 	if msg_type == MSG_TYPES.GOD_SELECTED then
         local _, _, _, teamID = Spring.GetPlayerInfo(playerID)
         -- XXX The temp powers break this loop
         -- Uncomment it and remove the subsequent AddPowers 
         -- when the temp powers are gone
-        --for i=2,#msg do
-            --AddPower(teamID, msg[i])
+        --for i=2,#params do
+            --AddPower(teamID, params[i])
         --end
-        AddPower(teamID, msg[2])
-        AddPower(teamID, msg[3])
+        AddPower(teamID, params[1])
+        AddPower(teamID, params[2])
         GG.Delay.DelayCall(SpawnGod, {teamID})
 	end
 end

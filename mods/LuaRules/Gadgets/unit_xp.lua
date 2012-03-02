@@ -18,6 +18,7 @@ end
 if (gadgetHandler:IsSyncedCode()) then
 
 include("LuaUI/Headers/msgs.h.lua")
+include("LuaUI/Headers/units.h.lua")
 
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
@@ -80,7 +81,6 @@ local function AddXP(unitID, xp)
     if DEBUG then Spring.Echo("Unit XP at " .. curXP) end
     if max_xp and curXP >= max_xp then
         Morph(unitID, unitDef.customParams.morph_into, teamID)
-        return
     end
 end
 
@@ -92,7 +92,7 @@ end
 
 function gadget:UnitFromFactory(unitID, unitDefID, unitTeam, builderID, builderDefID, _)
     if not builderID then return end
-    if not table.contains(VILLAGE_IDS, builderDefID) then
+    if not Units.IsVillageUnit(unitID) then
         return 
     end
     local _, max_health = GetUnitHealth(unitID)
@@ -100,11 +100,10 @@ function gadget:UnitFromFactory(unitID, unitDefID, unitTeam, builderID, builderD
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
-    msg = LuaMessages.deserialize(msg)
-    local msg_type = msg[1]
+    local msg_type, params = LuaMessages.deserialize(msg)
     if msg_type == MSG_TYPES.CONVERT_FINISHED then
-        local clergyID = tonumber(msg[2])
-        local villageID = tonumber(msg[3])
+        local clergyID = tonumber(params[1])
+        local villageID = tonumber(params[2])
         local xp_gained = UnitDefs[GetUnitDefID(villageID)].customParams.convert_xp
         GG.Delay.DelayCall(AddXP, {clergyID, xp_gained})
     end
