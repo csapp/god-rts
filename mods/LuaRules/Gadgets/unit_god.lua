@@ -55,8 +55,8 @@ local function PopulatePowerTables()
 end
 
 local function PopulatePowerManagers()
-    VFS.Include("LuaRules/Classes/manager.lua")
-    VFS.Include("LuaRules/Classes/manager_power.lua")
+    VFS.Include("LuaRules/Classes/Managers/manager.lua")
+    VFS.Include("LuaRules/Classes/Managers/power.lua")
     for i, teamID in ipairs(Spring.GetTeamList()) do
         PowerManagers[teamID] = PowerManager:New({teamID=teamID})
     end
