@@ -21,8 +21,8 @@ Power = Object:Inherit{
 local this = Power
 local inherited = this.inherited
 
-function Power:New(obj)
-    obj = inherited.New(self, obj)
+function Power:New(teamID)
+    obj = inherited.New(self, {teamID=teamID})
     return obj
 end
 

@@ -25,8 +25,8 @@ VolcanicBlast = RangedPower:Inherit{
 local this = VolcanicBlast
 local inherited = this.inherited
 
-function VolcanicBlast:New(obj)
-    obj = inherited.New(self, obj)
+function VolcanicBlast:New(teamID)
+    obj = inherited.New(self, teamID)
     obj.cmdDesc = {
         id      = CMD_VOLCANIC_BLAST,
         name    = obj:GetName(),

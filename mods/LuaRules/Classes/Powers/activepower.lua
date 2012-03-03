@@ -22,11 +22,6 @@ ActivePower = Power:Inherit{
 local this = ActivePower
 local inherited = this.inherited
 
-function ActivePower:New(obj)
-    obj = inherited.New(self, obj)
-    return obj
-end
-
 function ActivePower:GetCmdDesc() return self.cmdDesc end
 function ActivePower:GetDamage() return self.damage end
 function ActivePower:GetCost() return self.cost end

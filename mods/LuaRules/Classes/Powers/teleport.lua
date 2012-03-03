@@ -12,8 +12,8 @@ Teleport = RangedPower:Inherit{
 local this = Teleport
 local inherited = this.inherited
 
-function Teleport:New(obj)
-    obj = inherited.New(self, obj)
+function Teleport:New(teamID)
+    obj = inherited.New(self, teamID)
     obj.cmdDesc = {
         id      = obj:GetID(),
         name    = obj:GetName(),

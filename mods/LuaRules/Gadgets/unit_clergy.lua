@@ -11,7 +11,7 @@ function gadget:GetInfo()
         author = "cam",
         date = "2011-12-21",
         license = "Public Domain",
-        layer = -255,
+        layer = 0,
         enabled = true
     }
 end

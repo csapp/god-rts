@@ -6,7 +6,7 @@ function gadget:GetInfo()
         author = "cam",
         date = "2012-02-29",
         license = "Public Domain",
-        layer = -100,
+        layer = -10,
         enabled = true
     }
 end
@@ -36,9 +36,17 @@ local power_filepaths = {
 }
 
 local power_ids = {}
+local power_managers = {}
 Powers = {}
 PowerNames = {}
-PowerManagers = {}
+
+local function PopulatePowerManagers()
+    local team_managers = _G.TeamManagers
+    for teamID, manager in pairs(team_managers) do
+        local power_mgr = manager:GetPowerManager()
+        power_managers[teamID] = power_mgr
+    end
+end
 
 local function PopulatePowerTables()
     for _, filepath in pairs(power_bases) do
@@ -54,18 +62,10 @@ local function PopulatePowerTables()
     end
 end
 
-local function PopulatePowerManagers()
-    VFS.Include("LuaRules/Classes/Managers/manager.lua")
-    VFS.Include("LuaRules/Classes/Managers/power.lua")
-    for i, teamID in ipairs(Spring.GetTeamList()) do
-        PowerManagers[teamID] = PowerManager:New({teamID=teamID})
-    end
-end
-
 local function AddPower(teamID, powerName)
     local power = PowerNames[powerName]
-    local manager = PowerManagers[teamID]
-    manager:AddElement(power.id, power:New({teamID=teamID}))
+    local manager = power_managers[teamID]
+    manager:AddElement(power.id, power:New(teamID))
 end
 
 local function SpawnGod(teamID)
@@ -77,8 +77,8 @@ end
 
 function gadget:Initialize()
     VFS.Include("LuaRules/Classes/object.lua")
-    PopulatePowerTables()
     PopulatePowerManagers()
+    PopulatePowerTables()
 end
 
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
@@ -86,7 +86,7 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
         return false
     end
 
-    local power_manager = PowerManagers[teamID]
+    local power_manager = power_managers[teamID]
     local power = power_manager:GetElement(cmdID)
     power:Use(cmdParams, cmdOptions)
 end
@@ -97,7 +97,7 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
     end
 
     local teamID = Spring.GetUnitTeam(unitID)
-    for powerID, power in pairs(PowerManagers[teamID]:GetElements()) do
+    for powerID, power in pairs(power_managers[teamID]:GetElements()) do
         InsertUnitCmdDesc(unitID, powerID, power:GetCmdDesc())
         power:SetGodID(unitID)
     end

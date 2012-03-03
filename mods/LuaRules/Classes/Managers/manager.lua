@@ -7,8 +7,8 @@ Manager = Object:Inherit{
 local this = Manager
 local inherited = this.inherited
 
-function Manager:New(obj)
-    obj = inherited.New(self, obj)
+function Manager:New(teamID)
+    obj = inherited.New(self, {teamID=teamID})
     return obj
 end
 
