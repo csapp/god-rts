@@ -43,7 +43,7 @@ function ActivePower:GetCharge()
 end
 
 function ActivePower:SpendCharge(charge)
-    self.charge = self:GetCharge() - charge
+    self:_SetCharge(self:GetCharge() - charge)
 end
 
 function ActivePower:_SetCharge(charge)
@@ -56,6 +56,7 @@ end
 
 function ActivePower:_RechargeUpdate(startTime, initialCharge)
     local curTime = GetGameSeconds()
+
     charge = initialCharge + (curTime-startTime)*self:GetRechargeRate()*POWERS.FULL_CHARGE
 
     if charge >= POWERS.FULL_CHARGE then
@@ -63,8 +64,6 @@ function ActivePower:_RechargeUpdate(startTime, initialCharge)
         self:_RechargeFinished()
     else
         self:_SetCharge(charge)
-       
-        -- FIXME this calls _RechargeUpdate 3 times for some reason
         GG.Delay.DelayCall(self._RechargeUpdate, {self, startTime, initialCharge})
     end
 end

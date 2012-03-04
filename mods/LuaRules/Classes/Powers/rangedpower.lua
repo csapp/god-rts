@@ -16,7 +16,8 @@ function RangedPower:GetRange() return self.range end
 
 function RangedPower:InRange(point)
     local x,y,z = unpack(point)
-    if not IsPosInLos(x,y,z,self:GetTeamID()) then
+    local allyID = 0 -- XXX why does this work
+    if not IsPosInLos(x, y, z, allyID) then
         return false
     end
 
@@ -31,5 +32,5 @@ function RangedPower:InRange(point)
 end
 
 function RangedPower:CanUse(cmdParams, cmdOptions)
-    return inherited:CanUse() and self:InRange(cmdParams)
+    return inherited.CanUse(self, cmdParams, cmdOptions) and self:InRange(cmdParams)
 end

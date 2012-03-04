@@ -30,7 +30,7 @@ function gadget:GameFrame(n)
     for i, delayed_call in ipairs(delayed_calls) do
         f, args = delayed_call[1], delayed_call[2]
         f(unpack(args))
-        delayed_calls[i] = nil
+        table.remove(delayed_calls, i)
     end
 end
 
