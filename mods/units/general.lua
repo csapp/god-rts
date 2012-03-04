@@ -12,7 +12,7 @@ local unitDef  =  {
     BuildPic = "filename.bmp",
     Category = "TANK SMALL NOTAIR NOTSUB",
     ObjectName = "general.s3o",
-    name = "general",
+    name = "General",
     script = "generalscript.lua",
 
     customParams = {

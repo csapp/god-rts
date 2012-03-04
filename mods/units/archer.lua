@@ -12,7 +12,7 @@ local unitDef  =  {
     BuildPic = "archer.png",
     Category = "TANK SMALL NOTAIR NOTSUB",
     ObjectName = "archer.s3o",
-    name = "archer",
+    name = "Archer",
     script = "archerscript.lua",
 
     customParams = {
