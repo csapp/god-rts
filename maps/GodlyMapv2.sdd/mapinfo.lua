@@ -162,18 +162,18 @@ local mapinfo = {
 		repeatX = 0.0,
 		repeatY = 0.0,
 
-		absorb    = {0.0, 0.0, 0.0},
-		baseColor = {0.0, 0.0, 0.0},
-		minColor  = {0.0, 0.0, 0.0},
+		absorb    = {0.022, 0.0060, 0.0045},
+		baseColor = {0.80, 1, 1},
+		minColor  = {0, 0, 0.05},
 
 		ambientFactor  = 1.0,
 		diffuseFactor  = 1.0,
 		specularFactor = 1.0,
 		specularPower  = 20.0,
 
-		planeColor = {0.0, 0.4, 0.0},
+		planeColor = {0.61, 0.84, 0.95},
 
-		surfaceColor  = {0.75, 0.8, 0.85},
+		surfaceColor  = {0.61, 0.84, 0.95},
 		surfaceAlpha  = 0.55,
 		diffuseColor  = {1.0, 1.0, 1.0},
 		specularColor = {0.5, 0.5, 0.5},
@@ -206,10 +206,14 @@ local mapinfo = {
 	},
 
 	teams = {
-		[0] = {startPos = {x = 2033, z = 852}},
-		[1] = {startPos = {x = 10134, z = 852}},
-		[2] = {startPos = {x = 0, z = 0}},
-		[3] = {startPos = {x = 0, z = 0}},
+		[0] = {startPos = {x = 450, z = 450}},--player1
+		[1] = {startPos = {x = 3646, z = 3646}},--player2
+	--	[2] = {startPos = {x = 305, z = 3896}},--hidden
+	---	[3] = {startPos = {x = 3846, z = 300}},--hidden
+	--	[4] = {startPos = {x = 2560, z = 3846}},--player2 close base
+	--	[5] = {startPos = {x = 1536, z = 250}},--player1 close base
+	--	[6] = {startPos = {x = 3000, z = 1536}},--player2 bridge def base
+	--	[7] = {startPos = {x = 500, z = 2112}},--player1 bridge def base
 	},
 
 	terrainTypes = {
@@ -240,15 +244,12 @@ local mapinfo = {
 			texture   = 'LuaGaia/effects/snowflake.png',
 		},
         villages = {
-            {vtype="smallvillage", x=672, z=295},
-            {vtype="smallvillage", x=1516, z=1221},
-            {vtype="smallvillage", x=3596, z=991},
-            {vtype="smallvillage", x=2449, z=1917},
-            {vtype="smallvillage", x=303, z=2376},
-            {vtype="smallvillage", x=344, z=3572},
-            {vtype="smallvillage", x=1409, z=3744},
-            {vtype="smallvillage", x=2458, z=3588},
-            {vtype="smallvillage", x=3826, z=3654},
+            {vtype="smallvillage", x=305, z=3896},--player1 hidden base
+            {vtype="smallvillage", x=3846, z=300},--player2 hidden base
+            {vtype="smallvillage", x=2560, z=3846},--player2 close base
+            {vtype="smallvillage", x=1536, z=250},--player1 close base
+            {vtype="smallvillage", x=3000, z=1536},--player2 bridge def base
+            {vtype="smallvillage", x=500, z=2112},--player2 bridge def base
         },
 
 	},

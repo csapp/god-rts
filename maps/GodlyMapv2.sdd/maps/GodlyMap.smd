@@ -1,0 +1,88 @@
+[MAP]
+{
+	Description=Deluxe Edition of FolsomDam made by SirArtturi. New gameplay, features, map options and outlook. Optimal for 8 to 14 players. Thanks to Beherith and Smoth for all the help and content!;
+	TidalStrength=20;
+	Gravity=125;
+	MaxMetal=0.63;
+	ExtractorRadius=95;
+	MapHardness=600;
+	AutoShowMetal=1;
+	Detailtex=zeusDET2.bmp;
+	SpecularTex=spec2.tga;
+
+	[ATMOSPHERE]
+	{
+		FogColor=0.65 0.72 0.82;
+		FogStart=0.72;
+		CloudColor=0.55 0.86 0.92;
+		SkyColor=0.82 0.66 0.79;
+		SunColor=1 1 1;
+		CloudDensity=0.65;
+		MinWind=2;
+		MaxWind=20;
+	}
+	[WATER]
+	{
+		WaterSurfaceColor=0.61 0.84 0.95;
+		WaterPlaneColor=0.61 0.84 0.95;
+		WaterBaseColor=0.80 1 1;
+		WaterAbsorb=0.022 0.0060 0.0045;
+		WaterMinColor=0 0 0.05;
+	}
+	[LIGHT]
+	{
+		SunDir=-0.7 0.77 0.5;
+		GroundAmbientColor=0.6 0.6 0.6;
+		GroundSunColor=1 0.92 0.85;
+		GroundShadowDensity=0.75;
+		UnitAmbientColor=0.5 0.5 0.5;
+		UnitSunColor=0.98 0.89 0.75;
+		UnitShadowDensity=0.75;
+	}
+	[TERRAINTYPE0]
+	{
+		name=Default terrain;
+		hardness=1;
+		tankmovespeed=1;
+		kbotmovespeed=1;
+		hovermovespeed=1;
+		shipmovespeed=1;
+	}
+	[TERRAINTYPE255]
+	{
+		name=Roads&Dam;
+		hardness=1;
+		tankmovespeed=1;
+		kbotmovespeed=1;
+		hovermovespeed=1;
+		shipmovespeed=1;
+	}
+	[TERRAINTYPE200]
+	{
+		name=Sand;
+		hardness=1;
+		tankmovespeed=1;
+		kbotmovespeed=1;
+		hovermovespeed=1;
+		shipmovespeed=1;
+	}
+	[TERRAINTYPE100]
+	{
+		name=Mountains;
+		hardness=1;
+		tankmovespeed=1;
+		kbotmovespeed=1;
+		hovermovespeed=1;
+		shipmovespeed=1;
+	}
+	[TEAM0]
+		{
+		StartPosX=250;
+		StartPosZ=250;
+		}
+	[TEAM1]
+		{
+		StartPosX=3846;
+		StartPosZ=3846;
+		}
+}
