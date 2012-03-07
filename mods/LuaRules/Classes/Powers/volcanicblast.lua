@@ -20,22 +20,16 @@ VolcanicBlast = RangedPower:Inherit{
     damage = 400,
     rechargeRate = 1/30,
     radius = 200,
+    tooltip = "Cause massive fire damage to units within a certain radius",
+    cmdType = CMDTYPE.ICON_MAP,
 }
 
 local this = VolcanicBlast
 local inherited = this.inherited
 
-function VolcanicBlast:New(teamID)
-    obj = inherited.New(self, teamID)
-    obj.cmdDesc = {
-        id      = CMD_VOLCANIC_BLAST,
-        name    = obj:GetName(),
-        action  = "volcanicBlast",
-        type    = CMDTYPE.ICON_MAP,
-        tooltip = "Cause massive fire damage to units within a certain radius",
-        params = {},
-    }
-    return obj
+function VolcanicBlast:Initialize()
+    inherited.Initialize(self)
+    self:SetCustomCursor("cursorConvert")
 end
 
 function VolcanicBlast:GetRadius()

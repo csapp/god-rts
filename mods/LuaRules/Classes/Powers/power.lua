@@ -26,6 +26,9 @@ function Power:New(teamID)
     return obj
 end
 
+function Power:Initialize()
+end
+
 function Power:GetName() return self.powerName end
 function Power:GetType() return self.powerType end
 

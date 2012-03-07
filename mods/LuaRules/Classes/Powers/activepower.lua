@@ -5,6 +5,7 @@ ActivePower = Power:Inherit{
     classname = "ActivePower",
     powerName = "",
     powerType = "",
+    tooltip = "",
     id = 0,
     damage = 0,
     
@@ -17,14 +18,43 @@ ActivePower = Power:Inherit{
     charge = POWERS.FULL_CHARGE,
     cost = POWERS.FULL_CHARGE,
     cmdDesc = {},
+    cmdType = CMDTYPE.ICON,
+    cmdParams = {},
 }
 
 local this = ActivePower
 local inherited = this.inherited
 
+function ActivePower:GetCmdType() return self.cmdType end
 function ActivePower:GetCmdDesc() return self.cmdDesc end
 function ActivePower:GetDamage() return self.damage end
 function ActivePower:GetCost() return self.cost end
+function ActivePower:GetTooltip() return self.tooltip end
+
+function ActivePower:Initialize()
+    inherited.Initialize(self)
+    self:_SetCmdDesc()
+    gadgetHandler:RegisterCMDID(self:GetID())
+end
+
+function ActivePower:_SetCmdDesc()
+    self.cmdDesc = {
+        id = self:GetID(),
+        name = self:GetName(),
+        action = self.classname,
+        type = self:GetCmdType(),
+        tooltip = self:GetTooltip(),
+        cursor = self:GetName(),
+        params = self.cmdParams,
+    }
+end
+
+function ActivePower:SetCustomCursor(cursorName, colour)
+    colour = colour or {1, 1, 1, 0.5}
+    local cmdDescCursor = self:GetCmdDesc().cursor
+    Spring.AssignMouseCursor(cmdDescCursor, cursorName, true, true)
+    Spring.SetCustomCommandDrawData(self:GetID(), cmdDescCursor, colour, false)
+end
 
 function ActivePower:GetID()
     return self.id

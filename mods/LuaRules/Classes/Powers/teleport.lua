@@ -7,22 +7,16 @@ Teleport = RangedPower:Inherit{
     powerName = "Teleport",
     powerType = POWERS.TYPES.DEFENSIVE,
     rechargeRate = 1/30,
+    cmdType = CMDTYPE.ICON_MAP,
+    tooltip = "Teleport to another location on the map",
 }
 
 local this = Teleport
 local inherited = this.inherited
 
-function Teleport:New(teamID)
-    obj = inherited.New(self, teamID)
-    obj.cmdDesc = {
-        id      = obj:GetID(),
-        name    = obj:GetName(),
-        action  = "teleport",
-        type    = CMDTYPE.ICON_MAP,
-        tooltip = "Teleport to another location on the map",
-        params = {},
-    }
-    return obj
+function Teleport:Initialize()
+    inherited.Initialize(self)
+    self:SetCustomCursor("cursorConvert")
 end
 
 --function Teleport:GetRadius()

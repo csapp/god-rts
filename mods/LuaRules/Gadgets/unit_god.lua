@@ -54,11 +54,11 @@ local function PopulatePowerTables()
     end
     for _, filepath in pairs(power_filepaths) do
         local power = VFS.Include(POWERS_DIR .. filepath)
+        power:Initialize()
         local id = power:GetID()
         Powers[id] = power
         table.insert(power_ids, id)
         PowerNames[power:GetName()] = power
-        gadgetHandler:RegisterCMDID(id)
     end
 end
 
