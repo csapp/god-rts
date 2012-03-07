@@ -20,6 +20,7 @@ ActivePower = Power:Inherit{
     cmdDesc = {},
     cmdType = CMDTYPE.ICON,
     cmdParams = {},
+    cmdCursor = nil,
 }
 
 local this = ActivePower
@@ -44,7 +45,7 @@ function ActivePower:_SetCmdDesc()
         action = self.classname,
         type = self:GetCmdType(),
         tooltip = self:GetTooltip(),
-        cursor = self:GetName(),
+        cursor = self.cmdCursor or self.classname,
         params = self.cmdParams,
     }
 end
