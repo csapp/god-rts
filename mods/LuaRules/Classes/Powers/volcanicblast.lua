@@ -29,7 +29,7 @@ local inherited = this.inherited
 
 function VolcanicBlast:Initialize()
     inherited.Initialize(self)
-    self:SetCustomCursor("cursorConvert")
+    self:SetCustomCursor("cursorVolcanicBlast")
 end
 
 function VolcanicBlast:GetRadius()

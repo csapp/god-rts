@@ -16,7 +16,7 @@ local inherited = this.inherited
 
 function Teleport:Initialize()
     inherited.Initialize(self)
-    self:SetCustomCursor("cursorConvert")
+    self:SetCustomCursor("cursorTeleport")
 end
 
 --function Teleport:GetRadius()
