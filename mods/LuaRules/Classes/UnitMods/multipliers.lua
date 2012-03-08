@@ -6,6 +6,8 @@ local SetUnitMaxHealth = Spring.SetUnitMaxHealth
 local GetUnitHealth = Spring.GetUnitHealth
 local SetUnitHealth = Spring.SetUnitHealth
 local GetUnitDefID = Spring.GetUnitDefID
+local SetGroundMoveTypeData = Spring.MoveCtrl.SetGroundMoveTypeData
+local GetUnitMoveTypeData = Spring.GetUnitMoveTypeData
 
 Multiplier = Object:Inherit{
     classname = "Multiplier",
@@ -118,4 +120,42 @@ function HealthMultiplier:Apply(unitID)
     local value = self:GetValue(unitID)
     SetUnitMaxHealth(unitID, maxHealth * value)
     SetUnitHealth(unitID, GetUnitHealth(unitID) * value)
+end
+
+
+MoveSpeedMultiplier = PersistentMultiplier:Inherit{
+    classname = "MoveSpeedMultiplier",
+    -- XXX Spring is silly and doesn't allow upgrades to maxSpeed
+    -- so we need to set all of the maxSpeeds to a large number in
+    -- the unitdefs and control them ourselves here
+    -- More info: http://springrts.com/phpbb/viewtopic.php?f=23&t=27774
+    origspeeds = {
+        [Units.UNITDEF_NAMES.GOD] = 90,
+        [Units.UNITDEF_NAMES.GENERAL] = 90, 
+        [Units.UNITDEF_NAMES.ARCHER] = 90,
+        [Units.UNITDEF_NAMES.WARRIOR] = 90, 
+        [Units.UNITDEF_NAMES.SOLDIER] = 90,
+        [Units.UNITDEF_NAMES.SCOUT] = 150,
+        [Units.UNITDEF_NAMES.PROPHET] = 90,
+        [Units.UNITDEF_NAMES.PRIEST] = 90,
+        [Units.UNITDEF_NAMES.MARKSMAN] = 90,
+        [Units.UNITDEF_NAMES.KNIGHT] = 150,
+        [Units.UNITDEF_NAMES.HORSEMAN] = 150,
+        [Units.UNITDEF_NAMES.HUNTER] = 90,
+    },
+}
+
+function MoveSpeedMultiplier:GetValue(unitID)
+    if UnitDefs[GetUnitDefID(unitID)].canMove then
+        return MoveSpeedMultiplier.inherited.GetValue(self, unitID)
+    end
+end
+ 
+function MoveSpeedMultiplier:Apply(unitID)
+    local value = self:GetValue(unitID)
+    if not value then return end
+
+    local ud = UnitDefs[GetUnitDefID(unitID)]
+    local origspeed = self.origspeeds[ud.name]
+    SetGroundMoveTypeData(unitID, "maxSpeed", origspeed * value)
 end

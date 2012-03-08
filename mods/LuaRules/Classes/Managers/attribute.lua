@@ -19,6 +19,7 @@ function AttributeManager:New(teamID)
     obj = inherited.New(self, teamID)
 
     obj:RegisterMultiplier(Multipliers.TYPES.HEALTH, HealthMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.MOVE_SPEED, MoveSpeedMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.XP, XPMultiplier:New(teamID))
     return obj
 end
@@ -50,7 +51,9 @@ end
 --end
 
 function AttributeManager:ApplyPersistentMultipliers(unitID)
-    self:GetHealthMultiplier():Apply(unitID)
+    for _, key in pairs(Multipliers.PERSISTENT_TYPES) do
+        self:GetMultiplier(key):Apply(unitID)
+    end
 end
 
 function AttributeManager:AddTimedMultiplier(key, value, duration, classes)

@@ -12,6 +12,21 @@ Units.CLASSES = {
     GOD = "god",
 }
 
+Units.UNITDEF_NAMES = {
+    GOD = "god",
+    GENERAL = "general",
+    ARCHER = "archer",
+    WARRIOR = "warrior",
+    SOLDIER = "soldier",
+    SCOUT = "scout",
+    PROPHET = "Prophet",
+    PRIEST = "priest",
+    MARKSMAN = "marksman",
+    KNIGHT = "knight",
+    HORSEMAN = "horseman",
+    HUNTER = "hunter",
+}
+
 local function GetCustomParam(unitID, param)
     return UnitDefs[GetUnitDefID(unitID)].customParams[param]
 end
