@@ -1,7 +1,7 @@
 local MANAGER_DIR = "LuaRules/Classes/Managers/"
 
 VFS.Include(MANAGER_DIR .. "power.lua")
-VFS.Include(MANAGER_DIR .. "bonus.lua")
+VFS.Include(MANAGER_DIR .. "attribute.lua")
 
 TeamManager = Manager:Inherit{
     classname = "TeamManager",
@@ -9,7 +9,7 @@ TeamManager = Manager:Inherit{
 
 TeamManager.MANAGER_IDS = {
     POWER = "power",
-    BONUS = "bonus",
+    ATTRIBUTE = "attribute",
 }
 
 local this = TeamManager
@@ -24,17 +24,17 @@ function TeamManager:GetPowerManager()
     return self:GetElement(self.MANAGER_IDS.POWER)
 end
 
-function TeamManager:AddBonusManager()
-    local manager = BonusManager:New(self:GetTeamID())
-    self:AddElement(self.MANAGER_IDS.BONUS, manager)
+function TeamManager:AddAttributeManager()
+    local manager = AttributeManager:New(self:GetTeamID())
+    self:AddElement(self.MANAGER_IDS.ATTRIBUTE, manager)
 end
 
-function TeamManager:GetBonusManager()
-    return self:GetElement(self.MANAGER_IDS.BONUS)
+function TeamManager:GetAttributeManager()
+    return self:GetElement(self.MANAGER_IDS.ATTRIBUTE)
 end
 
 function TeamManager:Initialize()
-    self:AddBonusManager()
+    self:AddAttributeManager()
     self:AddPowerManager()
 end
 

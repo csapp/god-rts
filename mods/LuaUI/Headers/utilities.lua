@@ -83,6 +83,10 @@ function table.contains(table, element)
 	return false 
 end
 
+function table.isempty(t)
+    return next(t) == nil
+end
+
 function table:merge(table2)
   for i,v in pairs(table2) do
     if (type(v)=='table') then

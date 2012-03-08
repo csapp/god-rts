@@ -28,6 +28,10 @@ function Manager:AddElement(id, element)
     self.elements[id] = element
 end
 
+function Manager:SetElement(id, value)
+    self:AddElement(id, value)
+end
+
 function Manager:RemoveElement(id)
     self.elements[id] = nil
 end
