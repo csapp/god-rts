@@ -53,5 +53,7 @@ function AttributeManager:ApplyPersistentMultipliers(unitID)
     self:GetHealthMultiplier():Apply(unitID)
 end
 
-function AttributeManager:AddTimedMultiplier(key, duration, value, classes)
+function AttributeManager:AddTimedMultiplier(key, value, duration, classes)
+    self:AddMultiplier(key, value, classes)
+    GG.Delay.CallLater(duration, self.AddMultiplier, {self, key, -value, classes})
 end

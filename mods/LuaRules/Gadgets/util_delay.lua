@@ -14,11 +14,16 @@ end
 GG.Delay = {}
 local delayed_calls = {}
 
+local function CallLater(time, f, args)
+    table.insert(delayed_calls, {time, f, args})
+end
+
 local function DelayCall(f, args)
-    table.insert(delayed_calls, {f, args})
+    CallLater(1, f, args)
 end
 
 GG.Delay.DelayCall = DelayCall
+GG.Delay.CallLater = CallLater
 
 ------------------------------------------------------------
 -- SYNCED
@@ -28,9 +33,14 @@ if (gadgetHandler:IsSyncedCode()) then
 function gadget:GameFrame(n)
     if n % 30 ~= 10 then return end
     for i, delayed_call in ipairs(delayed_calls) do
-        f, args = delayed_call[1], delayed_call[2]
-        f(unpack(args))
-        table.remove(delayed_calls, i)
+        time, f, args = unpack(delayed_call)
+        time = time - 1
+        if time == 0 then
+            f(unpack(args))
+            table.remove(delayed_calls, i)
+        else
+            delayed_call[1] = time
+        end
     end
 end
 
