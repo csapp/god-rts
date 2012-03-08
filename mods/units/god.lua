@@ -74,6 +74,16 @@ local unitDef  =  {
 			mainDir = "0 0 1",
 			maxAngleDif = 180,
 		},
+		[2] = {
+			def = "VOLCANIC_BLAST",
+			mainDir = "0 1 0",
+			maxAngleDif = 180,
+		},
+--[[		[3] = {
+			def = "BFB",
+			mainDir = "0 1 0",
+			maxAngleDif = 180,		
+		}]]--
 	},
 	
 	weaponDefs = {
@@ -99,6 +109,33 @@ local unitDef  =  {
 			default = ATKDMG,
 		},
 	},
+	VOLCANIC_BLAST = {
+		avoidFriendly = 1,
+		burst = 3,
+		burstrate = 0.3,
+		collideFriendly = false,
+		collisionSize = 3,
+		name = "Volcanic_Blast",
+		energypershot = 0,
+		endsmoke = "0",
+		impactonly = true,
+		model = "VolcanicBlast.S3O",
+		noSelfDamage = true,
+		range = ATKRNG,
+		reloadtime = ATKSPD,
+		size = 3,
+		sprayangle = 1024,
+		startVelocity=250,
+		targetBorder = 0,
+		tolerance = 5000,
+		turret = true,
+		weaponTimer = 0.1,
+		weaponType = "MissileLauncher",
+		weaponVelocity = 1000,
+		weaponAcceleration=200,
+		damage = {
+			default = ATKDMG,
+		},
 	
 	},
 	
@@ -107,8 +144,6 @@ local unitDef  =  {
     NoChaseCategory = "AIR",
 
 }
-
+}
 return lowerkeys({ [unitName]  =  unitDef })
-
-
 
