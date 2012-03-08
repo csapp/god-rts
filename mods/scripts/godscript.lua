@@ -16,7 +16,7 @@ local arm_movespeed = 3
 local attacking = false
 --local atkAnimCounter = 0
 local pi = 3.1415
-local chosenWeapon = "ARM"
+local chosenWeapon
 
 local RESTORE_DELAY = Spring.UnitScript.GetLongestReloadTime(unitID) * 2
 -- picks a sensible time to wait before trying to turn the turret back to default.
@@ -60,6 +60,7 @@ end
 
 
 function script.Create()
+	chosenWeapon = "ARM"
     return 0
 end
 
@@ -96,6 +97,7 @@ function script.AimFromWeapon1()
 end
 
 function script.AimWeapon1(heading, pitch)
+	Spring.Echo("ARM AIMING")
 	if chosenWeapon ~= "ARM" then
 		return false
 	end
@@ -138,6 +140,7 @@ function script.AimFromWeapon2()
 end
 
 function script.AimWeapon2(heading, pitch)
+	Spring.Echo("VOLCANIC BLAST AIMING")
 	if chosenWeapon ~= "VOLCANIC_BLAST" then
 		return false
 	end

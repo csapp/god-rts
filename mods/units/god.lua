@@ -76,7 +76,7 @@ local unitDef  =  {
 		},
 		[2] = {
 			def = "VOLCANIC_BLAST",
-			mainDir = "0 1 0",
+			mainDir = "0 0 1",
 			maxAngleDif = 180,
 		},
 --[[		[3] = {
@@ -121,7 +121,7 @@ local unitDef  =  {
 		impactonly = true,
 		model = "VolcanicBlast.S3O",
 		noSelfDamage = true,
-		range = ATKRNG,
+		range = 200,
 		reloadtime = ATKSPD,
 		size = 3,
 		sprayangle = 1024,
