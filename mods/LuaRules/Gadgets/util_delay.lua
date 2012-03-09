@@ -6,7 +6,7 @@ function gadget:GetInfo()
         author = "cam",
         date = "2012-02-12",
         license = "Public Domain",
-        layer = 0,
+        layer = -math.huge,
         enabled = true
     }
 end
@@ -15,6 +15,7 @@ GG.Delay = {}
 local delayed_calls = {}
 
 local function CallLater(time, f, args)
+    args = args or {}
     table.insert(delayed_calls, {time, f, args})
 end
 

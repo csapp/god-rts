@@ -61,6 +61,10 @@ function AttributeManager:GetConvertTimeMultiplier()
     return self:GetMultiplier(Multipliers.TYPES.CONVERT_TIME)
 end
 
+function AttributeManager:GetVillagerMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.VILLAGER)
+end
+
 function AttributeManager:GetHealthMultiplier()
     return self:GetMultiplier(Multipliers.TYPES.HEALTH)
 end
