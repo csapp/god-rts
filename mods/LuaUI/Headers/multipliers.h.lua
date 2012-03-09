@@ -2,11 +2,14 @@
 Multipliers = {}
 
 Multipliers.TYPES = {
-    HEALTH = 'health',
-    XP = 'xp',
-    MOVE_SPEED = "move_speed",
-    ATTACK_SPEED = "attack_speed",
-    ATTACK_RANGE = "attack_range",
+    HEALTH = 'HEALTH',
+    MOVE_SPEED = "MOVE_SPEED",
+    ATTACK_SPEED = "ATTACK_SPEED",
+    ATTACK_RANGE = "ATTACK_RANGE",
+    XP = "XP",
+    VILLAGER = "VILLAGER",
+    POWER_RECHARGE = "POWER_RECHARGE",
+    CONVERT_TIME = "CONVERT_TIME",
 }
 
 Multipliers.PERSISTENT_TYPES = {

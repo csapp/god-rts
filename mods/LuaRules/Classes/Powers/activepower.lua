@@ -32,6 +32,12 @@ function ActivePower:SetUp()
     gadgetHandler:RegisterCMDID(self:GetID())
 end
 
+function ActivePower:Initialize()
+    inherited.Initialize(self)
+    self.attrManager = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager() 
+    self.rechargeRateMult = self.attrManager:GetPowerRechargeMultiplier()
+end
+
 function ActivePower:_SetCmdDesc()
     self.cmdDesc = {
         id = self:GetID(),
@@ -52,7 +58,7 @@ function ActivePower:SetCustomCursor(cursorName, colour)
 end
 
 function ActivePower:GetRechargeRate()
-    return self.rechargeRate
+    return self.rechargeRate * self.rechargeRateMult:GetValue(self:GetGodID())
 end
 
 function ActivePower:SetRechargeRate(rate)
@@ -77,9 +83,7 @@ end
 
 function ActivePower:_RechargeUpdate(startTime, initialCharge)
     local curTime = GetGameSeconds()
-
     charge = initialCharge + (curTime-startTime)*self:GetRechargeRate()*POWERS.FULL_CHARGE
-
     if charge >= POWERS.FULL_CHARGE then
         self:_SetCharge(POWERS.FULL_CHARGE)
         self:_RechargeFinished()

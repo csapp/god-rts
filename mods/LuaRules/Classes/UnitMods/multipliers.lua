@@ -80,6 +80,9 @@ EventMultiplier = Multiplier:Inherit{
     classname = "EventMultiplier"
 }
 
+------------------------------------------------------------
+-- XP MULTIPLIER
+------------------------------------------------------------
 XPMultiplier = EventMultiplier:Inherit{
     classname = "XPMultiplier"
 }
@@ -89,6 +92,44 @@ function XPMultiplier:GetFromDamage(victimID, attackerID, weaponID)
     local levelMult = -0.2*levelDiff
     return self:GetValue() + levelMult
 end
+
+------------------------------------------------------------
+-- VILLAGER GENERATION MULTIPLIER
+------------------------------------------------------------
+
+VillagerMultiplier = EventMultiplier:Inherit{
+    classname = "VillagerMultiplier",
+}
+
+function VillagerMultiplier:Add(value)
+    VillagerMultiplier.inherited.Add(self, value, {Units.CLASSES.VILLAGE})
+end
+
+------------------------------------------------------------
+-- POWER RECHARGE RATE MULTIPLIER
+------------------------------------------------------------
+
+PowerRechargeMultiplier = EventMultiplier:Inherit{
+    classname = "PowerRechargeMultiplier",
+}
+
+function PowerRechargeMultiplier:Add(value)
+    PowerRechargeMultiplier.inherited.Add(self, value, {Units.CLASSES.GOD})
+end
+
+------------------------------------------------------------
+-- CONVERT TIME MULTIPLIER
+------------------------------------------------------------
+
+ConvertTimeMultiplier =  EventMultiplier:Inherit{
+    classname = "ConvertTimeMultiplier",
+}
+
+function ConvertTimeMultiplier:Add(value)
+    ConvertTimeMultiplier.inherited.Add(self, -value, {Units.CLASSES.CLERGY})
+end
+
+-- ****************************************************** --
 
 ------------------------------------------------------------
 -- PERSISTENT MULTIPLIER

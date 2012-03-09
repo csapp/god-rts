@@ -71,7 +71,9 @@ end
 local function StartConvert(clergyID, villageID)
     convert_pending[clergyID] = nil
     converting[villageID] = clergyID
-    local convert_time = tonumber(UnitDefs[GetUnitDefID(villageID)].customParams.convert_time)
+    local am = _G.TeamManagers[GetUnitTeam(clergyID)]:GetAttributeManager()
+    local convert_time = Units.GetConvertTime(villageID)
+    convert_time = convert_time * am:GetConvertTimeMultiplier():GetValue(clergyID)
     GG.ProgressBars.AddProgressBar(clergyID, "Converting...", convert_time, FinishConvert)
 end
 

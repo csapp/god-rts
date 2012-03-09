@@ -23,6 +23,9 @@ function AttributeManager:New(teamID)
     obj:RegisterMultiplier(Multipliers.TYPES.ATTACK_SPEED, AttackSpeedMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.ATTACK_RANGE, AttackRangeMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.XP, XPMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.VILLAGER, VillagerMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.POWER_RECHARGE, PowerRechargeMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.CONVERT_TIME, ConvertTimeMultiplier:New(teamID))
     return obj
 end
 
@@ -48,6 +51,14 @@ function AttributeManager:GetAllValues(unitID)
         values[mtype] = mult:GetValue(unitID)
     end
     return values
+end
+
+function AttributeManager:GetPowerRechargeMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.POWER_RECHARGE)
+end
+
+function AttributeManager:GetConvertTimeMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.CONVERT_TIME)
 end
 
 function AttributeManager:GetHealthMultiplier()

@@ -35,6 +35,10 @@ function Units.GetLevel(unitID)
     return GetCustomParam(unitID, 'level')
 end
 
+function Units.GetConvertTime(villageID)
+    return tonumber(GetCustomParam(villageID, 'convert_time'))
+end
+
 function Units.GetClass(unitID)
     return GetCustomParam(unitID, 'class')
 end
