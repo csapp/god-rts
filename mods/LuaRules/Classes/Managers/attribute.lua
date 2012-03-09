@@ -36,8 +36,32 @@ function AttributeManager:GetMultiplier(key)
     return self:GetElement(key)
 end
 
+function AttributeManager:GetAllMultipliers()
+    return self:GetElements()
+end
+
+function AttributeManager:GetAllUnitMultipliers(unitID)
+    local values = {}
+    for mtype, mult in pairs(self:GetAllMultipliers()) do 
+        values[mtype] = mult:GetValue(unitID)
+    end
+    return values
+end
+
 function AttributeManager:GetHealthMultiplier()
     return self:GetMultiplier(Multipliers.TYPES.HEALTH)
+end
+
+function AttributeManager:GetMoveSpeedMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.MOVE_SPEED)
+end
+
+function AttributeManager:GetAttackSpeedMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.ATTACK_SPEED)
+end
+
+function AttributeManager:GetAttackRangeMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.ATTACK_RANGE)
 end
 
 function AttributeManager:GetXPMultiplier()
@@ -47,10 +71,6 @@ end
 function AttributeManager:AddMultiplier(key, m, classes)
     self:GetMultiplier(key):Add(m, classes)
 end
-
---function AttributeManager:AddHealthMultiplier(m)
-    --self:AddMultiplier(Multipliers.TYPES.HEALTH, m)
---end
 
 function AttributeManager:ApplyPersistentMultipliers(unitID)
     for _, key in pairs(Multipliers.PERSISTENT_TYPES) do
