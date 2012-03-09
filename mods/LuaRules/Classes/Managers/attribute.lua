@@ -40,7 +40,9 @@ function AttributeManager:GetAllMultipliers()
     return self:GetElements()
 end
 
-function AttributeManager:GetAllUnitMultipliers(unitID)
+function AttributeManager:GetAllValues(unitID)
+    -- If unitID is not passed or nil, global values
+    -- will be returned
     local values = {}
     for mtype, mult in pairs(self:GetAllMultipliers()) do 
         values[mtype] = mult:GetValue(unitID)

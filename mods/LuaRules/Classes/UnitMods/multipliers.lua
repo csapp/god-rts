@@ -9,6 +9,10 @@ local GetUnitDefID = Spring.GetUnitDefID
 local SetGroundMoveTypeData = Spring.MoveCtrl.SetGroundMoveTypeData
 local GetUnitMoveTypeData = Spring.GetUnitMoveTypeData
 
+------------------------------------------------------------
+-- BASE MULTIPLIERS
+------------------------------------------------------------
+
 Multiplier = Object:Inherit{
     classname = "Multiplier",
     globalValue = 1,
@@ -70,7 +74,7 @@ function Multiplier:GetValue(unitID)
 end
 
 ------------------------------------------------------------
--- EVENT MULTIPLIERS
+-- EVENT MULTIPLIER
 ------------------------------------------------------------
 EventMultiplier = Multiplier:Inherit{
     classname = "EventMultiplier"
@@ -87,7 +91,7 @@ function XPMultiplier:GetFromDamage(victimID, attackerID, weaponID)
 end
 
 ------------------------------------------------------------
--- PERSISTENT MULTIPLIERS
+-- PERSISTENT MULTIPLIER
 ------------------------------------------------------------
 
 PersistentMultiplier = Multiplier:Inherit{
@@ -109,6 +113,10 @@ function PersistentMultiplier:Add(value, classes)
     self:ApplyToTeam()
 end
 
+------------------------------------------------------------
+-- HEALTH
+------------------------------------------------------------
+
 HealthMultiplier = PersistentMultiplier:Inherit{
     classname = "HealthMultiplier"
 }
@@ -121,6 +129,9 @@ function HealthMultiplier:Apply(unitID)
     SetUnitHealth(unitID, GetUnitHealth(unitID) * value)
 end
 
+------------------------------------------------------------
+-- MOVE SPEED
+------------------------------------------------------------
 
 MoveSpeedMultiplier = PersistentMultiplier:Inherit{
     classname = "MoveSpeedMultiplier",
@@ -145,7 +156,7 @@ MoveSpeedMultiplier = PersistentMultiplier:Inherit{
 }
 
 function MoveSpeedMultiplier:GetValue(unitID)
-    if UnitDefs[GetUnitDefID(unitID)].canMove then
+    if not unitID or UnitDefs[GetUnitDefID(unitID)].canMove then
         return MoveSpeedMultiplier.inherited.GetValue(self, unitID)
     end
 end
@@ -170,7 +181,7 @@ AttackSpeedMultiplier = PersistentMultiplier:Inherit{
 }
 
 function AttackSpeedMultiplier:GetValue(unitID)
-    if UnitDefs[GetUnitDefID(unitID)].canAttack then
+    if not unitID or UnitDefs[GetUnitDefID(unitID)].canAttack then
         return AttackSpeedMultiplier.inherited.GetValue(self, unitID)
     end
 end
@@ -197,14 +208,10 @@ AttackRangeMultiplier = PersistentMultiplier:Inherit{
 }
 
 function AttackRangeMultiplier:GetValue(unitID)
-    if UnitDefs[GetUnitDefID(unitID)].canAttack then
+    if not unitID or UnitDefs[GetUnitDefID(unitID)].canAttack then
         return AttackRangeMultiplier.inherited.GetValue(self, unitID)
     end
 end
-
---function AttackRangeMultiplier:Add(value, classes)
-    --AttackRangeMultiplier.inherited.Add(self, -value, classes)
---end
 
 function AttackRangeMultiplier:Apply(unitID)
     local value = self:GetValue(unitID)
