@@ -189,3 +189,29 @@ function AttackSpeedMultiplier:Apply(unitID)
     Spring.SetUnitWeaponState(unitID, 0, "reloadTime", attackSpeed*value)
 end
 
+------------------------------------------------------------
+-- ATTACK RANGE
+------------------------------------------------------------
+AttackRangeMultiplier = PersistentMultiplier:Inherit{
+    classname = "AttackRangeMultiplier"
+}
+
+function AttackRangeMultiplier:GetValue(unitID)
+    if UnitDefs[GetUnitDefID(unitID)].canAttack then
+        return AttackRangeMultiplier.inherited.GetValue(self, unitID)
+    end
+end
+
+--function AttackRangeMultiplier:Add(value, classes)
+    --AttackRangeMultiplier.inherited.Add(self, -value, classes)
+--end
+
+function AttackRangeMultiplier:Apply(unitID)
+    local value = self:GetValue(unitID)
+    if not value then return end
+    
+    local weapons = UnitDefs[GetUnitDefID(unitID)].weapons
+    if table.isempty(weapons) then return end
+    local attackRange = WeaponDefs[weapons[1].weaponDef].range
+    Spring.SetUnitWeaponState(unitID, 0, "range", attackRange*value)
+end
