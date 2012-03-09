@@ -3,18 +3,12 @@ local GetGameSeconds = Spring.GetGameSeconds
 
 ActivePower = Power:Inherit{
     classname = "ActivePower",
-    powerName = "",
-    powerType = "",
     tooltip = "",
-    id = 0,
     damage = 0,
     
     -- 0 <= rechargeRate <= 1
     -- % power recharges / second
     rechargeRate = 0, 
-
-    teamID = -1,
-    godID = -1,
     charge = POWERS.FULL_CHARGE,
     cost = POWERS.FULL_CHARGE,
     cmdDesc = {},
@@ -32,8 +26,8 @@ function ActivePower:GetDamage() return self.damage end
 function ActivePower:GetCost() return self.cost end
 function ActivePower:GetTooltip() return self.tooltip end
 
-function ActivePower:Initialize()
-    inherited.Initialize(self)
+function ActivePower:SetUp()
+    inherited.SetUp(self)
     self:_SetCmdDesc()
     gadgetHandler:RegisterCMDID(self:GetID())
 end
@@ -55,10 +49,6 @@ function ActivePower:SetCustomCursor(cursorName, colour)
     local cmdDescCursor = self:GetCmdDesc().cursor
     Spring.AssignMouseCursor(cmdDescCursor, cursorName, true, true)
     Spring.SetCustomCommandDrawData(self:GetID(), cmdDescCursor, colour, false)
-end
-
-function ActivePower:GetID()
-    return self.id
 end
 
 function ActivePower:GetRechargeRate()

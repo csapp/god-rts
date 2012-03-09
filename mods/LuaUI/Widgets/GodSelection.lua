@@ -35,10 +35,7 @@ function done()
     if(listOfPowers[1] == "" or listOfPowers[2] == "" or listOfPowers[3] == "") then
 	    return false
     end
-	ID = Spring.GetMyPlayerID()
-    table.insert(listOfPowers, ID)
     LuaMessages.SendLuaRulesMsg(MSG_TYPES.GOD_SELECTED, listOfPowers)
-    --Spring.Echo("Done")
 	widgetHandler:RemoveWidget()
 end
 
@@ -182,7 +179,7 @@ end
 		margin = {0, 0, 0, 0},
 		minWidth = 120,
 		minHeight = 120,
-		caption = "Something",
+		caption = "Boots of Hermes",
 		isDisabled = false,
 		cmdid = 3,
 		OnMouseDown = {ClickFunc},

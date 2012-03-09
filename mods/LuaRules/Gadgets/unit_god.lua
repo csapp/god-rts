@@ -27,12 +27,14 @@ local POWERS_DIR = "LuaRules/Classes/Powers/"
 local power_bases = {
     "power.lua",
     "activepower.lua",
+    "passivepower.lua",
     "rangedpower.lua",
 }
 
 local power_filepaths = {
     "volcanicblast.lua",
     "teleport.lua",
+    "hermes.lua",
 }
 
 local power_ids = {}
@@ -54,7 +56,7 @@ local function PopulatePowerTables()
     end
     for _, filepath in pairs(power_filepaths) do
         local power = VFS.Include(POWERS_DIR .. filepath)
-        power:Initialize()
+        power:SetUp()
         local id = power:GetID()
         Powers[id] = power
         table.insert(power_ids, id)
@@ -65,7 +67,9 @@ end
 local function AddPower(teamID, powerName)
     local power = PowerNames[powerName]
     local manager = power_managers[teamID]
-    manager:AddElement(power.id, power:New(teamID))
+    local powerobj = power:New(teamID)
+    powerobj:Initialize()
+    manager:AddElement(power.id, powerobj)
 end
 
 local function SpawnGod(teamID)
@@ -98,8 +102,10 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
 
     local teamID = Spring.GetUnitTeam(unitID)
     for powerID, power in pairs(power_managers[teamID]:GetElements()) do
-        InsertUnitCmdDesc(unitID, powerID, power:GetCmdDesc())
         power:SetGodID(unitID)
+        if power:GetType() ~= POWERS.TYPES.PASSIVE then 
+            InsertUnitCmdDesc(unitID, powerID, power:GetCmdDesc())
+        end
     end
 end
 
@@ -107,14 +113,9 @@ function gadget:RecvLuaMsg(msg, playerID)
     local msg_type, params = LuaMessages.deserialize(msg)
 	if msg_type == MSG_TYPES.GOD_SELECTED then
         local _, _, _, teamID = Spring.GetPlayerInfo(playerID)
-        -- XXX The temp powers break this loop
-        -- Uncomment it and remove the subsequent AddPowers 
-        -- when the temp powers are gone
-        --for i=2,#params do
-            --AddPower(teamID, params[i])
-        --end
-        AddPower(teamID, params[1])
-        AddPower(teamID, params[2])
+        for i=1,#params do
+            AddPower(teamID, params[i])
+        end
         GG.Delay.DelayCall(SpawnGod, {teamID})
 	end
 end

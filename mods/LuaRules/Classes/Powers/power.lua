@@ -12,6 +12,7 @@ POWERS = {
 
 Power = Object:Inherit{
     classname = "Power",
+    id = 0,
     powerName = "",
     powerType = "",
     teamID = -1,
@@ -26,9 +27,15 @@ function Power:New(teamID)
     return obj
 end
 
-function Power:Initialize()
+function Power:SetUp()
+    -- Sets up any class stuff
 end
 
+function Power:Initialize()
+    -- Initializes any object stuff
+end
+
+function Power:GetID() return self.id end
 function Power:GetName() return self.powerName end
 function Power:GetType() return self.powerType end
 
