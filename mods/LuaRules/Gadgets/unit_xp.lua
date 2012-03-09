@@ -28,6 +28,8 @@ local GetUnitExperience = Spring.GetUnitExperience
 local SetUnitExperience = Spring.SetUnitExperience
 
 --local DEBUG = 1
+--
+local xpMultipliers = {}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, morphInto, teamID)
@@ -36,7 +38,7 @@ local function Morph(unitID, morphInto, teamID)
 
     -- Copy command queue
     local myCmds = Spring.GetUnitCommands(unitID)
-    for i = 1, myCmds.n do
+    for i = 1, #myCmds do
         local cmd = myCmds[i]
         Spring.GiveOrderToUnit(newUnitID, cmd.id, cmd.params, cmd.options.coded)
     end
@@ -84,28 +86,36 @@ end
 function gadget:UnitDamaged(unitID, unitDefID, teamID, damage, paralyzer,
                             weaponID, attackerID)
     if attackerID == nil or attackerID < 0 then return end
-    local attackerTeam = GetUnitTeam(attackerID)
-    local xpMult = _G.TeamManagers[attackerTeam]:GetAttributeManager():GetXPMultiplier()
+    local xpMult = xpMultipliers[GetUnitTeam(attackerID)]
     local xpGained = damage*xpMult:GetFromDamage(unitID, attackerID, weaponID)
     AddXP(attackerID, xpGained)
 end
 
 function gadget:UnitFromFactory(unitID, unitDefID, unitTeam, builderID, builderDefID, _)
-    if not builderID then return end
-    if not Units.IsVillageUnit(unitID) then
-        return 
-    end
-    local _, max_health = GetUnitHealth(unitID)
-    AddXP(builderID, max_health/10)
+    if not builderID or not Units.IsVillageUnit(builderID) then return end
+    local _, maxHealth = GetUnitHealth(unitID)
+    local xpGained = (maxHealth/10) * xpMultipliers[unitTeam]:GetValue(builderID)
+    AddXP(builderID, xpGained)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
-    local msg_type, params = LuaMessages.deserialize(msg)
-    if msg_type == MSG_TYPES.CONVERT_FINISHED then
+    local msgType, params = LuaMessages.deserialize(msg)
+    if msgType == MSG_TYPES.CONVERT_FINISHED then
         local clergyID = tonumber(params[1])
         local villageID = tonumber(params[2])
-        local xp_gained = UnitDefs[GetUnitDefID(villageID)].customParams.convert_xp
-        GG.Delay.DelayCall(AddXP, {clergyID, xp_gained})
+        local xpGained = UnitDefs[GetUnitDefID(villageID)].customParams.convert_xp
+        local xpMult = xpMultipliers[GetUnitTeam(clergyID)]:GetValue(clergyID)
+        GG.Delay.DelayCall(AddXP, {clergyID, xpGained*xpMult})
+    end
+end
+
+function gadget:Initialize()
+    local gaiaTeamID = Spring.GetGaiaTeamID()
+    local TeamManagers = _G.TeamManagers
+    for _, teamID in pairs(Spring.GetTeamList()) do
+        if teamID ~= gaiaTeamID then
+            xpMultipliers[teamID] = TeamManagers[teamID]:GetAttributeManager():GetXPMultiplier()
+        end
     end
 end
 
