@@ -28,9 +28,6 @@ local GetUnitExperience = Spring.GetUnitExperience
 local SetUnitExperience = Spring.SetUnitExperience
 
 --local DEBUG = 1
-local VILLAGE_IDS = {UnitDefNames["smallvillage"].id,
-                     UnitDefNames["mediumvillage"].id,
-                     UnitDefNames["largevillage"].id}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, morphInto, teamID)
@@ -87,7 +84,10 @@ end
 function gadget:UnitDamaged(unitID, unitDefID, teamID, damage, paralyzer,
                             weaponID, attackerID)
     if attackerID == nil or attackerID < 0 then return end
-    AddXP(attackerID, damage)
+    local attackerTeam = GetUnitTeam(attackerID)
+    local xpMult = _G.TeamManagers[attackerTeam]:GetAttributeManager():GetXPMultiplier()
+    local xpGained = damage*xpMult:GetFromDamage(unitID, attackerID, weaponID)
+    AddXP(attackerID, xpGained)
 end
 
 function gadget:UnitFromFactory(unitID, unitDefID, unitTeam, builderID, builderDefID, _)
