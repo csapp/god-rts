@@ -21,13 +21,18 @@ end
 
 -- INCLUDES
 include("msgs.h.lua")
+VFS.Include("LuaUI/Headers/utilities.lua")
 
 -- CONSTANTS
 local Chili
 local Label
 local Window
+local MAXBUTTONSONROW = 3
+local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu"}
 
 -- MEMBERS
+
+local commandWindow
 
 -- CONTROLS
 local spGetModKeyState			= Spring.GetModKeyState
@@ -61,17 +66,146 @@ function setUnitInfo(unit)
 	unitInfo:SetCaption(unitInfoString)
 end
 
---[[
+function LayoutHandler(xIcons, yIcons, cmdCount, commands)
+	widgetHandler.commands   = commands
+	widgetHandler.commands.n = cmdCount
+	widgetHandler:CommandsChanged()
+	local reParamsCmds = {}
+	local customCmds = {}
+
+	return "", xIcons, yIcons, {}, customCmds, {}, {}, {}, {}, reParamsCmds, {[1337]=9001}
+end
+
+function ClickFunc(button) 
+	local _,_,left,_,right = Spring.GetMouseState()
+	local alt,ctrl,meta,shift = Spring.GetModKeyState()
+	local index = Spring.GetCmdDescIndex(button.cmdid)
+	if (left) then
+		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
+		Spring.SetActiveCommand(index,1,left,right,alt,ctrl,meta,shift)
+	end
+	if (right) then
+		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
+		Spring.SetActiveCommand(index,3,left,right,alt,ctrl,meta,shift)
+	end
+end
+
+function findButtonData(cmd)
+	local isState = (cmd.type == CMDTYPE.ICON_MODE and #cmd.params > 1)
+	local isBuild = (cmd.id < 0)	
+	local buttontext = ""
+	local container
+	local texture = nil
+	if not isState and not isBuild then
+		buttontext = cmd.name
+		container = commandWindow
+	elseif isState then
+		local indexChoice = cmd.params[1] + 2
+		buttontext = cmd.params[indexChoice]
+		container = stateCommandWindow
+	elseif isBuild then
+		container = buildCommandWindow
+		buttontext = cmd.name:gsub("^%l", string.upper)
+		-- For some reason, buildpics are not working. When they magically work again, uncomment the following line.
+		-- texture = '#'..-cmd.id
+	else
+		texture = cmd.texture
+	end
+	return buttontext, container, isState, isBuild, texture	
+end
+
+function createMyButton(cmd)
+	if(type(cmd) == 'table')then
+		buttontext, container, isState, isBuild, texture = findButtonData(cmd)
+
+		local result = container.xstep % MAXBUTTONSONROW
+		container.xstep = container.xstep + 1
+		local increaseRow = false
+		if(result==0)then
+			result = MAXBUTTONSONROW
+			increaseRow = true
+		end	
+
+		local y_axis = 0;
+		if not texture then
+			y_axis = 38 * (container.ystep-1)
+		else
+			y_axis = 80 * (container.ystep-1)
+		end
+		
+		local color = {0,0,0,1}
+		local button = Chili.Button:New {
+			parent = container,
+			x = 110 * (result-1),
+			y = y_axis,
+			padding = {5, 5, 5, 5},
+			margin = {0, 0, 0, 0},
+			minWidth = 110,
+			minHeight = 40,
+			caption = buttontext,
+			isDisabled = false,
+			cmdid = cmd.id,
+			OnMouseDown = {ClickFunc},
+		}
+		
+		if texture then
+			if DEBUG then Spring.Echo("texture",texture) end
+			button:Resize(80,80)
+			image = Chili.Image:New {
+				width="100%";
+				height="90%";
+				y="6%";
+				keepAspect = true,	--isState;
+				file = texture;
+				parent = button;
+			}
+		end
+		
+		if(increaseRow)then
+			container.ystep = container.ystep+1
+		end		
+	end
+end
+
+function filterUnwanted(commands)
+	local uniqueList = {}
+	if DEBUG then Spring.Echo("Total commands ", #commands) end
+	if not(#commands == 0)then
+		j = 1
+		for _, cmd in ipairs(commands) do
+			if DEBUG then Spring.Echo("Adding command ", cmd.action) end
+			if not table.contains(COMMANDSTOEXCLUDE,cmd.action) then
+				uniqueList[j] = cmd
+				j = j + 1
+			end
+		end
+	end
+	return uniqueList
+end
+
+function loadPanel()
+	local commands = Spring.GetActiveCmdDescs()
+	commands = filterUnwanted(commands)
+	table.sort(commands,function(x,y) return x.action < y.action end)
+	for cmdid, cmd in pairs(commands) do
+		rowcount = createMyButton(commands[cmdid]) 
+	end
+end
+
+
 function setUnitStats(unit)
-	local unitStatString = printVelocity(unit)
+	local unitStatString = printVelocity(unit) .. "\n" ..
+						   printDamage(unit) .. "\n" ..
+						   printRange(unit) .. "\n" ..
+						   printAttSpeed(unit)
 	
 	unitStats:SetCaption(unitStatString)
 end
-]]
 
 function resetWindow(container)
 	container:ClearChildren()
-	
+	container.xstep = 1
+	container.ystep = 1
 end
 
 function widget:Initialize()
@@ -91,9 +225,9 @@ function widget:Initialize()
 	statusBar = Window:New{
 		parent = screen0,
 		x = 0,
-		y = -150,
+		y = -250,
 		width = "100%",
-		height = 150,
+		height = 250,
 		draggable = false,
 		resizable = false,
 		dragUseGrip = false,		
@@ -113,10 +247,10 @@ function widget:Initialize()
 		anchors = {left=true,bottom=true,right=false,top=false},
 		caption = "",
 	}
-	--[[
+
 	unitStats = Label:New{
 		parent = statusBar,
-		x = 300,
+		x = 500,
 		y = -220,
 		width = "25%",
 		height = "100%",
@@ -127,7 +261,6 @@ function widget:Initialize()
 		anchors = {left=true,bottom=true,right=false,top=false},
 		caption = "",
 	}
-	]]
 	
 	imageWindow = Control:New{
         parent = statusBar,
@@ -145,6 +278,20 @@ function widget:Initialize()
 		height = 50,
 		padding = {0, 0, 0, 0},
 		margin = {0, 0, 0, 0},
+	}
+	
+	commandWindow = Chili.Control:New{
+		parent = statusBar,
+		x = 200,
+		y = 0,
+		width = "20%",
+		height = "100%",
+		xstep = 1,
+		ystep = 1,
+		draggable = false,
+		resizable = false,
+		dragUseGrip = false,
+		caption = "Commands",
 	}
 
 
@@ -166,17 +313,21 @@ function widget:CommandsChanged()
             current_progress_bar = nil
         end
         unitInfo:SetCaption("")
-		--unitStats:SetCaption("")
+		unitStats:SetCaption("")
 		resetWindow(imageWindow)
+		resetWindow(commandWindow)
+		
         return
     end
     -- XXX need to decide what to do if multiple units are selected
 	-- This just handles showing the first unit selected in a group
     setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
-	-- setUnitStats(selected_units[1])
+	setUnitStats(selected_units[1])
 	resetWindow(imageWindow)
+	resetWindow(commandWindow)
 	drawPortrait()
+	loadPanel()
     
     if current_progress_bar ~= nil then
         pbarWindow:RemoveChild(current_progress_bar)
@@ -273,25 +424,82 @@ function printDescription(unitID)
 	end
 end
 
---[[
 function printVelocity(unitID)
-	local velocity = UnitDefs[Spring.GetUnitDefID(unitID)].MaxWaterDepth
+	local speed = Spring.GetUnitMoveTypeData(unitID).maxSpeed
 	
-	Spring.Echo("velocity: ", velocity)
+	if speed ~= nil then
+		return "Speed: " .. speed
+	else
+		return ""
+	end
+
+--[[
+for k,v in pairs(Spring.GetUnitMoveTypeData(unitID)) do
+Spring.Echo(k,v)
+end
+]]
 	
-	if velocity ~= nil then
-		return "Speed: " .. velocity
+	--[[
+		for k,v in pairs(WeaponDefs[weapons[1].weaponDef].damages) do
+   Spring.Echo(k,v)
+end
+]]	
+--[[
+ for id,weaponDef in pairs(UnitDefs) do
+   for name,param in unitDef:pairs() do
+     Spring.Echo(name,param)
+   end
+ end
+ --]]
+end
+
+function printDamage(unitID)
+	local weapons = UnitDefs[Spring.GetUnitDefID(unitID)].weapons
+	
+    if table.isempty(weapons) then
+		return ""
+	end
+	
+    local damage = WeaponDefs[weapons[1].weaponDef].damages[0] -- Good job on the consistent numbering system, Spring.
+	
+	if damage ~= nil then
+		return "Damage: " .. damage
 	else
 		return ""
 	end
 end
-]]
 
-	--local range = WeaponDefs[Spring.GetUnitDefID(unitID)].range
-	--local damage = WeaponDefs[Spring.GetUnitDefID(unitID)].damge
-	--local attackSpeed = WeaponDefs[Spring.GetUnitDefID(unitID)].reloadtime
-    --
-    --
+function printRange(unitID)
+	local weapons = UnitDefs[Spring.GetUnitDefID(unitID)].weapons
+	
+    if table.isempty(weapons) then
+		return ""
+	end
+	
+    local range = WeaponDefs[weapons[1].weaponDef].range
+	
+	if range ~= nil then
+		return "Range: " .. range
+	else
+		return ""
+	end
+end
+
+function printAttSpeed(unitID)
+	local weapons = UnitDefs[Spring.GetUnitDefID(unitID)].weapons
+	
+    if table.isempty(weapons) then
+		return ""
+	end
+	
+    local attSpeed = WeaponDefs[weapons[1].weaponDef].reload
+	
+	if attSpeed ~= nil then
+		return "Attack Speed: " .. attSpeed
+	else
+		return ""
+	end
+end
 
 local function createProgressBar(unitID, caption)
 
@@ -368,4 +576,3 @@ function widget:RecvLuaMsg(msg, playerID)
 		destroyProgressBar(unitID)
     end
 end
-
