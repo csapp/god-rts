@@ -186,7 +186,7 @@ end
 	}
 
 
-	local buttonTemp = Chili.Button:New {
+	local buttonExpress = Chili.Button:New {
 		parent = godselWindow,
 		x = 180,
 		y = 340,
@@ -194,7 +194,7 @@ end
 		margin = {0, 0, 0, 0},
 		minWidth = 120,
 		minHeight = 120,
-		caption = "Temp",
+		caption = "Express Conversion",
 		isDisabled = false,
 		cmdid = 3,
 		OnMouseDown = {ClickFunc},

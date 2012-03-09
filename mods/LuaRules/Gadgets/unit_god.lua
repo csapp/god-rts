@@ -35,6 +35,7 @@ local power_filepaths = {
     "volcanicblast.lua",
     "teleport.lua",
     "hermes.lua",
+    "expressconversion.lua",
 }
 
 local power_ids = {}
