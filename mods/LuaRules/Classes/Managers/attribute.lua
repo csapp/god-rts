@@ -20,6 +20,7 @@ function AttributeManager:New(teamID)
 
     obj:RegisterMultiplier(Multipliers.TYPES.HEALTH, HealthMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.MOVE_SPEED, MoveSpeedMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.ATTACK_SPEED, AttackSpeedMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.XP, XPMultiplier:New(teamID))
     return obj
 end

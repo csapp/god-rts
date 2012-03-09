@@ -30,14 +30,12 @@ function Multiplier:GetClassValue(class)
 end
 
 function Multiplier:SetClassValue(class, value)
-    if table.contains(Units.CLASSES, class) then
-        self.classValues[class] = value
-    end
+    self.classValues[class] = value
 end
 
 function Multiplier:AddClassValue(class, value)
     local cur = self.classValues[class] or 0
-    self.classValues[class] = cur + value
+    self:SetClassValue(class, cur+value)
 end
 
 function Multiplier:GetGlobalValue()
@@ -70,6 +68,7 @@ function Multiplier:GetValue(unitID)
 
     return globalValue + self:GetClassValue(Units.GetClass(unitID))
 end
+
 ------------------------------------------------------------
 -- EVENT MULTIPLIERS
 ------------------------------------------------------------
@@ -157,5 +156,36 @@ function MoveSpeedMultiplier:Apply(unitID)
 
     local ud = UnitDefs[GetUnitDefID(unitID)]
     local origspeed = self.origspeeds[ud.name]
-    SetGroundMoveTypeData(unitID, "maxSpeed", origspeed * value)
+    if origspeed then 
+        SetGroundMoveTypeData(unitID, "maxSpeed", origspeed * value)
+    end
 end
+
+------------------------------------------------------------
+-- ATTACK SPEED
+------------------------------------------------------------
+
+AttackSpeedMultiplier = PersistentMultiplier:Inherit{
+    classname = "AttackSpeedMultiplier"
+}
+
+function AttackSpeedMultiplier:GetValue(unitID)
+    if UnitDefs[GetUnitDefID(unitID)].canAttack then
+        return AttackSpeedMultiplier.inherited.GetValue(self, unitID)
+    end
+end
+
+function AttackSpeedMultiplier:Add(value, classes)
+    AttackSpeedMultiplier.inherited.Add(self, -value, classes)
+end
+
+function AttackSpeedMultiplier:Apply(unitID)
+    local value = self:GetValue(unitID)
+    if not value then return end
+    
+    local weapons = UnitDefs[GetUnitDefID(unitID)].weapons
+    if table.isempty(weapons) then return end
+    local attackSpeed = WeaponDefs[weapons[1].weaponDef].reload
+    Spring.SetUnitWeaponState(unitID, 0, "reloadTime", attackSpeed*value)
+end
+
