@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "horsemanscript.lua",
 
     customParams = {
+        real_speed = 150,
         class = "cavalry",
         morph_into = "scout",
         max_xp = 750,

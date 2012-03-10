@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "generalscript.lua",
 
     customParams = {
+        real_speed = 90,
         class = "infantry",
         level = 3,
     },

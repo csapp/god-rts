@@ -19,6 +19,7 @@ local unitDef  =  {
     --capturespeed = 900,
 
     customParams = {
+        real_speed = 90,
         class = "clergy",
         morph_into = "prophet",
         max_xp = 1500,

@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "scoutscript.lua",
 
     customParams = {
+        real_speed = 150,
         class = "cavalry",
         morph_into = "knight",
         max_xp = 1500,

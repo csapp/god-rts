@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "godscript.lua",
 
     customParams = {
+        real_speed = 90,
         class = "god",
         level = 1, -- XXX remove this when we have persistent god info
     },

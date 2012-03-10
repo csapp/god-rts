@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "hunterscript.lua",
 
     customParams = {
+        real_speed = 90,
         class = "ranged",
         morph_into = "marksman",
         max_xp = 500,

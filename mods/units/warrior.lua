@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "warriorscript.lua",
 
     customParams = {
+        real_speed = 90,
         class = "infantry",
         morph_into = "general",
         max_xp = 1000,

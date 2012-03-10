@@ -10,6 +10,7 @@ Units.CLASSES = {
     CLERGY = "clergy",
     VILLAGE = "village",
     GOD = "god",
+    ZOMBIE = "zombie",
 }
 
 Units.UNITDEF_NAMES = {
@@ -25,10 +26,15 @@ Units.UNITDEF_NAMES = {
     KNIGHT = "knight",
     HORSEMAN = "horseman",
     HUNTER = "hunter",
+    --ZOMBIE = "zombie",
 }
 
 local function GetCustomParam(unitID, param)
     return UnitDefs[GetUnitDefID(unitID)].customParams[param]
+end
+
+function Units.GetSpeed(unitID)
+    return GetCustomParam(unitID, 'real_speed')
 end
 
 function Units.GetLevel(unitID)
@@ -67,3 +73,10 @@ function Units.IsGodUnit(unitID)
     return Units.GetClass(unitID) == Units.CLASSES.GOD
 end
 
+function Units.IsZombieUnit(unitID)
+    return Units.GetClass(unitID) == Units.CLASSES.ZOMBIE
+end
+
+function Units.IsTempUnit(unitID)
+    return GetCustomParam(unitID, 'temp_unit') or false
+end

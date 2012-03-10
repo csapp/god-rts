@@ -16,6 +16,7 @@ local unitDef  =  {
     script = "archerscript.lua",
 
     customParams = {
+        real_speed = 90,
         class = "ranged",
         level = 3,
     },
