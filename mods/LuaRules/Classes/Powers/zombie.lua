@@ -10,33 +10,27 @@ ZombieApocalypse = RangedPower:Inherit{
     rechargeRate = 1/180,
     zombieCount = 20,
     zombieLifetime = 30, -- i.e. zombies die after zombieLifetime seconds
+    tooltip = "Spawn a wave of hungry zombies for a short time",
+    cmdType = CMDTYPE.ICON_MAP,
+    cmdCursor = "Attack",
 }
 
 local this = ZombieApocalypse
 local inherited = this.inherited
 
-function ZombieApocalypse:New(teamID)
-    obj = inherited.New(self, teamID)
-    obj.cmdDesc = {
-        id      = CMD_ZOMBIE,
-        name    = obj:GetName(),
-        action  = "ZombieApocalypse",
-        type    = CMDTYPE.ICON_MAP,
-        tooltip = "Spawn a wave of hungry zombies for " .. self.zombieLifetime .. " seconds",
-        params = {},
-    }
-    return obj
+function ZombieApocalypse:_SpawnZombie(x, y, z, teamID)
 end
 
-local function SpawnZombie(x, y, z, teamID)
+function ZombieApocalypse:_KillZombies()
 end
 
 function ZombieApocalypse:_Use(cmdParams, cmdOptions)
     local x, y, z = unpack(cmdParams)
     local teamID = self:GetTeamID()
     for i=1,#self.zombieCount do
-        SpawnZombie(x,y,z,teamID)
+        self:_SpawnZombie(x,y,z,teamID)
     end
+    GG.Delay.CallLater(self.zombieLifetime, self._KillZombies, {self})
 end
 
 return ZombieApocalypse
