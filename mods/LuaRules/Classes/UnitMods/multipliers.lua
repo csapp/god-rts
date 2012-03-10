@@ -179,24 +179,6 @@ end
 
 MoveSpeedMultiplier = PersistentMultiplier:Inherit{
     classname = "MoveSpeedMultiplier",
-    -- XXX Spring is silly and doesn't allow upgrades to maxSpeed
-    -- so we need to set all of the maxSpeeds to a large number in
-    -- the unitdefs and control them ourselves here
-    -- More info: http://springrts.com/phpbb/viewtopic.php?f=23&t=27774
-    --origspeeds = {
-        --[Units.UNITDEF_NAMES.GOD] = 90,
-        --[Units.UNITDEF_NAMES.GENERAL] = 90, 
-        --[Units.UNITDEF_NAMES.ARCHER] = 90,
-        --[Units.UNITDEF_NAMES.WARRIOR] = 90, 
-        --[Units.UNITDEF_NAMES.SOLDIER] = 90,
-        --[Units.UNITDEF_NAMES.SCOUT] = 150,
-        --[Units.UNITDEF_NAMES.PROPHET] = 90,
-        --[Units.UNITDEF_NAMES.PRIEST] = 90,
-        --[Units.UNITDEF_NAMES.MARKSMAN] = 90,
-        --[Units.UNITDEF_NAMES.KNIGHT] = 150,
-        --[Units.UNITDEF_NAMES.HORSEMAN] = 150,
-        --[Units.UNITDEF_NAMES.HUNTER] = 90,
-    --},
 }
 
 function MoveSpeedMultiplier:GetValue(unitID)
@@ -211,8 +193,6 @@ function MoveSpeedMultiplier:Apply(unitID)
     -- value will be nil if the unit can't move
     if not value then return end
 
-    --local ud = UnitDefs[GetUnitDefID(unitID)]
-    --local origspeed = self.origspeeds[ud.name]
     local origspeed = Units.GetSpeed(unitID)
     if origspeed then 
         SetGroundMoveTypeData(unitID, "maxSpeed", origspeed * value)
