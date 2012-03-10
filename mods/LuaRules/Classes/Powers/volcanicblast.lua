@@ -19,8 +19,8 @@ local this = VolcanicBlast
 local inherited = this.inherited
 local volcanoID
 
-function VolcanicBlast:Initialize()
-    inherited.Initialize(self)
+function VolcanicBlast:SetUp()
+    inherited.SetUp(self)
     self:SetCustomCursor("cursorVolcanicBlast")
 end
 
@@ -33,12 +33,14 @@ function VolcanicBlast:SetRadius(r)
 end
 
 function VolcanicBlast:_DestroyVolcano()
+    Spring.PlaySoundFile("sounds/avalancheshort3.wav")
 	DestroyUnit(volcanoID)
 end
 
 function VolcanicBlast:_Use(cmdParams, cmdOptions)
     local center_x, center_y, center_z = unpack(cmdParams)
     local teamID = self:GetTeamID()
+    Spring.PlaySoundFile("sounds/avalancheshort.wav")
 	volcanoID = CreateUnit("Volcano", center_x, center_y, center_z, 0, teamID)
 	GG.Delay.CallLater(self.volcanoLifetime, self._DestroyVolcano, {self})
 end

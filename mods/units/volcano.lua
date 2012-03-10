@@ -18,6 +18,7 @@ local unitDef  =  {
 	    customParams = {
         class = "volcano",
 		temp_unit = true,
+        level = 1,
     },
 	
 --Unit limitations and properties
@@ -115,6 +116,7 @@ local unitDef  =  {
 		damage = {
 			default = ATKDMG,
 		},
+        soundStart = "cannonshot.wav",
 	},
 	
 	FIREBALL2 = {
