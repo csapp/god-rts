@@ -140,7 +140,7 @@ end
 	}
 
 
-	local buttonTemp = Chili.Button:New {
+	local buttonLove= Chili.Button:New {
 		parent = godselWindow,
 		x = 180,
 		y = 190,
@@ -148,7 +148,7 @@ end
 		margin = {0, 0, 0, 0},
 		minWidth = 120,
 		minHeight = 120,
-		caption = "Temp",
+		caption = "Whole Lotta Love",
 		isDisabled = false,
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},

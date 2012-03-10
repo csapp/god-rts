@@ -38,6 +38,7 @@ local power_filepaths = {
     "expressconversion.lua",
     "aphrodite.lua",
 	"zombie.lua",
+	"love.lua",
 }
 
 local power_ids = {}

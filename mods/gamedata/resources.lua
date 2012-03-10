@@ -17,6 +17,7 @@ local resources =
             cartooncloud = 'effects/cartooncloud.png',
             levelup = 'effects/levelup.png',
             flames = 'effects/flames.png',
+            hearts = 'effects/hearts.png',
             --lightb2 = 'effects/lightningball2.tga',
             --cloudexplo = 'effects/cloudexplo.tga',
             --flowexplo = 'effects/flowexplo.tga',
