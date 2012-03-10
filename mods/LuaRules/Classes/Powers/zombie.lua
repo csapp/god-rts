@@ -18,7 +18,7 @@ ZombieApocalypse = RangedPower:Inherit{
 local this = ZombieApocalypse
 local inherited = this.inherited
 
-function ZombieApocalypse:_SpawnZombie(x, y, z, teamID)
+function ZombieApocalypse:_SpawnZombie(x, y, z)
 end
 
 function ZombieApocalypse:_KillZombies()
@@ -26,9 +26,8 @@ end
 
 function ZombieApocalypse:_Use(cmdParams, cmdOptions)
     local x, y, z = unpack(cmdParams)
-    local teamID = self:GetTeamID()
     for i=1,#self.zombieCount do
-        self:_SpawnZombie(x,y,z,teamID)
+        self:_SpawnZombie(x,y,z)
     end
     GG.Delay.CallLater(self.zombieLifetime, self._KillZombies, {self})
 end
