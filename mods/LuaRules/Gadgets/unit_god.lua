@@ -37,6 +37,7 @@ local power_filepaths = {
     "hermes.lua",
     "expressconversion.lua",
     "aphrodite.lua",
+	"zombie.lua",
 }
 
 local power_ids = {}

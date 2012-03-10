@@ -1,32 +1,39 @@
-local unitName  =  "god"
+local unitName  =  "zombie"
 
 --Attribute Defintions
-local HP = 2000
-local ATKDMG = 20
-local ATKSPD = 2
+local HP = 100
+local ATKDMG = 10
+local ATKSPD = 0.5
 local ATKRNG = 20
-local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
+local MOVESPD = {0.25,0.15} -- {walkspeed, acceleration}
 
 local unitDef  =  {
 --Internal settings
-    BuildPic = "filename.bmp",
+    BuildPic = "placeholder.png",
     Category = "TANK SMALL NOTAIR NOTSUB",
-    ObjectName = "god.s3o",
-    name = "God",
-    script = "godscript.lua",
+    ObjectName = "Zombie.s3o",
+    name = "Zombie",
+    script = "zombiescript.lua",
 
     customParams = {
-        real_speed = 90,
-        class = "god",
-        level = 1, -- XXX remove this when we have persistent god info
+        class = "zombie",
+		temp_unit = true,
+        level = 1,
     },
 
     sounds = {
+      select = {
+         --   "come_on_2",
+    --        "come_on_3",
+        },
+      ok = {
+   --         "yes_1",
+        },
     },
     
 --Unit limitations and properties
     BuildTime = 5,
-    Description = "An awesomely powerful soldier",
+    Description = "A scary Zombie! Ahh!",
     MaxDamage = HP,
 	mass = 500,
     RadarDistance = 0,
@@ -37,7 +44,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 0,
+    BuildCostMetal = 3,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],
@@ -45,7 +52,7 @@ local unitDef  =  {
     FootprintX = 1,	--Affects Bounding Box (the green colored one)
     FootprintZ = 1,	--Affects Bounding Box (the green colored one)
     MaxSlope = 15,
-    MaxVelocity = 1000,
+    MaxVelocity = MOVESPD[1],
     MaxWaterDepth = 20,
     MovementClass = "Default2x2",
     TurnRate = 900,
@@ -80,16 +87,12 @@ local unitDef  =  {
 	weaponDefs = {
 	ARM = {
 		avoidFriendly = 1,
-		areaofeffect = 8,
 		collideFriendly = false,
 		name = "Arm",
 		cylinderTargetting = 1,
 		energypershot = 0,
-		edgeEffectiveness = 0.5,
 		endsmoke = "0",
 		impactonly = true,
-		impulseBoost = 5,
-		impulseFactor = 20,
 		noSelfDamage = true,
 		range = ATKRNG,
 		reloadtime = ATKSPD,
@@ -103,6 +106,7 @@ local unitDef  =  {
 		damage = {
 			default = ATKDMG,
 		},
+    --    soundStart = "swordhit2.wav",
 	},
 	
 	},
@@ -114,4 +118,6 @@ local unitDef  =  {
 }
 
 return lowerkeys({ [unitName]  =  unitDef })
+
+
 

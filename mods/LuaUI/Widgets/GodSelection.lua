@@ -95,7 +95,7 @@ end
 	}
 
 
-	local buttonTemp = Chili.Button:New {
+	local buttonZombieApocalyspe = Chili.Button:New {
 		parent = godselWindow,
 		x = 180,
 		y = 40,
@@ -103,7 +103,7 @@ end
 		margin = {0, 0, 0, 0},
 		minWidth = 120,
 		minHeight = 120,
-		caption = "Temp",
+		caption = "Zombie Apocalypse",
 		isDisabled = false,
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},

@@ -16,20 +16,10 @@ local arm_movespeed = 3
 local attacking = false
 --local atkAnimCounter = 0
 local pi = 3.1415
-local chosenWeapon
 
 local RESTORE_DELAY = Spring.UnitScript.GetLongestReloadTime(unitID) * 2
 -- picks a sensible time to wait before trying to turn the turret back to default.
 
-
-function script.Changeweapon(weaponDef)
-	Spring.Echo("Changeweapon was called")
-	if weaponDef == "ARM" then 
-		chosenWeapon = "ARM"
-	elseif weaponDef == "VOLCANIC_BLAST" then
-		chosenWeapon = "VOLCANIC_BLAST"
-	end
-end
 ---WALKING---
 local function walk()
 	Signal(SIG_WALK)
@@ -60,7 +50,7 @@ end
 
 
 function script.Create()
-	chosenWeapon = "ARM"
+	chosenWeapon = "VOLCANIC_BLAST"
     return 0
 end
 
@@ -97,11 +87,6 @@ function script.AimFromWeapon1()
 end
 
 function script.AimWeapon1(heading, pitch)
-	Spring.Echo("ARM AIMING")
-	if chosenWeapon ~= "ARM" then
-		return false
-	end
-	Spring.Echo("Aiming with weapon 1")
 	Sleep(50)
 	Signal(SIG_AIM)
 	SetSignalMask(SIG_AIM)
@@ -128,36 +113,6 @@ function MeleeAnimations()
 	attacking=false
 	return(1)
 end
-
---- Weapon 2 ---
-
-function script.QueryWeapon2()
-	return rarm
-end
-	
-function script.AimFromWeapon2()
-	return body
-end
-
-function script.AimWeapon2(heading, pitch)
-	Spring.Echo("VOLCANIC BLAST AIMING")
-	if chosenWeapon ~= "VOLCANIC_BLAST" then
-		return false
-	end
-	Spring.Echo("Aiming with weapon 2")
-	Sleep(50)
-	Signal(SIG_AIM)
-	SetSignalMask(SIG_AIM)
-	return true
-end
-
-function script.Shot2()
-	attacking = true
-	StartThread(MeleeAnimations)
-end
-
----------------
-
 	
 function script.Killed(damage, health)
 	
