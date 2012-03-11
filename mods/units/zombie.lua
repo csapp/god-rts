@@ -23,11 +23,10 @@ local unitDef  =  {
 
     sounds = {
       select = {
-         --   "come_on_2",
-    --        "come_on_3",
+           "zombieselect",
         },
       ok = {
-   --         "yes_1",
+           "zombieok",
         },
     },
     
@@ -106,7 +105,7 @@ local unitDef  =  {
 		damage = {
 			default = ATKDMG,
 		},
-    --    soundStart = "swordhit2.wav",
+       soundStart = "zombie.wav",
 	},
 	
 	},

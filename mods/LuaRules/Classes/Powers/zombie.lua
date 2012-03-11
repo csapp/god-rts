@@ -9,7 +9,7 @@ ZombieApocalypse = RangedPower:Inherit{
     id = CMD_ZOMBIE,
     powerName = "Zombie Apocalypse",
     powerType = POWERS.TYPES.OFFENSIVE,
-    rechargeRate = 1/180,
+    rechargeRate = 1/300,
     zombieCount = 20,
     zombieLifetime = 75, -- i.e. zombies die after zombieLifetime seconds
 	radius = 50,
@@ -22,6 +22,7 @@ local this = ZombieApocalypse
 local inherited = this.inherited
 
 function ZombieApocalypse:_SpawnZombie(x, y, z, teamID)
+    Spring.PlaySoundFile("sounds/avalancheshort2.wav")
 	local zombieID
 	for i=1,self.zombieCount do
 		randomNumX = math.random(0,self.radius)
@@ -33,9 +34,13 @@ function ZombieApocalypse:_SpawnZombie(x, y, z, teamID)
 end
 
 function ZombieApocalypse:_KillZombies()
+    Spring.PlaySoundFile("sounds/Manscreaming1.wav")
+    Spring.PlaySoundFile("sounds/Manscreaming2.wav")
+    Spring.PlaySoundFile("sounds/Manscreaming3.wav")
 	for i=1, #listOfZombies do
 		DestroyUnit(listOfZombies[i])
 	end
+    listOfZombies = {}
 end
 
 function ZombieApocalypse:_Use(cmdParams, cmdOptions)
