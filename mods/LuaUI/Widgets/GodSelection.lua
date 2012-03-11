@@ -26,7 +26,7 @@ function widget:GetInfo()
  -- SCRIPT FUNCTIONS
 function selectPower(row, power, button)
 	listOfPowers[row] = power
-	Spring.Echo(listOfPowers[1], listOfPowers[2], listOfPowers[3])
+	--Spring.Echo(listOfPowers[1], listOfPowers[2], listOfPowers[3])
 	--Highlight Button
 	--Set listofPowers
 end

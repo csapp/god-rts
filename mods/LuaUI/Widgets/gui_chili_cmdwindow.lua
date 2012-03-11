@@ -24,7 +24,7 @@ VFS.Include("LuaUI/Headers/utilities.lua")
 
 -- CONSTANTS
 local MAXBUTTONSONROW = 3
-local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu"}
+local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard"}
 local Chili
 
 -- MEMBERS
@@ -73,24 +73,39 @@ function findButtonData(cmd)
 	local isState = (cmd.type == CMDTYPE.ICON_MODE and #cmd.params > 1)
 	local isBuild = (cmd.id < 0)	
 	local buttontext = ""
+	local texture = getTexture(cmd.action)--'bitmaps/icons/'..(cmd.action)..'.png'
 	local container
-	local texture = nil
 	if not isState and not isBuild then
 		buttontext = cmd.name
 		container = commandWindow
 	elseif isState then
 		local indexChoice = cmd.params[1] + 2
 		buttontext = cmd.params[indexChoice]
-		container = stateCommandWindow
+		container = commandWindow
 	elseif isBuild then
-		container = buildCommandWindow
+		container = commandWindow
 		buttontext = cmd.name:gsub("^%l", string.upper)
-		-- For some reason, buildpics are not working. When they magically work again, uncomment the following line.
-		-- texture = '#'..-cmd.id
 	else
 		texture = cmd.texture
 	end
 	return buttontext, container, isState, isBuild, texture	
+end
+
+--sets texture to correct path depending on command. Yes I'm I know there is a "right" way to do this but it was taking forever to find
+--so in the interest of time.... this works
+function getTexture(action)
+	--Spring.Echo("texture",action)
+	if action == 'VolcanicBlast' then return 'bitmaps/icons/VolcanicBlast.png' end
+	if action == 'Teleport' then return 'bitmaps/icons/Teleport.png' end
+	if action == 'stop' then return 'bitmaps/icons/stop.png' end
+	if action == 'wait' then return 'bitmaps/icons/wait.png' end
+	if action == 'move' then return 'bitmaps/icons/move.png' end
+	if action == 'attack' then return 'bitmaps/icons/attack.png' end
+	if action == 'fight' then return 'bitmaps/icons/fight.png' end
+	if action == 'buildunit_horseman' then return 'bitmaps/icons/buildunit_horseman.png' end
+	if action == 'buildunit_hunter' then return 'bitmaps/icons/buildunit_hunter.png' end
+	if action == 'buildunit_soldier' then return 'bitmaps/icons/buildunit_soldier.png' end
+	return nil
 end
 
 function createMyButton(cmd)
@@ -107,20 +122,20 @@ function createMyButton(cmd)
 
 		local y_axis = 0;
 		if not texture then
-			y_axis = 38 * (container.ystep-1)
+			y_axis = 72 * (container.ystep-1)
 		else
-			y_axis = 80 * (container.ystep-1)
+			y_axis = 72 * (container.ystep-1)
 		end
 		
 		local color = {0,0,0,1}
 		local button = Chili.Button:New {
 			parent = container,
-			x = 110 * (result-1),
+			x = 72 * (result-1),
 			y = y_axis,
 			padding = {5, 5, 5, 5},
 			margin = {0, 0, 0, 0},
-			minWidth = 110,
-			minHeight = 40,
+			Width = 72,
+			minHeight = 72,
 			caption = buttontext,
 			isDisabled = false,
 			cmdid = cmd.id,
@@ -129,7 +144,7 @@ function createMyButton(cmd)
 		
 		if texture then
 			if DEBUG then Spring.Echo("texture",texture) end
-			button:Resize(80,80)
+			button:Resize(72,72)
 			image = Chili.Image:New {
 				width="100%";
 				height="90%";
@@ -197,7 +212,7 @@ function widget:Initialize()
 		x = 0,
 		y = 0,
 		width = "100%",
-		height = "40%",
+		height = "100%",
 		xstep = 1,
 		ystep = 1,
 		draggable = false,
@@ -233,16 +248,16 @@ function widget:Initialize()
 	}		
 	
 	window0 = Chili.Window:New{
-		x = '70%',
-		y = '12%',	
+		x = -250,
+		y = -250,	
+		width = 250,
+		height = 250,
 		dockable = true,
 		parent = screen0,
 		caption = "Commands",
 		draggable = true,
 		resizable = true,
 		dragUseGrip = true,
-		clientWidth = 350,
-		clientHeight = 400,
 		backgroundColor = {0,0,0,1},
 		skinName  = "Robocracy",		
 		children = {commandWindow,stateCommandWindow,buildCommandWindow},
