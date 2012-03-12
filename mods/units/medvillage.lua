@@ -4,7 +4,7 @@ local unitDef =
 {
 -- Internal settings	
 	Category = "LAND",
-	ObjectName = "village.s3o",
+	ObjectName = "MediumVillage.s3o",
 	TEDClass = "PLANT",
 	Name = "Medium Village",
 	script = "villagescript.lua",
