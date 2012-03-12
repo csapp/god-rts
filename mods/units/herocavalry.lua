@@ -19,6 +19,7 @@ local unitDef  =  {
         real_speed = 150,
         class = "cavalry",
         level = 4,
+        hero = "true",
     },
 
     sounds = {

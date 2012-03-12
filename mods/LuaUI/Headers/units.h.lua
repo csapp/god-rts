@@ -78,5 +78,10 @@ function Units.IsZombieUnit(unitID)
 end
 
 function Units.IsTempUnit(unitID)
-    return GetCustomParam(unitID, 'temp_unit') or false
+    return GetCustomParam(unitID, 'temp_unit') == "true"
 end
+
+function Units.IsHeroUnit(unitID)
+    return GetCustomParam(unitID, 'hero') == "true"
+end
+

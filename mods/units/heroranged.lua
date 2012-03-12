@@ -19,6 +19,7 @@ local unitDef  =  {
         real_speed = 90,
         class = "ranged",
         level = 4,
+        hero = "true",
     },
 
     sounds = {
