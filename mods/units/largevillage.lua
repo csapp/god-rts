@@ -62,7 +62,13 @@ local unitDef =
         convert_time = 120,
         convert_xp = 1000,
         level = 3,
-    }
+    },
+
+    sounds = {
+        select = {"hey_sweetness1",
+                  "hey_sweetness2",
+                  "hiwoman"},
+    },
 }
 
 return lowerkeys({ [unitName] = unitDef })

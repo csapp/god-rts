@@ -60,7 +60,12 @@ local unitDef =
         level = 2,
         max_xp = 5000,
         morph_into = "largevillage",
-    }
+    },
+    sounds = {
+        select = {"hey_sweetness1",
+                  "hey_sweetness2",
+                  "hiwoman"},
+    },
 }
 
 return lowerkeys({ [unitName] = unitDef })
