@@ -22,6 +22,8 @@ local unitDef  =  {
     },
 
     sounds = {
+        ok = {"godyes2", "godyesindeed"},
+        select = "godselect",
     },
     
 --Unit limitations and properties
