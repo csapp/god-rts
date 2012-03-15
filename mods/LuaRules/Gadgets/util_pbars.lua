@@ -35,14 +35,15 @@ local function UpdateProgressBar(unitID, progress)
 end
 
 local function FinishProgressBar(unitID)
-    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_DESTROY, {unitID, progress})
-    callback = progress_bars[unitID][3]
+    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_DESTROY, {unitID})
+    local callback = progress_bars[unitID][3]
     if callback then callback(unitID) end
     progress_bars[unitID] = nil
 end
 
 local function CancelProgressBar(unitID)
-    FinishProgressBar(unitID)
+    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_DESTROY, {unitID})
+    progress_bars[unitID] = nil
 end
 
 GG.ProgressBars.AddProgressBar = AddProgressBar
