@@ -7,7 +7,7 @@ function gadget:GetInfo()
         author = "cam",
         date = "Feb 9, 2012",
         license = "Public Domain",
-        layer = 0,
+        layer = -1,
         enabled = true
     }
 end
@@ -19,18 +19,16 @@ if (not gadgetHandler:IsSyncedCode()) then
     return false
 end
 
-function gadget:Initialize()
+function gadget:GameStart()
 
     if not VFS.FileExists("mapinfo.lua") then
         Spring.Echo("Village spawner gadget: Can't find mapinfo.lua!")
-        gadgetHandler:RemoveGadget()
         return
     end
 
     local mapcfg = VFS.Include("mapinfo.lua")
     if (not mapcfg) or (not mapcfg.custom) or (not mapcfg.custom.villages) then
         Spring.Echo("Village spawner gadget: Can't find village locations in mapinfo.lua!")
-        gadgetHandler:RemoveGadget()
         return
     end
 
@@ -42,5 +40,4 @@ function gadget:Initialize()
                    village.z, 0, gaiaTeamID)
         Spring.SetUnitNeutral(v, true)
     end
-    gadgetHandler:RemoveGadget()
 end

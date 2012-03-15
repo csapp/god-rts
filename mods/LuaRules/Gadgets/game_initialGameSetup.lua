@@ -56,7 +56,6 @@ end
 function gadget:GameStart()
 	spawnInitialUnits()
 	setDefaultResources()
-	gadgetHandler:RemoveGadget("initialGameSetup")
 end
 
 
