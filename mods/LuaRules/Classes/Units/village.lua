@@ -16,6 +16,7 @@ Village = BaseUnit:Inherit{
 local CLASS_MAP = {
     [Buildings.TYPES.SHRINE] = Shrine,
     [Buildings.TYPES.TURRET] = Turret,
+    [Buildings.TYPES.MOTEL] = Motel,
 }
 
 local this = Village

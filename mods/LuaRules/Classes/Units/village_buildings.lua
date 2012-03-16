@@ -106,3 +106,27 @@ end
 
 function Turret:Unapply(oldTeam) end
 
+------------------------------------------------------------
+-- MOTEL
+------------------------------------------------------------
+
+Motel = Building:Inherit{
+    classname = "Motel",
+    buildingName = "Motel",
+    buildTime = 5,
+    multipliers = {
+        [Multipliers.TYPES.VILLAGER] = {1},
+    },
+    tooltip = "Allows units to sleep to regain health, and increases villager generation rate",
+}
+
+function Motel:Apply()
+    Motel.inherited.Apply(self)
+    self:GetVillage():AllowCommand(CMD.REPAIR)
+end
+
+function Motel:Unapply(oldTeam)
+    Motel.inherited.Unapply(self, oldTeam)
+    self:GetVillage():DisallowCommand(CMD.REPAIR)
+end
+
