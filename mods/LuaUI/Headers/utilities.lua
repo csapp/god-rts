@@ -83,6 +83,15 @@ function table.contains(table, element)
 	return false 
 end
 
+function table.containsvalue(table, value)
+    for k,v in pairs(table) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
+
 function table.isempty(t)
     return next(t) == nil
 end

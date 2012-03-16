@@ -37,10 +37,14 @@ local unitDef =
 	
 -- Building	
 	Builder = true,
+	workerTime = 1,
+    CanRepair = true,
+    RepairSpeed = 1, 
+    CanRestore = false,
     Reclaimable = false,
 	ShowNanoSpray = false,
 	CanBeAssisted = false,	
-	workerTime = 1,
+
 	buildoptions = 
         {
             "soldier",
@@ -61,6 +65,47 @@ local unitDef =
         select = {"hey_sweetness1",
                   "hey_sweetness2",
                   "hiwoman"},
+    },
+
+	weapons = {
+		[1] = {
+			def = "BOW",
+			mainDir = "0 0 1",
+			maxAngleDif = 180,
+		},
+	},
+	
+	weaponDefs = {
+        BOW = {
+            soundStart = "archery-arrowflyby.wav",
+            avoidFriendly = 1,
+            burst = 3,
+            burstrate = 0.3,
+            collideFriendly = false,
+            collisionSize = 3,
+            name = "Bow",
+            energypershot = 0,
+            endsmoke = "0",
+            impactonly = true,
+            model = "Arrow.S3O",
+            noSelfDamage = true,
+            range = 200,
+            reloadtime = 2,
+            size = 3,
+            sprayangle = 1024,
+            startVelocity=250,
+            targetBorder = 0,
+            tolerance = 5000,
+            turret = true,
+            weaponTimer = 0.1,
+            weaponType = "MissileLauncher",
+            weaponVelocity = 1000,
+            weaponAcceleration=200,
+            damage = {
+                default = 2,
+            },
+            
+        },
     },
 }
 

@@ -18,6 +18,7 @@ local CLASS_MAP = {
     [Buildings.TYPES.TURRET] = Turret,
     [Buildings.TYPES.MOTEL] = Motel,
     [Buildings.TYPES.HIGH_RISE] = HighRise,
+    [Buildings.TYPES.TRAINING_FACILITY] = TrainingFacility,
 }
 
 local this = Village
@@ -89,6 +90,12 @@ end
 
 function Village:GetBuilding(key)
     return self.buildings[key]
+end
+
+function Village:ExecuteCommand(cmdID)
+    for _, building in pairs(self:GetBuildings()) do
+        building:ExecuteCommand(cmdID)
+    end
 end
 
 function Village:Transfer(oldTeam)

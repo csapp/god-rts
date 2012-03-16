@@ -85,6 +85,15 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
     local buildingkey = CMD_KEY_MAP[cmdID]
     if buildingkey then 
         v:AddBuilding(buildingkey)
+        return true
+    end
+
+    if table.containsvalue(Buildings.CMD_IDS.RESEARCH, cmdID) then
+        Spring.Echo("Found command!")
+        v:ExecuteCommand(cmdID)
+        return true
+    else
+        Spring.Echo("didn't find command")
     end
     
     return true
