@@ -17,6 +17,7 @@ local CLASS_MAP = {
     [Buildings.TYPES.SHRINE] = Shrine,
     [Buildings.TYPES.TURRET] = Turret,
     [Buildings.TYPES.MOTEL] = Motel,
+    [Buildings.TYPES.HIGH_RISE] = HighRise,
 }
 
 local this = Village

@@ -1,3 +1,4 @@
+include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/multipliers.h.lua")
 include("LuaUI/Headers/buildings.h.lua")
@@ -34,8 +35,10 @@ function Building:GetCmdDesc()
 end
 
 function Building:GetCmdID() 
-    return self.cmdID or Buildings.CMD_IDS[string.upper(self:GetName())]
+    local key = self:GetName():upper():gsub(' ', '_')
+    return self.cmdID or Buildings.CMD_IDS[key]
 end
+
 function Building:GetVillage() return self.village end
 function Building:GetBuildTime() return self.buildTime end
 function Building:GetUnitID() return self:GetVillage():GetUnitID() end
@@ -69,8 +72,10 @@ function Building:Unapply(oldTeam)
 end
 
 function Building:Transfer(oldTeam)
-    self:Unapply(oldTeam)
-    self:Apply()
+    if not table.isempty(self:GetMultipliers()) then
+        self:Unapply(oldTeam)
+        self:Apply()
+    end
 end
 
 ------------------------------------------------------------
@@ -100,11 +105,12 @@ Turret = Building:Inherit{
 }
 
 function Turret:Apply()
-    --Turret.inherited.Apply(self)
     self:GetVillage():AllowCommand(CMD.ATTACK)
 end
 
-function Turret:Unapply(oldTeam) end
+function Turret:Unapply(oldTeam) 
+    self:GetVillage():DisallowCommand(CMD.ATTACK)
+end
 
 ------------------------------------------------------------
 -- MOTEL
@@ -128,5 +134,35 @@ end
 function Motel:Unapply(oldTeam)
     Motel.inherited.Unapply(self, oldTeam)
     self:GetVillage():DisallowCommand(CMD.REPAIR)
+end
+
+------------------------------------------------------------
+-- HIGH RISE
+------------------------------------------------------------
+
+HighRise= Building:Inherit{
+    classname = "HighRise",
+    buildingName = "High Rise",
+    buildTime = 5,
+    hpBonus = 500,
+    tooltip = "Provides a 500 HP bonus and increases villager cap",
+}
+
+function HighRise:GetHPBonus() return self.hpBonus end
+
+function HighRise:Apply()
+    local unitID = self:GetUnitID()
+    local hpBonus = self:GetHPBonus()
+    local health, maxHealth = Spring.GetUnitHealth(unitID)
+    Spring.SetUnitMaxHealth(unitID, maxHealth + hpBonus)
+    Spring.SetUnitHealth(unitID, health + hpBonus)
+end
+
+function HighRise:Unapply(oldTeam)
+    local unitID = self:GetUnitID()
+    local hpBonus = self:GetHPBonus()
+    local health, maxHealth = Spring.GetUnitHealth(unitID)
+    Spring.SetUnitMaxHealth(unitID, maxHealth - hpBonus)
+    Spring.SetUnitHealth(unitID, health - hpBonus)
 end
 
