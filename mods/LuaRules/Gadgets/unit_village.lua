@@ -18,6 +18,7 @@ if (not gadgetHandler:IsSyncedCode()) then
     return false
 end
 
+include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/msgs.h.lua")
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/buildings.h.lua")
@@ -26,16 +27,7 @@ include("LuaRules/Classes/Units/village.lua")
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 
 local VillageManager
-
-local CMD_BUILD_SHRINE = 31050
-local shrineCmd = {
-      id      = CMD_BUILD_SHRINE,
-      name    = "Build Shrine",
-      action  = "building_shrine",
-      type    = CMDTYPE.ICON,
-      tooltip = "Build a Shrine in this village",
-      params = {},
-}
+local CMD_KEY_MAP = {}
 
 local function GetVillage(unitID)
     return VillageManager:GetElement(unitID)
@@ -48,13 +40,13 @@ end
 function gadget:GameStart()
 
     if not VFS.FileExists("mapinfo.lua") then
-        Spring.Echo("Village spawner gadget: Can't find mapinfo.lua!")
+        Spring.Echo("Village gadget: Can't find mapinfo.lua!")
         return
     end
 
     local mapcfg = VFS.Include("mapinfo.lua")
     if (not mapcfg) or (not mapcfg.custom) or (not mapcfg.custom.villages) then
-        Spring.Echo("Village spawner gadget: Can't find village locations in mapinfo.lua!")
+        Spring.Echo("Village gadget: Can't find village locations in mapinfo.lua!")
         return
     end
 
@@ -73,11 +65,26 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
         return true
     end
     local v = GetVillage(unitID)
+    
+    -- At the beginning of the game, we don't have village objects yet
+    if not v then return false end
+
+    if table.contains(v:GetDisallowedCommands(), cmdID) then
+        return false
+    end
+
     if cmdID == CMD.STOP then
         v:Stop()
+        return true
     end
-    if cmdID == CMD_BUILD_SHRINE then
-        v:AddBuilding(Buildings.TYPES.SHRINE)
+
+    if v:IsBusy() then
+        return false
+    end
+
+    local buildingkey = CMD_KEY_MAP[cmdID]
+    if buildingkey then 
+        v:AddBuilding(buildingkey)
     end
     
     return true
@@ -85,8 +92,12 @@ end
 
 function gadget:UnitCreated(unitID, unitDefID, unitTeam)
     if not Units.IsVillageUnit(unitID) then return end
-    VillageManager:AddElement(unitID, Village:New(unitID))
-    InsertUnitCmdDesc(unitID, CMD_BUILD_SHRINE, shrineCmd)
+    local village = Village:New(unitID)
+    VillageManager:AddElement(unitID, village)
+    for key, building in pairs(village:GetAvailableBuildings()) do
+        InsertUnitCmdDesc(unitID, building:GetCmdID(), building:GetCmdDesc())
+        CMD_KEY_MAP[building:GetCmdID()] = key
+    end
 end
 
 function gadget:AllowUnitTransfer(unitID, unitDefID, oldTeam, newTeam, capture)

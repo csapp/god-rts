@@ -7,14 +7,38 @@ Village = BaseUnit:Inherit{
     classname = "Village",
     buildings = {},
     busy = false,
+    disallowedCommands = {
+        CMD.ATTACK,
+        CMD.REPAIR,
+    },
 }
 
 local CLASS_MAP = {
     [Buildings.TYPES.SHRINE] = Shrine,
+    [Buildings.TYPES.TURRET] = Turret,
 }
 
 local this = Village
 local inherited = this.inherited
+
+function Village:GetDisallowedCommands()
+    return self.disallowedCommands
+end
+
+function Village:AllowCommand(command)
+    local disallowedCommands = self:GetDisallowedCommands()
+    for i, cmd in ipairs(disallowedCommands) do
+        if cmd == command then
+            table.remove(disallowedCommands, i)
+            break
+        end
+    end
+end
+
+function Village:DisallowCommand(command)
+    local disallowedCommands = self:GetDisallowedCommands()
+    table.insert(disallowedCommands, command)
+end
 
 function Village:GetSlots()
     -- # of building slots = current level
@@ -70,3 +94,10 @@ function Village:Transfer(oldTeam)
         building:Transfer(oldTeam)
     end
 end
+
+function Village:GetAvailableBuildings()
+    -- All villages have the same buildings available, so for now
+    -- just return the class map
+    return CLASS_MAP
+end
+
