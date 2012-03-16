@@ -35,6 +35,7 @@ MSG_TYPES = {
 
     CONVERT_FINISHED = "convert_finished",
     GOD_SELECTED = "godselected",
+    LEVEL_UP = "level_up",
 }
 
 ACTION_TYPES = {

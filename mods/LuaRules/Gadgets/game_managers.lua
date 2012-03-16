@@ -23,6 +23,7 @@ local MANAGER_DIR = "LuaRules/Classes/Managers/"
 VFS.Include("LuaRules/Classes/object.lua")
 VFS.Include(MANAGER_DIR .. "manager.lua")
 VFS.Include(MANAGER_DIR .. "team.lua")
+VFS.Include(MANAGER_DIR .. "village.lua")
 
 
 function gadget:Initialize()
@@ -37,5 +38,6 @@ function gadget:Initialize()
     end
 
     _G.TeamManagers = TeamManagers
+    _G.VillageManager = VillageManager:New()
 end
 

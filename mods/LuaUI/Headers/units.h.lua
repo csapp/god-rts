@@ -34,11 +34,11 @@ local function GetCustomParam(unitID, param)
 end
 
 function Units.GetSpeed(unitID)
-    return GetCustomParam(unitID, 'real_speed')
+    return tonumber(GetCustomParam(unitID, 'real_speed'))
 end
 
 function Units.GetLevel(unitID)
-    return GetCustomParam(unitID, 'level')
+    return tonumber(GetCustomParam(unitID, 'level'))
 end
 
 function Units.GetConvertTime(villageID)

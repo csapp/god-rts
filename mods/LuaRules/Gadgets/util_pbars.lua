@@ -25,8 +25,8 @@ GG.ProgressBars = {}
 
 local progress_bars = {}
 
-local function AddProgressBar(unitID, caption, duration, callback)
-    progress_bars[unitID] = {GetGameSeconds(), duration, callback}
+local function AddProgressBar(unitID, caption, duration, callback, cancel_callback)
+    progress_bars[unitID] = {GetGameSeconds(), duration, callback, cancel_callback}
     LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_CREATE, {unitID, caption})
 end
 
@@ -43,6 +43,8 @@ end
 
 local function CancelProgressBar(unitID)
     LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_DESTROY, {unitID})
+    local callback = progress_bars[unitID][4]
+    if callback then callback(unitID) end
     progress_bars[unitID] = nil
 end
 
