@@ -188,7 +188,7 @@ function HighRise:Unapply(oldTeam)
 end
 
 ------------------------------------------------------------
--- TRAINING FACILITY
+-- UPGRADES
 ------------------------------------------------------------
 
 Upgrade = Object:Inherit{
@@ -273,12 +273,37 @@ end
 SpeedUpgrade = Upgrade:Inherit{
     classname = "SpeedUpgrade",
     upgradeName = "Speed Boots",
-    upgradeType = "Speed",
+    upgradeType = "SPEED",
     researchTime = 5,
     multipliers = {
         [Multipliers.TYPES.MOVE_SPEED] = {.5},
     }
 }
+
+AttackRangeUpgrade = Upgrade:Inherit{
+    classname = "AttackRangeUpgrade",
+    upgradeName = "Long range arrows",
+    upgradeType = "ATTACK_RANGE",
+    tooltip = "Increases attack range for ranged units",
+    researchTime = 5,
+    multipliers = {
+        [Multipliers.TYPES.ATTACK_RANGE] = {.5, {Units.CLASSES.RANGED}},
+    }
+}
+
+AttackSpeedUpgrade = Upgrade:Inherit{
+    classname = "AttackSpeedUpgrade",
+    upgradeName = "Quick swords",
+    upgradeType = "ATTACK_SPEED",
+    researchTime = 5,
+    tooltip = "Increases melee attack speed",
+    multipliers = {
+        [Multipliers.TYPES.ATTACK_SPEED] = {.5, {Units.CLASSES.INFANTRY, Units.CLASSES.CAVALRY}},
+    }
+}
+------------------------------------------------------------
+-- TRAINING FACILITY
+------------------------------------------------------------
 
 TrainingFacility = Building:Inherit{
     classname = "TrainingFacility",
@@ -291,6 +316,8 @@ function TrainingFacility:New(village)
     local obj = TrainingFacility.inherited.New(self, village)
     obj.availableUpgrades = {
         [SpeedUpgrade:GetCmdID()] = SpeedUpgrade:New(obj),
+        [AttackRangeUpgrade:GetCmdID()] = AttackRangeUpgrade:New(obj),
+        [AttackSpeedUpgrade:GetCmdID()] = AttackSpeedUpgrade:New(obj),
     }
     return obj
 end
