@@ -10,6 +10,7 @@ Multipliers.TYPES = {
     VILLAGER = "VILLAGER",
     POWER_RECHARGE = "POWER_RECHARGE",
     CONVERT_TIME = "CONVERT_TIME",
+    FAITH = "FAITH",
 }
 
 Multipliers.PERSISTENT_TYPES = {

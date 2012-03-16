@@ -1,3 +1,4 @@
+include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/multipliers.h.lua")
 
 local GetUnitTeam = Spring.GetUnitTeam
@@ -57,11 +58,11 @@ end
 Shrine = Building:Inherit{
     classname = "Shrine",
     buildingName = "Shrine",
-    buildTime = 5,
+    buildTime = 60,
     info = {
         multipliers = {
-            --[Multipliers.TYPES.FAITH] = {0.1, {}},
-            [Multipliers.TYPES.XP] = {0.1, {"clergy"}},
+            [Multipliers.TYPES.FAITH] = {2},
+            [Multipliers.TYPES.XP] = {0.1, {Units.CLASSES.CLERGY}},
         }
     },
     tooltip = "Provides automatic faith generation and an XP bonus for Clergy",

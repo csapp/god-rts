@@ -53,7 +53,7 @@ function Village:AddBuilding(key)
         self:SetBusy(false)
     end
     local function _cancelled() self:SetBusy(false) end
-    GG.ProgressBars.AddProgressBar(self:GetUnitID(), "Building...", 
+    GG.ProgressBars.AddProgressBar(self:GetUnitID(), "Building " .. building:GetName() .. "...", 
                                    building:GetBuildTime(), _done, _cancelled)
 end
 

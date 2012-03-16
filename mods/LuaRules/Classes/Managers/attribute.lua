@@ -26,6 +26,7 @@ function AttributeManager:New(teamID)
     obj:RegisterMultiplier(Multipliers.TYPES.VILLAGER, VillagerMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.POWER_RECHARGE, PowerRechargeMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.CONVERT_TIME, ConvertTimeMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.FAITH, FaithMultiplier:New(teamID))
     return obj
 end
 
@@ -51,6 +52,10 @@ function AttributeManager:GetAllValues(unitID)
         values[mtype] = mult:GetValue(unitID)
     end
     return values
+end
+
+function AttributeManager:GetFaithMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.FAITH)
 end
 
 function AttributeManager:GetPowerRechargeMultiplier()

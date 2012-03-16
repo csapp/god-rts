@@ -47,7 +47,7 @@ function gadget:Initialize()
             table.insert(teams, teamID) 
         end
     end
-    -- Delay this call in case the TeamManagers aren't set up yet
+    -- XXX Delay this call in case the TeamManagers aren't set up yet
     GG.Delay.DelayCall(InitVillageMultipliers)
 end
 
@@ -58,16 +58,9 @@ function InitVillageMultipliers()
     end
 end
 
---[[local function getResources(playerID)
-	local eCurr, eStor = Spring.GetTeamResources(playerID, "energy")
-	local mCurr, mStor = Spring.GetTeamResources(playerID, "metal")
-    Spring.Echo("Metal = " .. mCurr .. " Energy = " .. eCurr)
-    Spring.Echo("MetalStorage = " .. mStor .. " EnergyStorage = " .. eStor)
-end]]--
-
 local function generateVillagers(teamID)
     -- Each timestamp, a team will generate villagers according to this formula:
-    -- villagersGenerated = sum(GetLevel(v)*GetMultiplier(v) for v in ownedVillages(teamID))
+    -- villagersGenerated = sum(GetLevel(v)*GetMultiplierValue(v) for v in ownedVillages(teamID))
 	local villagersGenerated = 0
 	
     for _, unitID in pairs(GetTeamUnits(teamID)) do
@@ -80,12 +73,10 @@ local function generateVillagers(teamID)
 	return villagersGenerated 
 end
 
---local function generateFaith(playerID)
-	--idea is to add a certain amount of faith and then 
-	--add/subtract based on the outcome of several cases
-	
-	--Can't properly implement this until we have a list of villages under the players control
---end
+local function generateFaith(teamID)
+    local am = _G.TeamManagers[teamID]:GetAttributeManager()
+    return am:GetFaithMultiplier():GetValue()
+end
 
 local function addFaith(teamID, amt)
     AddTeamResource(teamID, "energy", amt)
@@ -105,8 +96,9 @@ function gadget:RecvLuaMsg(msg, playerID)
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, adefID, ateamID)
-    if attackerID == nil then 
     -- Unit is leveling up, don't remove faith
+    -- XXX Does this have any undesired side effects?
+    if attackerID == nil then 
         return 
     end
 
@@ -115,20 +107,16 @@ function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, adefID, ate
 end
 
 function gadget:GameFrame(n)
-	--Spring.Echo("Value of N is " .. n) For Debugging only
 	if (n % timeInterval == 0) then --denotes one second
 		counter = counter + 1
-		-- Spring.Echo("Counter Value is " .. counter) For Debugging only
 	end
 	if (counter == counterMaxValue) then --every five seconds generate resources
-		--Spring.Echo("Adding Resources")
 		for i=1, #teams do
 			AddTeamResource(teams[i], "metal", generateVillagers(teams[i]))
-			--AddTeamResource(playerID[i], "energy", generateVillagers(playerID[i]))
+            addFaith(teams[i], generateFaith(teams[i]))
 			if DEBUG then getResources(teams[i]) end
 		end
 		counter = 0
 	end
-	
 end
 

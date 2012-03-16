@@ -132,6 +132,17 @@ function ConvertTimeMultiplier:Add(value)
     ConvertTimeMultiplier.inherited.Add(self, -value, {Units.CLASSES.CLERGY})
 end
 
+------------------------------------------------------------
+-- FAITH MULTIPLIER
+------------------------------------------------------------
+
+FaithMultiplier =  EventMultiplier:Inherit{
+    classname = "FaithMultiplier",
+    globalValue = 0,
+}
+
+-- ****************************************************** --
+-- ****************************************************** --
 -- ****************************************************** --
 
 ------------------------------------------------------------
