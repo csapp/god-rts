@@ -32,27 +32,33 @@ local SetUnitExperience = Spring.SetUnitExperience
 local xpMultipliers = {}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
-local function Morph(unitID, morphInto, teamID)
+local function Morph(unitID, noCopyCmds, noCopyStates)--, morphInto, teamID)
+    local morphInto = UnitDefs[GetUnitDefID(unitID)].customParams.morph_into
+    local teamID = GetUnitTeam(unitID)
     local myX, myY, myZ = Spring.GetUnitBasePosition(unitID)
     local newUnitID = Spring.CreateUnit(morphInto, myX, myY, myZ, 0, teamID)
 
     -- Copy command queue
-    local myCmds = Spring.GetUnitCommands(unitID)
-    for i = 1, #myCmds do
-        local cmd = myCmds[i]
-        Spring.GiveOrderToUnit(newUnitID, cmd.id, cmd.params, cmd.options.coded)
+    if not noCopyCmds then
+        local myCmds = Spring.GetUnitCommands(unitID)
+        for i = 1, #myCmds do
+            local cmd = myCmds[i]
+            Spring.GiveOrderToUnit(newUnitID, cmd.id, cmd.params, cmd.options.coded)
+        end
     end
 
     -- Copy unit's states
-    local states = Spring.GetUnitStates(unitID)
-    Spring.GiveOrderArrayToUnitArray({ newUnitID }, {
-        { CMD.FIRE_STATE, { states.firestate },             {} },
-        { CMD.MOVE_STATE, { states.movestate },             {} },
-        { CMD.REPEAT,     { states['repeat']  and 1 or 0 }, {} },
-        { CMD.CLOAK,      { states.cloak      and 1 or 0 }, {} },
-        { CMD.ONOFF,      { 1 }, {} },
-        { CMD.TRAJECTORY, { states.trajectory and 1 or 0 }, {} },
-    })
+    if not noCopyStates then 
+        local states = Spring.GetUnitStates(unitID)
+        Spring.GiveOrderArrayToUnitArray({ newUnitID }, {
+            { CMD.FIRE_STATE, { states.firestate },             {} },
+            { CMD.MOVE_STATE, { states.movestate },             {} },
+            { CMD.REPEAT,     { states['repeat']  and 1 or 0 }, {} },
+            { CMD.CLOAK,      { states.cloak      and 1 or 0 }, {} },
+            { CMD.ONOFF,      { 1 }, {} },
+            { CMD.TRAJECTORY, { states.trajectory and 1 or 0 }, {} },
+        })
+    end
 
     -- Make new unit face in the same direction
     local h = Spring.GetUnitHeading(unitID)
@@ -79,7 +85,12 @@ local function AddXP(unitID, xp)
     SetUnitExperience(unitID, curXP)
     if DEBUG then Spring.Echo("Unit XP at " .. curXP) end
     if max_xp and curXP >= max_xp then
-        Morph(unitID, unitDef.customParams.morph_into, teamID)
+        if not Units.IsVillageUnit(unitID) then
+            Morph(unitID)--, unitDef.customParams.morph_into, teamID)
+        else
+            local village = _G.VillageManager:GetElement(unitID)
+            village:ReadyToFortify()
+        end
     end
 end
 
@@ -110,12 +121,21 @@ function gadget:RecvLuaMsg(msg, playerID)
 end
 
 function gadget:Initialize()
+    -- Get local references to XP multipliers
     local gaiaTeamID = Spring.GetGaiaTeamID()
     local TeamManagers = _G.TeamManagers
     for _, teamID in pairs(Spring.GetTeamList()) do
         if teamID ~= gaiaTeamID then
             xpMultipliers[teamID] = TeamManagers[teamID]:GetAttributeManager():GetXPMultiplier()
         end
+    end
+end
+
+function gadget:RecvLuaMsg(msg, playerID)
+    local msgType, params = LuaMessages.deserialize(msg)
+    if msgType == MSG_TYPES.MORPH then
+        local unitID, ncc, ncs = tonumber(params[1]), params[2], params[3]
+        GG.Delay.DelayCall(Morph, {unitID, ncc, ncs})
     end
 end
 

@@ -21,7 +21,7 @@ end
 include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/msgs.h.lua")
 include("LuaUI/Headers/units.h.lua")
-include("LuaUI/Headers/buildings.h.lua")
+include("LuaUI/Headers/villages.h.lua")
 include("LuaRules/Classes/Units/village.lua")
 
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
@@ -82,6 +82,11 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
         return false
     end
 
+    if cmdID == Villages.CMDS.FORTIFY then
+        v:Fortify()
+        return true
+    end
+
     local buildingkey = CMD_KEY_MAP[cmdID]
     if buildingkey then 
         v:AddBuilding(buildingkey)
@@ -89,11 +94,8 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
     end
 
     if table.containsvalue(Buildings.CMD_IDS.RESEARCH, cmdID) then
-        Spring.Echo("Found command!")
         v:ExecuteCommand(cmdID)
         return true
-    else
-        Spring.Echo("didn't find command")
     end
     
     return true
@@ -118,7 +120,7 @@ end
 
 function gadget:RecvLuaMsg(msg, playerID)
     msgtype, params = LuaMessages.deserialize(msg)
-    if msgtype == MSG_TYPES.LEVEL_UP then
+    if msgtype == MSG_TYPES.UNIT_LEVELLED_UP then
         local oldUnitID, newUnitID = unpack(params)
         GetVillage(oldUnitID):SetUnitID(newUnitID)
     end

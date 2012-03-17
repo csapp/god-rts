@@ -1,3 +1,8 @@
+Villages = {}
+
+Villages.CMDS = {
+    FORTIFY = 33000,
+}
 
 Buildings = {}
 

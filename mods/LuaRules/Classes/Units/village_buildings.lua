@@ -1,7 +1,7 @@
 include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/multipliers.h.lua")
-include("LuaUI/Headers/buildings.h.lua")
+include("LuaUI/Headers/villages.h.lua")
 
 local GetUnitTeam = Spring.GetUnitTeam
 local gaiaTeamID = Spring.GetGaiaTeamID()

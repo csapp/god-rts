@@ -1,5 +1,6 @@
 include("LuaUI/Headers/units.h.lua")
-include("LuaUI/Headers/buildings.h.lua")
+include("LuaUI/Headers/villages.h.lua")
+include("LuaUI/Headers/customcmds.h.lua")
 include("LuaRules/Classes/Units/unit.lua")
 include("LuaRules/Classes/Units/village_buildings.lua")
 
@@ -11,6 +12,7 @@ Village = BaseUnit:Inherit{
         CMD.ATTACK,
         CMD.REPAIR,
     },
+    fortifyTime = 6,
 }
 
 local CLASS_MAP = {
@@ -23,6 +25,38 @@ local CLASS_MAP = {
 
 local this = Village
 local inherited = this.inherited
+
+local fortifyCmdDesc = {
+    id = Villages.CMDS.FORTIFY,
+    name = "Fortify",
+    action = "Fortify",
+    type = CMD.ICON,
+    tooltip = "Fortify the village to level up",
+    params = {},
+}
+
+function Village:GetFortifyTime()
+    return self.fortifyTime*Units.GetLevel(self:GetUnitID())
+end
+
+function Village:ReadyToFortify()
+    Spring.InsertUnitCmdDesc(self:GetUnitID(), Villages.CMDS.FORTIFY, fortifyCmdDesc)
+end
+
+function Village:Fortify()
+    local unitID = self:GetUnitID()
+    self:SetBusy(true)
+    local function _done()
+        LuaMessages.SendLuaRulesMsg(MSG_TYPES.MORPH, {unitID, 1})
+        self:SetBusy(false)
+    end
+    local function _cancelled() 
+        self:SetBusy(false)
+    end
+    
+    GG.ProgressBars.AddProgressBar(unitID, "Fortifying...", 
+                                   self:GetFortifyTime(), _done, _cancelled)
+end
 
 function Village:GetDisallowedCommands()
     return self.disallowedCommands
