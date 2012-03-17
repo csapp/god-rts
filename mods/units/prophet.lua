@@ -66,6 +66,7 @@ local unitDef  =  {
     workerTime = 1,
     CanRepair = true,
     CanReclaim = false,
+    CanRestore = false,
     RepairSpeed = 1, 
     canAttack = false,
 	canFight = false,
@@ -88,6 +89,4 @@ local unitDef  =  {
 }
 
 return lowerkeys({ [unitName]  =  unitDef })
-
-
 
