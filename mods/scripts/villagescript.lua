@@ -1,10 +1,12 @@
-local buildspot = piece "grid3"
+local buildspot = piece "village"
+local emit = piece "emit"
 
 function script.QueryBuildInfo() 
     return buildspot 
 end
 
 function script.Create()
+	return 0
 end
 
 function script.Activate()
