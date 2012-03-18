@@ -76,123 +76,6 @@ function LayoutHandler(xIcons, yIcons, cmdCount, commands)
 	return "", xIcons, yIcons, {}, customCmds, {}, {}, {}, {}, reParamsCmds, {[1337]=9001}
 end
 
-function ClickFunc(button) 
-	local _,_,left,_,right = Spring.GetMouseState()
-	local alt,ctrl,meta,shift = Spring.GetModKeyState()
-	local index = Spring.GetCmdDescIndex(button.cmdid)
-	if (left) then
-		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
-		Spring.SetActiveCommand(index,1,left,right,alt,ctrl,meta,shift)
-	end
-	if (right) then
-		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
-		Spring.SetActiveCommand(index,3,left,right,alt,ctrl,meta,shift)
-	end
-end
-
-function findButtonData(cmd)
-	local isState = (cmd.type == CMDTYPE.ICON_MODE and #cmd.params > 1)
-	local isBuild = (cmd.id < 0)	
-	local buttontext = ""
-	local container
-	local texture = nil
-	if not isState and not isBuild then
-		buttontext = cmd.name
-		container = commandWindow
-	elseif isState then
-		local indexChoice = cmd.params[1] + 2
-		buttontext = cmd.params[indexChoice]
-		container = stateCommandWindow
-	elseif isBuild then
-		container = buildCommandWindow
-		buttontext = cmd.name:gsub("^%l", string.upper)
-		-- For some reason, buildpics are not working. When they magically work again, uncomment the following line.
-		-- texture = '#'..-cmd.id
-	else
-		texture = cmd.texture
-	end
-	return buttontext, container, isState, isBuild, texture	
-end
-
-function createMyButton(cmd)
-	if(type(cmd) == 'table')then
-		buttontext, container, isState, isBuild, texture = findButtonData(cmd)
-
-		local result = container.xstep % MAXBUTTONSONROW
-		container.xstep = container.xstep + 1
-		local increaseRow = false
-		if(result==0)then
-			result = MAXBUTTONSONROW
-			increaseRow = true
-		end	
-
-		local y_axis = 0;
-		if not texture then
-			y_axis = 38 * (container.ystep-1)
-		else
-			y_axis = 80 * (container.ystep-1)
-		end
-		
-		local color = {0,0,0,1}
-		local button = Chili.Button:New {
-			parent = container,
-			x = 110 * (result-1),
-			y = y_axis,
-			padding = {5, 5, 5, 5},
-			margin = {0, 0, 0, 0},
-			minWidth = 110,
-			minHeight = 40,
-			caption = buttontext,
-			isDisabled = false,
-			cmdid = cmd.id,
-			OnMouseDown = {ClickFunc},
-		}
-		
-		if texture then
-			if DEBUG then Spring.Echo("texture",texture) end
-			button:Resize(80,80)
-			image = Chili.Image:New {
-				width="100%";
-				height="90%";
-				y="6%";
-				keepAspect = true,	--isState;
-				file = texture;
-				parent = button;
-			}
-		end
-		
-		if(increaseRow)then
-			container.ystep = container.ystep+1
-		end		
-	end
-end
-
-function filterUnwanted(commands)
-	local uniqueList = {}
-	if DEBUG then Spring.Echo("Total commands ", #commands) end
-	if not(#commands == 0)then
-		j = 1
-		for _, cmd in ipairs(commands) do
-			if DEBUG then Spring.Echo("Adding command ", cmd.action) end
-			if not table.contains(COMMANDSTOEXCLUDE,cmd.action) then
-				uniqueList[j] = cmd
-				j = j + 1
-			end
-		end
-	end
-	return uniqueList
-end
-
-function loadPanel()
-	local commands = Spring.GetActiveCmdDescs()
-	commands = filterUnwanted(commands)
-	table.sort(commands,function(x,y) return x.action < y.action end)
-	for cmdid, cmd in pairs(commands) do
-		rowcount = createMyButton(commands[cmdid]) 
-	end
-end
-
-
 function setUnitStats(unit)
 	local unitStatString = printVelocity(unit) .. "\n" ..
 						   printDamage(unit) .. "\n" ..
@@ -232,7 +115,7 @@ function widget:Initialize()
 		resizable = false,
 		dragUseGrip = false,		
 		anchors = {left=true,bottom=true,right=true,top=false},
-		skinName  = "DarkGlass",
+		skinName  = "Godly",
 		--children = {unitInfo,imageWindow,[>unitStats<]},
 	}
 	unitInfo = Label:New{
@@ -243,7 +126,6 @@ function widget:Initialize()
 		fontsize = 13,
 		autosize = false,
 		autoObeyLineHeight = true,
-		textColor = {1,1,1,1},
 		anchors = {left=true,bottom=true,right=false,top=false},
 		caption = "",
 	}
@@ -257,7 +139,6 @@ function widget:Initialize()
 		fontsize = 13,
 		autosize = false,
 		autoObeyLineHeight = true,
-		textColor = {1,1,1,1},
 		anchors = {left=true,bottom=true,right=false,top=false},
 		caption = "",
 	}
@@ -327,7 +208,6 @@ function widget:CommandsChanged()
 	resetWindow(imageWindow)
 	resetWindow(commandWindow)
 	drawPortrait()
-	loadPanel()
     
     if current_progress_bar ~= nil then
         pbarWindow:RemoveChild(current_progress_bar)

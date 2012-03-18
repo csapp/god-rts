@@ -65,7 +65,7 @@ end
  		caption = "",
  		clientWidth = 480,
  		clientHeight = 520,
- 		backgroundColor = {0.8,0.8,0.8,0.8},
+		skinName  = "Godly",
  	}	
  	
  	godselLabel = Chili.Label:New{
@@ -75,7 +75,6 @@ end
  		parent = godselWindow,
  		caption = "Choose your god powers",
  		fontsize = 30,
- 		textColor = {1,1,1,1},
  	}
 
 -- Row 1

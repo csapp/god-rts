@@ -218,7 +218,7 @@ function widget:GameFrame(n)
         elseif (blinkE_status) then
                 blinkE_status = false
                 bar_energy:SetColor( col_energy )
-        bar_energy_overlay:SetColor({0,0,0,0})
+        --bar_energy_overlay:SetColor({0,0,0,0})
         end
 
 
@@ -446,7 +446,6 @@ function CreateWindow()
                 y      = p(100/bars),           
                 --caption = data.name, 
                 value = 0,
-                backgroundColor = {0, 0, 0, 0}, -- donut work
                 trackColor = col_metal,
                 min=0, 
                 max=1, 
@@ -473,7 +472,7 @@ function CreateWindow()
         }--]]
         bar_metal_overlay = Chili.Progressbar:New{
                 parent = window,
-                color  = {0.5,0.5,0.5,0.5},
+                --color  = {0.5,0.5,0.5,1},
                 height = p(100/bars),
                 right  = 26,
         min = 0,
@@ -553,7 +552,7 @@ function CreateWindow()
                 color  = col_energy,
                 height = p(100/bars),
         value  = 100,
-        color  = {0,0,0,0},
+        --color  = {0,0,0,0},
                 right  = 36,
         x      = 100,
         y      = 1,

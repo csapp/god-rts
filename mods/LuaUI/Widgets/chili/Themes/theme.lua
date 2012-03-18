@@ -9,8 +9,7 @@ theme.name = "default"
 --//=============================================================================
 --// Define default skins
 
-local defaultSkin = "Robocracy"
---local defaultSkin = "DarkGlass"
+local defaultSkin = "Godly"
 
 theme.skin = {
   general = {
@@ -18,12 +17,9 @@ theme.skin = {
   },
 
   imagelistview = {
-  --  imageFolder      = "luaui/images/folder.png",
-  --  imageFolderUp    = "luaui/images/folder_up.png",
   },
 
   icons = {
-  --  imageplaceholder = "luaui/images/placeholder.png",
   },
 }
 

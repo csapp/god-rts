@@ -254,12 +254,12 @@ function widget:Initialize()
 		height = 250,
 		dockable = true,
 		parent = screen0,
+		textColor = {0.83,0.8,0.52,1},
 		caption = "Commands",
-		draggable = true,
-		resizable = true,
-		dragUseGrip = true,
-		backgroundColor = {0,0,0,1},
-		skinName  = "Robocracy",		
+		draggable = false,
+		resizable = false,
+		dragUseGrip = false,
+		skinName  = "Godly",		
 		children = {commandWindow,stateCommandWindow,buildCommandWindow},
 	}
 	
