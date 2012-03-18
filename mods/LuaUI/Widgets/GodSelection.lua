@@ -109,7 +109,7 @@ end
 		OnMouseDown = {ClickFunc},
 		}
 
-	local buttonTemp = Chili.Button:New {
+	local buttonBFB = Chili.Button:New {
 		parent = godselWindow,
 		x = 330,
 		y = 40,
@@ -117,7 +117,7 @@ end
 		margin = {0, 0, 0, 0},
 		minWidth = 120,
 		minHeight = 120,
-		caption = "Temp",
+		caption = "Big Friendly Bomb",
 		isDisabled = false,
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},
