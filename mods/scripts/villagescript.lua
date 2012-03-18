@@ -1,6 +1,18 @@
 local buildspot = piece "village"
 local emit = piece "emit"
 
+local SIG_AIM = 2  --signal for the weapon aiming thread
+
+local upgraded = false
+
+function Upgrade()
+    upgraded = true
+end
+
+function Downgrade()
+    upgraded = false
+end
+
 function script.QueryBuildInfo() 
     return buildspot 
 end
@@ -27,6 +39,23 @@ function script.QueryNanoPiece()
     return buildspot
 end
 
+function script.QueryWeapon1 ()
+	return emit
+end
+
+function script.AimFromWeapon1()
+	return buildspot
+end
+
+function script.AimWeapon1(heading, pitch)
+    if not upgraded then
+        return false
+    end
+    Sleep(50)
+    Signal(SIG_AIM)
+    SetSignalMask(SIG_AIM)
+    return true
+end
 --function script.StartBuilding()
 --end
 

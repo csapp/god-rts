@@ -126,11 +126,11 @@ Turret = Building:Inherit{
 }
 
 function Turret:Apply()
-    self:GetVillage():AllowCommand(CMD.ATTACK)
+    Spring.UnitScript.GetScriptEnv(self:GetUnitID()).Upgrade()
 end
 
 function Turret:Unapply(oldTeam) 
-    self:GetVillage():DisallowCommand(CMD.ATTACK)
+    Spring.UnitScript.GetScriptEnv(self:GetUnitID()).Downgrade()
 end
 
 ------------------------------------------------------------
