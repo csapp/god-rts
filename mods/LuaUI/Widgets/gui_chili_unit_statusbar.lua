@@ -29,6 +29,7 @@ local Label
 local Window
 local MAXBUTTONSONROW = 3
 local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu"}
+local MY_PLAYER_ID = Spring.GetMyPlayerID()
 
 -- MEMBERS
 
@@ -444,6 +445,7 @@ local function updateProgressBar(unitID, progress)
 end
 
 function widget:RecvLuaMsg(msg, playerID)
+    if playerID ~= MY_PLAYER_ID then return end
     local msg_type, params = LuaMessages.deserialize(msg)
     if msg_type == MSG_TYPES.PBAR_CREATE then
         unitID, caption = tonumber(params[1]), params[2]

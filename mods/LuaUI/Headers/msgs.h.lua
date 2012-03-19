@@ -37,6 +37,9 @@ MSG_TYPES = {
     GOD_SELECTED = "godselected",
     UNIT_LEVELLED_UP = "unit_levelled_up",
     MORPH = "MORPH",
+
+    GADGET_STATE_QUERY = "GADGET_STATE_QUERY",
+    GADGET_STATE_REPLY = "GADGET_STATE_REPLY",
 }
 
 ACTION_TYPES = {

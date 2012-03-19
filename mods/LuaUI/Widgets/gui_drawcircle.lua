@@ -10,21 +10,32 @@ function widget:GetInfo()
 	}
 end
 
+local GetMyTeamID = Spring.GetMyTeamID
+
 include("customcmds.h.lua")
 
-local drawState = false
+local radius = 0
+local circleOn = false
+
+local function SetRadius(r_as_string)
+    radius = tonumber(r_as_string)
+end
 
 function widget:GameFrame(n) 
 	local index, cmdID = Spring.GetActiveCommand()
-	if cmdID == CMD_BFB then 
-		drawState = true
+	if cmdID == CMD_BFB then
+        if not circleOn then 
+            local q = "_G.TeamManagers["..GetMyTeamID().."]:GetPowerManager():GetElement("..cmdID.."):GetRadius()"
+            WG.GadgetQuery.QueryGadgetState(q, SetRadius)
+            circleOn = true
+        end
 	else
-		drawState = false
+        circleOn = false
+        radius = 0
 	end
 end
 
 function getMouseCursorLocation()
-	
 	local x, y = Spring.GetMouseState()
 	local _, pos = Spring.TraceScreenRay(x,y,true)
 	if (pos ~= nil) then
@@ -33,10 +44,10 @@ function getMouseCursorLocation()
 end
 
 function widget:DrawWorld()
-	if drawState == true then
+	if circleOn then
 		local mouseX, mouseZ = getMouseCursorLocation()
 		if (mouseX ~= nil and mouseZ ~= nil) then
-			gl.DrawGroundCircle(mouseX,0, mouseZ, 200, 100)
+			gl.DrawGroundCircle(mouseX,0, mouseZ, radius, 100)
 		end
 	end
 end
