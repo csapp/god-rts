@@ -28,13 +28,10 @@ VFS.Include(MANAGER_DIR .. "village.lua")
 
 function gadget:Initialize()
     local TeamManagers = {}
-    local gaiateamID = Spring.GetGaiaTeamID()
     for _, teamID in pairs(Spring.GetTeamList()) do
-        if teamID ~= gaiateamID then
-            local mgr = TeamManager:New(teamID)
-            mgr:Initialize()
-            TeamManagers[teamID] = mgr
-        end
+        local mgr = TeamManager:New(teamID)
+        mgr:Initialize()
+        TeamManagers[teamID] = mgr
     end
 
     _G.TeamManagers = TeamManagers

@@ -122,12 +122,9 @@ end
 
 function gadget:Initialize()
     -- Get local references to XP multipliers
-    local gaiaTeamID = Spring.GetGaiaTeamID()
     local TeamManagers = _G.TeamManagers
     for _, teamID in pairs(Spring.GetTeamList()) do
-        if teamID ~= gaiaTeamID then
-            xpMultipliers[teamID] = TeamManagers[teamID]:GetAttributeManager():GetXPMultiplier()
-        end
+        xpMultipliers[teamID] = TeamManagers[teamID]:GetAttributeManager():GetXPMultiplier()
     end
 end
 
