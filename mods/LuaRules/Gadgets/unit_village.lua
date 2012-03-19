@@ -121,6 +121,6 @@ function gadget:RecvLuaMsg(msg, playerID)
     msgtype, params = LuaMessages.deserialize(msg)
     if msgtype == MSG_TYPES.UNIT_LEVELLED_UP then
         local oldUnitID, newUnitID = unpack(params)
-        GetVillage(oldUnitID):SetUnitID(newUnitID)
+        GetVillage(oldUnitID):LevelUp(newUnitID)
     end
 end

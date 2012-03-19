@@ -28,3 +28,7 @@ end
 function BaseUnit:GetTeamID()
     return GetUnitTeam(self:GetUnitID())
 end
+
+function BaseUnit:LevelUp(newUnitID)
+    self:SetUnitID(newUnitID)
+end
