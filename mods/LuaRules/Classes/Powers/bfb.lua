@@ -89,8 +89,8 @@ function BFB:_Use(cmdParams, cmdOptions)
 			impulseX, impulseY, impulseZ = GetActualImpulseVectors(center_x, center_z, unitX, unitZ, radius, maxImpulse)
 			AddUnitImpulse(affected_unit, impulseX, impulseY, impulseZ)
 			AddUnitDamage(affected_unit, actualDamage, 0, unitID)
-			Spring.Echo(unitX .. "," .. unitZ .. "," .. center_x .. "," .. center_z  .. "," .. actualDamage)
-			Spring.Echo(impulseX .. "," .. impulseY .. "," .. impulseZ)
+			--Spring.Echo(unitX .. "," .. unitZ .. "," .. center_x .. "," .. center_z  .. "," .. actualDamage)
+			--Spring.Echo(impulseX .. "," .. impulseY .. "," .. impulseZ)
 	    end  	  	 
     end 
 	
