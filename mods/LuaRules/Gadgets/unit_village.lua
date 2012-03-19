@@ -111,11 +111,10 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam)
     end
 end
 
-function gadget:AllowUnitTransfer(unitID, unitDefID, oldTeam, newTeam, capture)
-    if not Units.IsVillageUnit(unitID) then return false end
+function gadget:UnitGiven(unitID, unitDefID, newTeam, oldTeam)
+    if not Units.IsVillageUnit(unitID) then return end
     local vobj = GetVillage(unitID)
-    GG.Delay.DelayCall(vobj.Transfer, {vobj, oldTeam})
-    return true
+    vobj:Transfer(oldTeam)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
