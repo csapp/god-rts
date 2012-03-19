@@ -34,7 +34,8 @@ local function GetVillage(unitID)
 end
 
 function gadget:Initialize()
-    VillageManager = _G.VillageManager
+    local um = _G.UnitManager
+    VillageManager = um:GetVillageManager()
 end
 
 function gadget:GameStart()

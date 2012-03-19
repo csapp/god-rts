@@ -6,7 +6,7 @@ function gadget:GetInfo()
         author = "cam",
         date = "2012-02-29",
         license = "Public Domain",
-        layer = -100,
+        layer = -10000,
         enabled = true,
     }
 end
@@ -23,10 +23,12 @@ local MANAGER_DIR = "LuaRules/Classes/Managers/"
 VFS.Include("LuaRules/Classes/object.lua")
 VFS.Include(MANAGER_DIR .. "manager.lua")
 VFS.Include(MANAGER_DIR .. "team.lua")
-VFS.Include(MANAGER_DIR .. "village.lua")
+VFS.Include(MANAGER_DIR .. "unit.lua")
 
 
 function gadget:Initialize()
+    _G.UnitManager = UnitManager:New()
+
     local TeamManagers = {}
     for _, teamID in pairs(Spring.GetTeamList()) do
         local mgr = TeamManager:New(teamID)
@@ -35,6 +37,5 @@ function gadget:Initialize()
     end
 
     _G.TeamManagers = TeamManagers
-    _G.VillageManager = VillageManager:New()
 end
 
