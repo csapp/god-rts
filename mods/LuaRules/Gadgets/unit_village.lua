@@ -27,6 +27,7 @@ include("LuaRules/Classes/Units/village.lua")
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 
 local VillageManager
+local SupplyManagers = {}
 local CMD_KEY_MAP = {}
 
 local function GetVillage(unitID)
@@ -36,10 +37,13 @@ end
 function gadget:Initialize()
     local um = _G.UnitManager
     VillageManager = um:GetVillageManager()
+
+    for _, teamID in pairs(Spring.GetTeamList()) do
+        SupplyManagers[teamID] = _G.TeamManagers[teamID]:GetSupplyManager()
+    end
 end
 
 function gadget:GameStart()
-
     if not VFS.FileExists("mapinfo.lua") then
         Spring.Echo("Village gadget: Can't find mapinfo.lua!")
         return
@@ -65,13 +69,22 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
     if not Units.IsVillageUnit(unitID) then
         return true
     end
+
     local v = GetVillage(unitID)
     
+
     -- At the beginning of the game, we don't have village objects yet
     if not v then return false end
 
+
     if table.contains(v:GetDisallowedCommands(), cmdID) then
         return false
+    end
+
+    if cmdID < 0 then
+        -- Build command
+        local sm = SupplyManagers[teamID]
+        if not sm:UseSupplies(-cmdID) then return false end
     end
 
     if cmdID == CMD.STOP then
@@ -116,6 +129,10 @@ function gadget:UnitGiven(unitID, unitDefID, newTeam, oldTeam)
     if not Units.IsVillageUnit(unitID) then return end
     local vobj = GetVillage(unitID)
     vobj:Transfer(oldTeam)
+end
+
+function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
+    SupplyManagers[teamID]:ReturnSupplies(unitDefID)
 end
 
 function gadget:RecvLuaMsg(msg, playerID)

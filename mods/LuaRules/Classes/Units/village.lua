@@ -13,6 +13,7 @@ Village = BaseUnit:Inherit{
         CMD.REPAIR,
     },
     fortifyTime = 6,
+    supplyCap = 0, -- set in New()
 }
 
 local CLASS_MAP = {
@@ -34,6 +35,20 @@ local fortifyCmdDesc = {
     tooltip = "Fortify the village to level up",
     params = {},
 }
+
+function Village:New(unitID)
+    local obj = inherited.New(self, unitID)
+    obj.supplyCap = UnitDefs[Spring.GetUnitDefID(unitID)].customParams.supply_cap
+    return obj
+end
+
+function Village:GetSupplyCap()
+    return self.supplyCap
+end
+
+function Village:SetSupplyCap(cap)
+    self.supplyCap = cap
+end
 
 function Village:GetFortifyTime()
     return self.fortifyTime*Units.GetLevel(self:GetUnitID())

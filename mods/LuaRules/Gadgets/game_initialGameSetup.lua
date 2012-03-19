@@ -40,11 +40,14 @@ local function spawnInitialUnits()
 end
 
 local function setDefaultResources()
-	for player_id, start_pos in pairs(team_positions) do
-		Spring.SetTeamResource(player_id, "m", 50)
-		Spring.SetTeamResource(player_id, "e", 50)
-		Spring.SetTeamResource(player_id, "ms", 10000)
-		Spring.SetTeamResource(player_id, "es", 10000)
+    local tm = _G.TeamManagers
+	for teamID, start_pos in pairs(team_positions) do
+        local initialVillagers = 50
+		Spring.SetTeamResource(teamID, "m", 50)
+		Spring.SetTeamResource(teamID, "e", 50)
+		Spring.SetTeamResource(teamID, "ms", 10000)
+		Spring.SetTeamResource(teamID, "es", 10000)
+        tm[teamID]:GetSupplyManager():UseSupplies(UnitDefNames["priest"].id)
 	end
 end
 	

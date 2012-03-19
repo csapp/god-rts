@@ -38,6 +38,8 @@ local counterMaxValue = 5 --Denotes the maximum value for the counter,
 
 local teams = {}
 local villagerMultipliers = {}
+local TeamManagers
+local SupplyManagers = {}
 				  
 function gadget:Initialize()
     if DEBUG then Spring.Echo("RESOURCE GENERATION ON!") end
@@ -48,13 +50,15 @@ function gadget:Initialize()
         end
     end
     -- XXX Delay this call in case the TeamManagers aren't set up yet
-    GG.Delay.DelayCall(InitVillageMultipliers)
+    GG.Delay.DelayCall(InitTeamManagers)
 end
 
-function InitVillageMultipliers()
+function InitTeamManagers()
+    TeamManagers = _G.TeamManagers
 	for _, teamID in pairs(teams) do
-        local am = _G.TeamManagers[teamID]:GetAttributeManager()
+        local am = TeamManagers[teamID]:GetAttributeManager()
         villagerMultipliers[teamID] = am:GetVillagerMultiplier()
+        SupplyManagers[teamID] = TeamManagers[teamID]:GetSupplyManager()
     end
 end
 
@@ -70,6 +74,13 @@ local function generateVillagers(teamID)
         end
     end
 	
+    local supplyCap = SupplyManagers[teamID]:GetSupplyCap()
+    local usedSupplies = SupplyManagers[teamID]:GetUsedSupplies()
+    local currentVillagers = math.floor(Spring.GetTeamResources(teamID, "metal"))
+    while (usedSupplies + currentVillagers + villagersGenerated > supplyCap
+           and villagersGenerated > 0) do
+        villagersGenerated = villagersGenerated - 1
+    end
 	return villagersGenerated 
 end
 

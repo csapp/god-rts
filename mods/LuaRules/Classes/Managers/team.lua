@@ -2,6 +2,7 @@ local MANAGER_DIR = "LuaRules/Classes/Managers/"
 
 VFS.Include(MANAGER_DIR .. "power.lua")
 VFS.Include(MANAGER_DIR .. "attribute.lua")
+VFS.Include(MANAGER_DIR .. "supply.lua")
 
 TeamManager = Manager:Inherit{
     classname = "TeamManager",
@@ -10,23 +11,19 @@ TeamManager = Manager:Inherit{
 TeamManager.MANAGER_IDS = {
     POWER = "power",
     ATTRIBUTE = "attribute",
+    SUPPLY = "supply",
 }
 
 local this = TeamManager
 local inherited = this.inherited
 
-function TeamManager:AddPowerManager()
-    local manager = PowerManager:New(self:GetTeamID())
-    self:AddElement(self.MANAGER_IDS.POWER, manager)
-end
 
 function TeamManager:GetPowerManager()
     return self:GetElement(self.MANAGER_IDS.POWER)
 end
 
-function TeamManager:AddAttributeManager()
-    local manager = AttributeManager:New(self:GetTeamID())
-    self:AddElement(self.MANAGER_IDS.ATTRIBUTE, manager)
+function TeamManager:GetSupplyManager()
+    return self:GetElement(self.MANAGER_IDS.SUPPLY)
 end
 
 function TeamManager:GetAttributeManager()
@@ -34,7 +31,9 @@ function TeamManager:GetAttributeManager()
 end
 
 function TeamManager:Initialize()
-    self:AddAttributeManager()
-    self:AddPowerManager()
+    local teamID = self:GetTeamID()
+    self:AddElement(self.MANAGER_IDS.POWER, PowerManager:New(teamID))
+    self:AddElement(self.MANAGER_IDS.ATTRIBUTE, AttributeManager:New(teamID))
+    self:AddElement(self.MANAGER_IDS.SUPPLY, SupplyManager:New(teamID))
 end
 

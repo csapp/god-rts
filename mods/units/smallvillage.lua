@@ -54,6 +54,7 @@ local unitDef =
 
     -- Custom
     customParams = {
+        supply_cap = 100,
         class = "village",
         convert_time = 30,
         convert_xp = 500,
