@@ -84,6 +84,35 @@ EventMultiplier = Multiplier:Inherit{
 }
 
 ------------------------------------------------------------
+-- DAMAGE MULTIPLIER
+------------------------------------------------------------
+DamageMultiplier = EventMultiplier:Inherit{
+    classname = "DamageMultiplier"
+}
+
+function DamageMultiplier:GetFromDamage(victimID, attackerID, weaponID)
+    -- TODO combat grid here?
+    if Units.IsVolcanoUnit(victimID) then return 0 end
+    local levelDiff = Units.GetLevel(attackerID) - Units.GetLevel(victimID)
+    local levelMult = -0.2*levelDiff
+    return self:GetValue(attackerID) + levelMult
+end
+
+function DamageMultiplier:GetValue(unitID)
+    local v = DamageMultiplier.inherited.GetValue(self, unitID)
+    if not unitID then return v end
+    for hero, units in pairs(GG.InfluencedUnits) do
+        for _, influencedUnit in pairs(units) do
+            if influencedUnit == unitID then
+                v = v + 0.2 -- XXX get this value from the influencing hero?
+                break
+            end
+        end
+    end
+    return v
+end
+
+------------------------------------------------------------
 -- XP MULTIPLIER
 ------------------------------------------------------------
 XPMultiplier = EventMultiplier:Inherit{
@@ -91,6 +120,7 @@ XPMultiplier = EventMultiplier:Inherit{
 }
 
 function XPMultiplier:GetFromDamage(victimID, attackerID, weaponID)
+    if Units.IsVolcanoUnit(victimID) then return 0 end
     local levelDiff = Units.GetLevel(attackerID) - Units.GetLevel(victimID)
     local levelMult = -0.2*levelDiff
     return self:GetValue(attackerID) + levelMult

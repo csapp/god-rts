@@ -11,6 +11,7 @@ Units.CLASSES = {
     VILLAGE = "village",
     GOD = "god",
     ZOMBIE = "zombie",
+    VOLCANO = "volcano",
 }
 
 Units.UNITDEF_NAMES = {
@@ -75,6 +76,10 @@ end
 
 function Units.IsZombieUnit(unitID)
     return Units.GetClass(unitID) == Units.CLASSES.ZOMBIE
+end
+
+function Units.IsVolcanoUnit(unitID)
+    return Units.GetClass(unitID) == Units.CLASSES.VOLCANO
 end
 
 function Units.IsTempUnit(unitID)

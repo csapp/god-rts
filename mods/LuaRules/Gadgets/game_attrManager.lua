@@ -30,3 +30,10 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
     am:ApplyPersistentMultipliers(unitID)
 end
 
+function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
+                            weaponID, attackerID, attackerDefID, attackerTeam)
+    if not attackerID then return damage end
+    local am = TeamManagers[attackerTeam]:GetAttributeManager()
+    local mult = am:GetDamageMultiplier():GetFromDamage(unitID, attackerID, weaponID)
+    return damage*mult
+end

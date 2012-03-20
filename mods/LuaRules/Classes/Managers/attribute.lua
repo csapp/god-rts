@@ -22,6 +22,8 @@ function AttributeManager:New(teamID)
     obj:RegisterMultiplier(Multipliers.TYPES.MOVE_SPEED, MoveSpeedMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.ATTACK_SPEED, AttackSpeedMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.ATTACK_RANGE, AttackRangeMultiplier:New(teamID))
+
+    obj:RegisterMultiplier(Multipliers.TYPES.DAMAGE, DamageMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.XP, XPMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.VILLAGER, VillagerMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.POWER_RECHARGE, PowerRechargeMultiplier:New(teamID))
@@ -44,14 +46,18 @@ function AttributeManager:GetAllMultipliers()
     return self:GetElements()
 end
 
-function AttributeManager:GetAllValues(unitID)
-    -- If unitID is not passed or nil, global values
-    -- will be returned
-    local values = {}
-    for mtype, mult in pairs(self:GetAllMultipliers()) do 
-        values[mtype] = mult:GetValue(unitID)
-    end
-    return values
+--function AttributeManager:GetAllValues(unitID)
+    ---- If unitID is not passed or nil, global values
+    ---- will be returned
+    --local values = {}
+    --for mtype, mult in pairs(self:GetAllMultipliers()) do 
+        --values[mtype] = mult:GetValue(unitID)
+    --end
+    --return values
+--end
+
+function AttributeManager:GetDamageMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.DAMAGE)
 end
 
 function AttributeManager:GetFaithMultiplier()
