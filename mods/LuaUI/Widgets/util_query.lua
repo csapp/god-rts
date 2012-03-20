@@ -10,7 +10,11 @@ function widget:GetInfo()
     }
 end
 
+include("Headers/utilities.lua")
 include("msgs.h.lua")
+include("managers.h.lua")
+
+local GetMyTeamID = Spring.GetMyTeamID
 
 local MY_PLAYER_ID = Spring.GetMyPlayerID()
 local queue = {}
@@ -33,18 +37,54 @@ end
 
 local function Callback(id, reply)
     local callback = queue[id]
-    if not callback then 
-        Spring.Echo('no callback')
-        return end
+    if not callback then return end
     callback(reply)
 end
 
-local function QueryGadgetState(funcstring, callback)
+local function CallFunction(funcstring, callback)
     local id = AddToQueue(callback)
     LuaMessages.SendLuaRulesMsg(MSG_TYPES.GADGET_STATE_QUERY, {id, funcstring})
 end
 
-WG.GadgetQuery.QueryGadgetState = QueryGadgetState
+local function GetCallbackWrapper(callback)
+    local function _callback(retval)
+        local f = assert(loadstring("return "..retval))
+        callback(f())
+    end
+    return _callback
+end
+
+local function StartManagerQueryString(key)
+    local teamID = GetMyTeamID()
+    local q = ""
+    if table.contains(Managers.Team.TYPES, key) then
+        q = q.."_G.TeamManagers["..teamID.."]:"
+    else
+        q = q.."_G."
+    end
+    return q.."Get"..key.."():"
+end
+
+local function CallManagerElementFunction(callback, key, elementID, funcname, args)
+    args = args or {} 
+    local q = StartManagerQueryString(key).."GetElement("..elementID.."):"..funcname.."("
+    q = q..table.concat(args, ",")..")"
+    CallFunction(q, GetCallbackWrapper(callback))
+end
+
+local function CallManagerFunctionOnAll(callback, key, funcname, args)
+    args = args or {} 
+    local q = StartManagerQueryString(key).."CallOnAll('"..funcname.."'"
+    if table.isempty(args) then
+        q = q..")"
+    else
+        q = q..","..table.tostring(args)..")"
+    end
+    CallFunction(q, GetCallbackWrapper(callback))
+end
+
+WG.GadgetQuery.CallManagerElementFunction = CallManagerElementFunction
+WG.GadgetQuery.CallManagerFunctionOnAll = CallManagerFunctionOnAll
 
 function widget:RecvLuaMsg(msg, playerID)
     if playerID ~= MY_PLAYER_ID then return end

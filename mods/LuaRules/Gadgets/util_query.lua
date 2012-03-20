@@ -25,7 +25,7 @@ function gadget:RecvLuaMsg(msg, playerID)
     if msgtype ~= MSG_TYPES.GADGET_STATE_QUERY then return end
     local msgID, funcstring = unpack(params)
     local func = assert(loadstring("return " .. funcstring))
-    local return_params = {msgID, utils.string.to_string(func())}
+    local return_params = {msgID, func()}
     LuaMessages.SendLuaUIMsg(MSG_TYPES.GADGET_STATE_REPLY, return_params) 
 end
 

@@ -1,29 +1,7 @@
---include("utilities.lua")
+VFS.Include("LuaUI/Headers/utilities.lua")
 
 local SendLuaUIMsg = Spring.SendLuaUIMsg
 local SendLuaRulesMsg = Spring.SendLuaRulesMsg
-
-function split(pString, pPattern)
-	local tableIndex = 1
-	local Table = {} -- NOTE: use {n = 0} in Lua-5.0
-	local fpat = "(.-)" .. pPattern
-	local last_end = 1
-	local s, e, cap = pString:find(fpat, 1)
-	while s do
-		if s ~= 1 or cap ~= "" then
-			Table[tableIndex] = cap
-			tableIndex = tableIndex + 1
-		end
-		last_end = e+1
-		s, e, cap = pString:find(fpat, last_end)
-	end
-	if last_end <= #pString then
-		cap = pString:sub(last_end)
-		Table[tableIndex] = cap
-		tableIndex = tableIndex + 1
-	end
-	return Table
-end
 
 LuaMessages = {}
 
@@ -45,12 +23,15 @@ MSG_TYPES = {
 ACTION_TYPES = {
 }
 
+LuaMessages.SEPARATOR = "|"
+
 function LuaMessages.serialize(msg_type, params)
-    return msg_type .. "," .. table.concat(params, ",")
+    return msg_type..LuaMessages.SEPARATOR..table.concat(
+        utils.map(utils.to_string, params), LuaMessages.SEPARATOR)
 end
 
 function LuaMessages.deserialize(message)
-    local msg_table = split(message, ',')
+    local msg_table = utils.string.split(message, LuaMessages.SEPARATOR)
     local msg_type = msg_table[1]
     table.remove(msg_table, 1)
     return msg_type, msg_table

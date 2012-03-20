@@ -35,3 +35,12 @@ end
 function Manager:RemoveElement(id)
     self.elements[id] = nil
 end
+
+function Manager:CallOnAll(funcname, args)
+    args = args or {}
+    local results = {}
+    for id, element in pairs(self:GetElements()) do
+        results[id] = element[funcname](element, unpack(args))
+    end
+    return results
+end

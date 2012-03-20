@@ -1,49 +1,51 @@
 -- Some utility functions
-
-------------------------------------------------------------
--- STRING UTIL FUNCTIONS
-------------------------------------------------------------
--- This function was written by sunspot for his Chili tutorial
--- http://springrts.com/wiki/Lesson_2_:_Dynamicly_change_label_content  
+-- Some functions borrowed from http://lua-users.org/wiki/FunctionalLibrary
 
 utils = {}
 utils.string = {}
 
-function utils.string.to_string(data, indent)
-	local str = ""        
-	if(indent == nil) then          
-		indent = 0      
-	end          
-	local indenter = "    "      
-	-- Check the type      
-	if(type(data) == "string") then          
-		str = str .. (indenter):rep(indent) .. data .. "\n"      
-	elseif(type(data) == "number") then          
-		str = str .. (indenter):rep(indent) .. data .. "\n"      
-	elseif(type(data) == "boolean") then          
-		if(data == true) then              
-			str = str .. "true"          
-		else              
-			str = str .. "false"          
-		end      
-	elseif(type(data) == "table") then          
-		local i, v          
-		for i, v in pairs(data) do              
-		-- Check for a table in a table              
-			if(type(v) == "table") then                  
-				str = str .. (indenter):rep(indent) .. i .. ":\n"              
-                        str = str .. to_string(v, indent + 2)              
-			else                  
-				str = str .. (indenter):rep(indent) .. i .. ": " ..  to_string(v, 0)             
-			end          
-		end          
-	elseif(type(data) == "function") then                  
-		str = str .. (indenter):rep(indent) .. 'function' .. "\n"      
+ -- map(function, table)
+ -- e.g: map(double, {1,2,3})    -> {2,4,6}
+function utils.map(func, tbl)
+    local newtbl = {}
+    for i,v in pairs(tbl) do
+        newtbl[i] = func(v)
+    end
+    return newtbl
+end
+
+-- filter(function, table)
+-- e.g: filter(is_even, {1,2,3,4}) -> {2,4}
+function utils.filter(func, tbl)
+    local newtbl= {}
+    for i,v in pairs(tbl) do
+        if func(v) then
+            newtbl[i]=v
+        end
+    end
+    return newtbl
+end
+--
+------------------------------------------------------------
+-- STRING UTIL FUNCTIONS
+------------------------------------------------------------
+
+local function to_string(data)
+	if type(data) == "string" then          
+        return data
+	elseif type(data) == "number" or type(data) == "boolean" then          
+        return tostring(data)
+	elseif type(data) == "table" then          
+        return table.tostring(data)
+	elseif type(data) == "function" then                  
+        return "function"
 	else          
 		Spring.Echo(1, "Error: unknown data type: %s", type(data))      
 	end        
-	return str  
-end  
+end
+
+utils.to_string = to_string
+utils.string.to_string = to_string
 
 -- This function was written by sunspot for his Chili tutorial
 -- http://springrts.com/wiki/Lesson_2_:_Dynamicly_change_label_content  
@@ -116,6 +118,44 @@ function table:shallowcopy()
     newTable[k] = v
   end
   return newTable
+end
+
+-- These next three table functions taken from
+-- http://lua-users.org/wiki/TableUtils
+function table.val_to_str ( v )
+  if "string" == type( v ) then
+    v = string.gsub( v, "\n", "\\n" )
+    if string.match( string.gsub(v,"[^'\"]",""), '^"+$' ) then
+      return "'" .. v .. "'"
+    end
+    return '"' .. string.gsub(v,'"', '\\"' ) .. '"'
+  else
+    return "table" == type( v ) and table.tostring( v ) or
+      tostring( v )
+  end
+end
+
+function table.key_to_str ( k )
+  if "string" == type( k ) and string.match( k, "^[_%a][_%a%d]*$" ) then
+    return k
+  else
+    return "[" .. table.val_to_str( k ) .. "]"
+  end
+end
+
+function table.tostring( tbl )
+  local result, done = {}, {}
+  for k, v in ipairs( tbl ) do
+    table.insert( result, table.val_to_str( v ) )
+    done[ k ] = true
+  end
+  for k, v in pairs( tbl ) do
+    if not done[ k ] then
+      table.insert( result,
+        table.key_to_str( k ) .. "=" .. table.val_to_str( v ) )
+    end
+  end
+  return "{" .. table.concat( result, "," ) .. "}"
 end
 
 function utils.distance_between_points(p1, p2)
