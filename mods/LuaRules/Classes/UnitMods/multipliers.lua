@@ -93,9 +93,22 @@ XPMultiplier = EventMultiplier:Inherit{
 function XPMultiplier:GetFromDamage(victimID, attackerID, weaponID)
     local levelDiff = Units.GetLevel(attackerID) - Units.GetLevel(victimID)
     local levelMult = -0.2*levelDiff
-    return self:GetValue() + levelMult
+    return self:GetValue(attackerID) + levelMult
 end
 
+function XPMultiplier:GetValue(unitID)
+    local v = XPMultiplier.inherited.GetValue(self, unitID)
+    if not unitID then return v end
+    for hero, units in pairs(GG.InfluencedUnits) do
+        for _, influencedUnit in pairs(units) do
+            if influencedUnit == unitID then
+                v = v + 10 -- XXX get this value from the influencing hero?
+                break
+            end
+        end
+    end
+    return v
+end
 ------------------------------------------------------------
 -- VILLAGER GENERATION MULTIPLIER
 ------------------------------------------------------------
