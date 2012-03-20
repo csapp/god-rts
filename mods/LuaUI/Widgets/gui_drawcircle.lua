@@ -12,10 +12,12 @@ end
 
 local GetMyTeamID = Spring.GetMyTeamID
 
+include("Headers/utilities.lua")
 include("customcmds.h.lua")
 
 local radius = 0
 local circleOn = false
+local circleCmds = {CMD_BFB, CMD_LOVE, CMD_POSSESSION}
 
 local function SetRadius(r_as_string)
     radius = tonumber(r_as_string)
@@ -23,7 +25,8 @@ end
 
 function widget:GameFrame(n) 
 	local index, cmdID = Spring.GetActiveCommand()
-	if cmdID == CMD_BFB then
+	--if cmdID == CMD_BFB then
+    if table.contains(circleCmds, cmdID) then
         if not circleOn then 
             local q = "_G.TeamManagers["..GetMyTeamID().."]:GetPowerManager():GetElement("..cmdID.."):GetRadius()"
             WG.GadgetQuery.QueryGadgetState(q, SetRadius)
