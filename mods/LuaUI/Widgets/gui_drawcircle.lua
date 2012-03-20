@@ -19,16 +19,17 @@ include("managers.h.lua")
 local radius = 0
 local circleOn = false
 local circleCmds = {CMD_BFB, CMD_LOVE, CMD_POSSESSION}
+local currentCmd
 
 function widget:GameFrame(n) 
 	local index, cmdID = Spring.GetActiveCommand()
+    if currentCmd == cmdID then return end
+    currentCmd = cmdID
     if table.contains(circleCmds, cmdID) then
-        if not circleOn then 
-            WG.GadgetQuery.CallManagerElementFunction(
-                function (r) radius = r end, 
-                Managers.TYPES.POWER, cmdID, "GetRadius")
-            circleOn = true
-        end
+        WG.GadgetQuery.CallManagerElementFunction(
+            function (r) radius = r end, 
+            Managers.TYPES.POWER, cmdID, "GetRadius")
+        circleOn = true
 	else
         circleOn = false
         radius = 0
