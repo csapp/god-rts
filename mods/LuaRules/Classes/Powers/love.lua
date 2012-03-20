@@ -7,14 +7,13 @@ local GetUnitTeam = Spring.GetUnitTeam
 
 WholeLottaLove = ActivePower:Inherit{
     classname = "WholeLottaLove",
-    radius = 200,
+    radius = 150,
     id = CMD_LOVE,
     powerName = "Whole Lotta Love",
     powerType = POWERS.TYPES.DEFENSIVE,
-    rechargeRate = 1/3,
+    rechargeRate = 1/300,
     cmdType = CMDTYPE.ICON_MAP,
-    tooltip = "Revive all units to full health",
-    cursor = "Repair",
+    tooltip = "Revive units with radius to full health",
 }
 
 local this = WholeLottaLove
@@ -31,7 +30,6 @@ function WholeLottaLove:HealUnit(unitID)
 end
 
 function WholeLottaLove:_Use(cmdParams, cmdOptions)
-    --local units = Spring.GetTeamUnits(self:GetTeamID())
     local x,y,z = unpack(cmdParams)
 	local nearbyUnits = Spring.GetUnitsInSphere(x, y, z, self:GetRadius())
     local teamID = self:GetTeamID()
