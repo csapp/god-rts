@@ -40,6 +40,7 @@ local power_filepaths = {
 	"zombie.lua",
 	"love.lua",
 	"bfb.lua",
+	"possession.lua",
 }
 
 local power_ids = {}

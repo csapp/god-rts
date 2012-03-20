@@ -153,7 +153,7 @@ end
 		OnMouseDown = {ClickFunc},
 		}
 
-	local buttonTemp = Chili.Button:New {
+	local buttonPossession = Chili.Button:New {
 		parent = godselWindow,
 		x = 330,
 		y = 190,
@@ -161,7 +161,7 @@ end
 		margin = {0, 0, 0, 0},
 		minWidth = 120,
 		minHeight = 120,
-		caption = "Temp",
+		caption = "Possession",
 		isDisabled = false,
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},
