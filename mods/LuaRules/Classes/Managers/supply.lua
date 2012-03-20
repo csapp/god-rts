@@ -10,11 +10,6 @@ SupplyManager = Manager:Inherit{
 local this = SupplyManager
 local inherited = this.inherited
 
---function SupplyManager:New(teamID)
-    --local obj = SupplyManager.inherited.New(self, teamID)
-    --obj:SetUsedSupplies(Spring.GetTeamResource(teamID, "metal"))
-    --return obj
---end
 function SupplyManager:GetUsedSupplies()
     return self.usedSupplies
 end
@@ -34,13 +29,14 @@ function SupplyManager:GetSupplyCap()
     return total
 end
 
-function SupplyManager:_CanUse(s)
+function SupplyManager:CanUse(unitDefID)
+    local s = UnitDefs[unitDefID].metalCost
     return self:GetUsedSupplies() + s <= self:GetSupplyCap()
 end
 
 function SupplyManager:UseSupplies(unitDefID)
     local s = UnitDefs[unitDefID].metalCost
-    if self:_CanUse(s) then
+    if self:CanUse(unitDefID) then
         self:SetUsedSupplies(self:GetUsedSupplies() + s)
         return true
     end

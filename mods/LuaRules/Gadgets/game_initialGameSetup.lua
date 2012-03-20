@@ -47,7 +47,6 @@ local function setDefaultResources()
 		Spring.SetTeamResource(teamID, "e", 50)
 		Spring.SetTeamResource(teamID, "ms", 10000)
 		Spring.SetTeamResource(teamID, "es", 10000)
-        tm[teamID]:GetSupplyManager():UseSupplies(UnitDefNames["priest"].id)
 	end
 end
 	
