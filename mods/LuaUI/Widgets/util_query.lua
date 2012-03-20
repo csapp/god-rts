@@ -65,10 +65,18 @@ local function StartManagerQueryString(key)
     return q.."Get"..key.."():"
 end
 
+local function CallManagerFunction(callback, key, funcname, args)
+    args = args or {} 
+    local q = StartManagerQueryString(key)..funcname.."("
+    q = q..table.concat(utils.map(utils.to_string, args), ",")..")"
+    CallFunction(q, GetCallbackWrapper(callback))
+end
+
 local function CallManagerElementFunction(callback, key, elementID, funcname, args)
     args = args or {} 
     local q = StartManagerQueryString(key).."GetElement("..elementID.."):"..funcname.."("
-    q = q..table.concat(args, ",")..")"
+    q = q..table.concat(utils.map(utils.to_string, args), ",")..")"
+    --q = q..table.concat(args, ",")..")"
     CallFunction(q, GetCallbackWrapper(callback))
 end
 
@@ -83,6 +91,7 @@ local function CallManagerFunctionOnAll(callback, key, funcname, args)
     CallFunction(q, GetCallbackWrapper(callback))
 end
 
+WG.GadgetQuery.CallManagerFunction = CallManagerFunction
 WG.GadgetQuery.CallManagerElementFunction = CallManagerElementFunction
 WG.GadgetQuery.CallManagerFunctionOnAll = CallManagerFunctionOnAll
 
