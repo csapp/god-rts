@@ -42,10 +42,23 @@ local convertCmd = {
       params = {},
 }
 
+local resurrectCmd = {
+	id = CMD_RESURRECT, 
+	name = "Resurrect", 
+	action = "resurrect",
+	type = CMDTYPE.ICON_MAP,
+	tooltip = "Resurrect fallen unit",
+	params = {
+		[1] = 20, -- radius
+	},
+}
+
 local converting = {}
 local convert_pending = {}
+local resurrect_pending = {}
 
 local CONVERT_DISTANCE = 100 
+local RESURRECT_DISTANCE = 100 
 
 local gaiaTeamID = Spring.GetGaiaTeamID()
 local function GetUnitNeutral(unitID)
@@ -98,6 +111,9 @@ end
 function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
     if Units.IsClergyUnit(unitID) then
         InsertUnitCmdDesc(unitID, CMD_CONVERT, convertCmd)
+		if Units.GetLevel(unitID) > 1 then
+			InsertUnitCmdDesc(unitID, CMD_RESURRECT, resurrectCmd)
+		end
     end
 end
 
@@ -133,10 +149,38 @@ local function CanConvert(clergyID, villageID)
     return true
 end
 
+local function StartResurrect(unitID,  resurrectPosition, radius)
+		resurrect_pending[unitID] = nil
+		local center_x, center_y, center_z = unpack(resurrectPosition)
+		local radius = resurrectCmd.params[1]
+		local corpseList = Spring.GetFeaturesInSphere(center_x, center_y, center_z, radius)
+		
+		for i,featureID in pairs(corpseList) do 
+		--[[	Spring.Echo(featureID)
+			local featureDefID = Spring.GetFeatureDefID(featureID)
+			local resurrectinto = FeatureDefs[featureDefID].customParams.resurrectintounit	
+			if resurrectinto ~= nil then
+				Spring.Echo(resurrectinto)
+				Spring.SetFeatureResurrect(featureID, resurrectinto, 0) --This doesnt work for some reason... Alternate way below
+			end]]--
+			
+			local teamID = Spring.GetFeatureTeam(featureID)
+
+			if teamID == Spring.GetUnitTeam(unitID) then
+				local x,y,z = Spring.GetFeaturePosition(featureID)
+				local featureDefID = Spring.GetFeatureDefID(featureID)
+				local resurrectinto = FeatureDefs[featureDefID].customParams.resurrectintounit	
+				if resurrectinto ~= nil then
+					Spring.DestroyFeature(featureID)
+					Spring.CreateUnit(resurrectinto, x,y,z,0, teamID)
+				end	
+			end
+		end
+		--Spring.Echo("Resurrect")
+end
+
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
-    if cmdID ~= CMD_CONVERT then
-        return false
-    end
+    if cmdID == CMD_CONVERT then
 
     local villageID = cmdParams[1]
     if Units.IsVillageUnit(unitID) then
@@ -156,6 +200,20 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
         convert_pending[unitID] = villageID
     end
     return true, false
+	
+	elseif cmdID == CMD_RESURRECT then
+		local x,y,z = Spring.GetUnitBasePosition(unitID)
+		local center_x, center_y, center_z = unpack(cmdParams)
+		local unitPosition = {x,y,z}
+		local resurrectPosition = {center_x, center_y, center_z}
+		
+		if utils.distance_between_points(unitPosition, resurrectPosition) < RESURRECT_DISTANCE then
+			StartResurrect(unitID, resurrectPosition)
+		else
+			GiveOrderToUnit(unitID, CMD.MOVE, resurrectPosition, {})
+			resurrect_pending[unitID] = resurrectPosition
+		end
+	end
 end
     
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
@@ -180,4 +238,14 @@ function gadget:GameFrame(n)
             GiveOrderToUnit(clergyID, CMD.STOP, {}, {}) 
         end
     end
+	for unitID, resurrectPosition in pairs(resurrect_pending) do
+		local unitX, unitY, unitZ = Spring.GetUnitBasePosition(unitID)
+		local unitPosition = {unitX, unitY, unitZ}
+		if utils.distance_between_points(unitPosition, resurrectPosition) < RESURRECT_DISTANCE then
+			StartResurrect(unitID, resurrectPosition)
+			GiveOrderToUnit(unitID, CMD.STOP, {}, {})
+		else
+			GiveOrderToUnit(unitID, CMD.MOVE, resurrectPosition, {})
+		end
+	end
 end

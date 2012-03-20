@@ -30,6 +30,14 @@ function widget:GameFrame(n)
             function (r) radius = r end, 
             Managers.TYPES.POWER, cmdID, "GetRadius")
         circleOn = true
+	elseif cmdID == CMD_RESURRECT then	
+		--needs special case because resurrect isn't defined 
+		--as a god power, can't access radius unless we go through params
+		local cmdDesc = Spring.GetActiveCmdDesc(index)
+		if cmdDesc ~= nil then
+			radius = cmdDesc.params[1]
+		end
+		circleOn = true
 	else
         circleOn = false
         radius = 0

@@ -12,6 +12,7 @@ local unitDef  =  {
     BuildPic = "filename.bmp",
     Category = "TANK SMALL NOTAIR NOTSUB",
     ObjectName = "scout.s3o",
+	corpse = "dead",
     name = "Scout",
     script = "scoutscript.lua",
 
@@ -120,6 +121,33 @@ local unitDef  =  {
     NoChaseCategory = "AIR",
 
 }
+
+--------------------------------------------------------------------------------
+
+local featureDefs = {
+  dead = {
+    blocking           = false,
+	customParams          = {
+		resurrectintounit	= "Scout",
+		featuredecaytime	= 10		
+	},  	
+    damage             = 300,
+    description        = "Dead Scout",
+    energy             = 0,
+    footprintX         = 2,
+    footprintZ         = 2,
+    height             = "5",
+    hitdensity         = "100",
+    metal              = 0,
+    object             = "Tombstone.s3o",
+    reclaimable        = false,
+	resurrectable  	   = 1,
+	smoketime 		   = 0,	
+  },
+}
+unitDef.featureDefs = featureDefs
+
+--------------------------------------------------------------------------------
 
 return lowerkeys({ [unitName]  =  unitDef })
 
