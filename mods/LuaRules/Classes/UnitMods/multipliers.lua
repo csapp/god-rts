@@ -102,7 +102,7 @@ function XPMultiplier:GetValue(unitID)
     for hero, units in pairs(GG.InfluencedUnits) do
         for _, influencedUnit in pairs(units) do
             if influencedUnit == unitID then
-                v = v + 10 -- XXX get this value from the influencing hero?
+                v = v + 0.2 -- XXX get this value from the influencing hero?
                 break
             end
         end
