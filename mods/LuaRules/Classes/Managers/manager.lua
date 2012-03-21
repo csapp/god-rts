@@ -40,7 +40,10 @@ function Manager:CallOnAll(funcname, args)
     args = args or {}
     local results = {}
     for id, element in pairs(self:GetElements()) do
-        results[id] = element[funcname](element, unpack(args))
+        local func = element[funcname]
+        if func then 
+            results[id] = func(element, unpack(args))
+        end
     end
     return results
 end
