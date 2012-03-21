@@ -22,6 +22,7 @@ end
 -- INCLUDES
 include("msgs.h.lua")
 VFS.Include("LuaUI/Headers/utilities.lua")
+include("managers.h.lua")
 
 -- CONSTANTS
 local Chili
@@ -53,10 +54,11 @@ local progressBars = {}
 local statusBar = nil
 local pbarWindow = nil
 local current_progress_bar = nil
+local multipliers = {}
 
 -- SCRIPT FUNCTIONS
--- Returns the caption, parent container and commandtype of the button	
 
+-- Returns the caption, parent container and commandtype of the button	
 function setUnitInfo(unit)
 	local unitInfoString = --printUnitName(unit) .. "\n"..
                            printDescription(unit) .. "\n"..
@@ -65,6 +67,10 @@ function setUnitInfo(unit)
                            printEXP(unit)
 
 	unitInfo:SetCaption(unitInfoString)
+end
+
+function setMultipliers(mults)
+	multipliers = mults
 end
 
 function LayoutHandler(xIcons, yIcons, cmdCount, commands)
@@ -218,7 +224,16 @@ function widget:CommandsChanged()
     if current_progress_bar ~= nil then
         pbarWindow:AddChild(current_progress_bar)
     end
-
+	
+	if DEBUG then
+		for k,v in pairs(multipliers) do
+			Spring.Echo(k,v)
+		end
+	end
+	
+	WG.GadgetQuery.CallManagerFunctionOnAll(setMultipliers, Managers.TYPES.ATTRIBUTE, 
+                                        "GetValue", {selected_units[1]})
+	
 	updateRequired = true
 end
 
@@ -277,6 +292,9 @@ function printUnitHealth(unitID)
 	
 	if health and health ~= nil then
 		healthString = "HP: " .. math.floor(health) .. " / " .. math.floor(maxHealth)
+		if multipliers["HEALTH"] ~= 1 and multipliers["HEALTH"] ~= nil then
+			healthString = healthString .. '+' .. multipliers["HEALTH"]
+		end
 		return healthString
 	else
 		return ""
@@ -289,6 +307,9 @@ function printEXP(unitID)
 	
 	if currentXP ~= nil and maxXP ~= nil then
 		expString = "Experience Points: " .. math.floor(currentXP) .. " / " .. maxXP
+		if multipliers["XP"] ~= 1 and multipliers["XP"] ~= nil then
+			expString = expString .. '+' .. multipliers["XP"]
+		end
 		return expString
 	else
 		return ""
@@ -309,29 +330,14 @@ function printVelocity(unitID)
 	local speed = Spring.GetUnitMoveTypeData(unitID).maxSpeed
 	
 	if speed ~= nil then
-		return "Speed: " .. speed
+		speedString = "Speed: " .. speed
+		if multipliers["MOVE_SPEED"] ~= 1 and multipliers["MOVE_SPEED"] ~= nil then
+			speedString = speedString .. '+' .. multipliers["MOVE_SPEED"]
+		end
+		return speedString
 	else
 		return ""
 	end
-
---[[
-for k,v in pairs(Spring.GetUnitMoveTypeData(unitID)) do
-Spring.Echo(k,v)
-end
-]]
-	
-	--[[
-		for k,v in pairs(WeaponDefs[weapons[1].weaponDef].damages) do
-   Spring.Echo(k,v)
-end
-]]	
---[[
- for id,weaponDef in pairs(UnitDefs) do
-   for name,param in unitDef:pairs() do
-     Spring.Echo(name,param)
-   end
- end
- --]]
 end
 
 function printDamage(unitID)
@@ -344,7 +350,11 @@ function printDamage(unitID)
     local damage = WeaponDefs[weapons[1].weaponDef].damages[0] -- Good job on the consistent numbering system, Spring.
 	
 	if damage ~= nil then
-		return "Damage: " .. damage
+		damageString = "Damage: " .. damage
+		if multipliers["DAMAGE"] ~= 1 and multipliers["DAMAGE"] ~= nil then
+			damageString = damageString .. '+' .. multipliers["DAMAGE"]
+		end
+		return damageString
 	else
 		return ""
 	end
@@ -360,7 +370,11 @@ function printRange(unitID)
     local range = WeaponDefs[weapons[1].weaponDef].range
 	
 	if range ~= nil then
-		return "Range: " .. range
+		rangeString = "Range: " .. range
+		if multipliers["ATTACK_RANGE"] ~= 1 and multipliers["ATTACK_RANGE"] ~= nil then
+			rangeString = rangeString .. '+' .. multipliers["ATTACK_RANGE"]
+		end
+		return rangeString
 	else
 		return ""
 	end
@@ -376,7 +390,11 @@ function printAttSpeed(unitID)
     local attSpeed = WeaponDefs[weapons[1].weaponDef].reload
 	
 	if attSpeed ~= nil then
-		return "Attack Speed: " .. attSpeed
+		aspeedString = "Attack Speed: " .. attSpeed
+		if multipliers["ATTACK_SPEED"] ~= 1 and multipliers["ATTACK_SPEED"] ~= nil then
+			aspeedString = aspeedString .. '+' .. multipliers["ATTACK_SPEED"]
+		end
+		return aspeedString
 	else
 		return ""
 	end
@@ -458,3 +476,23 @@ function widget:RecvLuaMsg(msg, playerID)
 		destroyProgressBar(unitID)
     end
 end
+
+-- These are here simply because Kaitlin is lazy and uses these a lot when testing.
+--[[
+for k,v in pairs(Spring.GetUnitMoveTypeData(unitID)) do
+Spring.Echo(k,v)
+end
+]]
+	
+--[[
+for k,v in pairs(WeaponDefs[weapons[1].weaponDef].damages) do
+   Spring.Echo(k,v)
+end
+]]	
+--[[
+ for id,weaponDef in pairs(UnitDefs) do
+   for name,param in unitDef:pairs() do
+     Spring.Echo(name,param)
+   end
+ end
+ --]]
