@@ -150,6 +150,19 @@ function widget:Initialize()
 		caption = "",
 	}
 	
+	powerInfo = Label:New{
+		parent = statusBar,
+		x = 890,
+		y = -220,
+		width = "25%",
+		height = "100%",
+		fontsize = 13,
+		autosize = false,
+		autoObeyLineHeight = true,
+		anchors = {left=true,bottom=true,right=false,top=false},
+		caption = "",
+	}
+	
 	imageWindow = Control:New{
         parent = statusBar,
 		x = 10,
@@ -202,6 +215,7 @@ function widget:CommandsChanged()
         end
         unitInfo:SetCaption("")
 		unitStats:SetCaption("")
+		powerInfo:SetCaption("")
 		resetWindow(imageWindow)
 		resetWindow(commandWindow)
 		
@@ -215,6 +229,7 @@ function widget:CommandsChanged()
 	resetWindow(imageWindow)
 	resetWindow(commandWindow)
 	drawPortrait()
+	printPowerInfo()
     
     if current_progress_bar ~= nil then
         pbarWindow:RemoveChild(current_progress_bar)
@@ -235,6 +250,7 @@ function widget:CommandsChanged()
                                         "GetValue", {selected_units[1]})
 	
 	updateRequired = true
+	
 end
 
 function drawPortrait()
@@ -398,6 +414,34 @@ function printAttSpeed(unitID)
 	else
 		return ""
 	end
+end
+
+function printPowerInfo()
+	local charges = {}
+	local names = {}
+	powerString = "Charges \n"
+	
+	function getCharges(returnCharges)
+		charges = returnCharges
+		for k,v in pairs(charges) do
+			Spring.Echo(k,v)
+		end
+	end
+		
+	function getNames(returnNames)
+		names = returnNames
+	end
+	
+	WG.GadgetQuery.CallManagerFunctionOnAll(getNames, Managers.TYPES.POWER, "GetName")
+	WG.GadgetQuery.CallManagerFunctionOnAll(getCharges, Managers.TYPES.POWER, "GetCharge")	
+	
+	for k,v in pairs(charges) do
+		Spring.Echo(k,v)
+		--powerString = powerString .. names[v] .. ": " .. charges[v] .. "\n"
+		powerString = powerString .. charges[v] .. "\n"
+	end
+	
+	powerInfo:SetCaption(powerString)
 end
 
 local function createProgressBar(unitID, caption)
