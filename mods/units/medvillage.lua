@@ -43,6 +43,7 @@ local unitDef =
 	workerTime = 1,
 	buildoptions = 
         {
+            "priest",
             "soldier",
             "horseman",
             "hunter",

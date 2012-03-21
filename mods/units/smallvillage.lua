@@ -47,6 +47,7 @@ local unitDef =
 
 	buildoptions = 
         {
+            "priest",
             "soldier",
             "horseman",
             "hunter",
