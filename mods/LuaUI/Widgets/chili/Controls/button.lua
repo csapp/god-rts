@@ -9,12 +9,21 @@ Button = Control:Inherit{
 
 local this = Button
 local inherited = this.inherited
+local highlighted = false
 
 --//=============================================================================
 
 function Button:SetCaption(caption)
   self.caption = caption
   self:Invalidate()
+end
+
+function Button:Select()
+  highlighted = true;
+end
+
+function Button:Deselect()
+  highlighted = false;
 end
 
 --//=============================================================================
@@ -40,7 +49,8 @@ end
 function Button:MouseUp(...)
   if (self._down) then
     self._down = false
-    self.state = 'normal'
+	if(highlighted) then self.state = 'pressed' else self.state = 'normal' end
+    
     inherited.MouseUp(self, ...)
     self:Invalidate()
     return self

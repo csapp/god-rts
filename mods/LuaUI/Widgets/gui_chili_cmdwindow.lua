@@ -331,23 +331,6 @@ function widget:CommandsChanged()
         selectedFac = nil
 end
 
-function widget:SelectionChanged(newSelection)
-        --get new selected fac, if any
-        for i=1,#newSelection do
-                local id = newSelection[i]
-                if UnitDefs[spGetUnitDefID(id)].isFactory then
-                        if selectedFac ~= id then
-                                alreadyRemovedTag = {}
-                        end
-                        selectedFac = id
-						UpdateFactoryBuildQueue() 
-						Spring.Echo('SELFAC\n');
-                        return
-                end
-        end
-        selectedFac = nil
-end
-
 function widget:DrawScreen()
     if updateRequired then
         updateRequired = false
