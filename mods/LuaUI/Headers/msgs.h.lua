@@ -12,7 +12,9 @@ MSG_TYPES = {
     PBAR_DESTROY = "pbar_destroy",
 
     CONVERT_FINISHED = "convert_finished",
+
     GOD_SELECTED = "godselected",
+    GOD_CREATED = "god_created",
     UNIT_LEVELLED_UP = "unit_levelled_up",
     MORPH = "MORPH",
 

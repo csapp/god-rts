@@ -426,7 +426,7 @@ function printPowerInfo()
 	local function getCharges(returnCharges)
         local powerString = "Charges \n"
         for k,v in pairs(returnCharges) do
-            powerString = powerString..powerNames[k]..": "..v.."\n"
+            powerString = powerString..powerNames[k]..": "..math.floor(v*100).."%\n"
         end
 	
         powerInfo:SetCaption(powerString)
@@ -509,7 +509,7 @@ function widget:RecvLuaMsg(msg, playerID)
     elseif msg_type == MSG_TYPES.PBAR_DESTROY then
         unitID = tonumber(params[1])
 		destroyProgressBar(unitID)
-    elseif msg_type == MSG_TYPES.GOD_SELECTED then
+    elseif msg_type == MSG_TYPES.GOD_CREATED then
         getPowerNames()
     end
 end

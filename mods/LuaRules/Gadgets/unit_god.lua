@@ -83,6 +83,7 @@ local function SpawnGod(teamID)
     sx = sx-50
     Spring.SpawnCEG("whitesmoke", sx, Spring.GetGroundHeight(sx, sz) + 10, sz)
     local god = Spring.CreateUnit("God", sx, sy, sz, 0, teamID)
+    LuaMessages.SendLuaUIMsg(MSG_TYPES.GOD_CREATED, {god})
 end
 
 function gadget:Initialize()
