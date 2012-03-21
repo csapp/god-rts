@@ -35,7 +35,7 @@ function done()
     if(listOfPowers[1] == "" or listOfPowers[2] == "" or listOfPowers[3] == "") then
 	    return false
     end
-    LuaMessages.SendLuaRulesMsg(MSG_TYPES.GOD_SELECTED, listOfPowers)
+    LuaMessages.SendMsgToAll(MSG_TYPES.GOD_SELECTED, listOfPowers)
 	widgetHandler:RemoveWidget()
 end
 

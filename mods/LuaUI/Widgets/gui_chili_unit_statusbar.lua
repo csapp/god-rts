@@ -55,6 +55,7 @@ local statusBar = nil
 local pbarWindow = nil
 local current_progress_bar = nil
 local multipliers = {}
+local powerNames = {}
 
 -- SCRIPT FUNCTIONS
 
@@ -416,32 +417,22 @@ function printAttSpeed(unitID)
 	end
 end
 
-function printPowerInfo()
-	local charges = {}
-	local names = {}
-	powerString = "Charges \n"
-	
-	function getCharges(returnCharges)
-		charges = returnCharges
-		for k,v in pairs(charges) do
-			Spring.Echo(k,v)
-		end
-	end
-		
-	function getNames(returnNames)
-		names = returnNames
-	end
-	
+local function getPowerNames()
+    local function getNames(names) powerNames = names end
 	WG.GadgetQuery.CallManagerFunctionOnAll(getNames, Managers.TYPES.POWER, "GetName")
-	WG.GadgetQuery.CallManagerFunctionOnAll(getCharges, Managers.TYPES.POWER, "GetCharge")	
+end
+
+function printPowerInfo()
+	local function getCharges(returnCharges)
+        local powerString = "Charges \n"
+        for k,v in pairs(returnCharges) do
+            powerString = powerString..powerNames[k]..": "..v.."\n"
+        end
 	
-	for k,v in pairs(charges) do
-		Spring.Echo(k,v)
-		--powerString = powerString .. names[v] .. ": " .. charges[v] .. "\n"
-		powerString = powerString .. charges[v] .. "\n"
+        powerInfo:SetCaption(powerString)
 	end
-	
-	powerInfo:SetCaption(powerString)
+
+    WG.GadgetQuery.CallManagerFunctionOnAll(getCharges, Managers.TYPES.POWER, "GetCharge")	
 end
 
 local function createProgressBar(unitID, caption)
@@ -518,6 +509,8 @@ function widget:RecvLuaMsg(msg, playerID)
     elseif msg_type == MSG_TYPES.PBAR_DESTROY then
         unitID = tonumber(params[1])
 		destroyProgressBar(unitID)
+    elseif msg_type == MSG_TYPES.GOD_SELECTED then
+        getPowerNames()
     end
 end
 
