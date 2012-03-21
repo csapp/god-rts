@@ -1,3 +1,5 @@
+-- This file should probably be in UnitMods, not here
+
 include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/multipliers.h.lua")
@@ -166,10 +168,12 @@ HighRise = Building:Inherit{
     buildingName = "High Rise",
     buildTime = 150,
     hpBonus = 500,
+    supplyCapBonus = 200,
     tooltip = "Provides a 500 HP bonus and increases villager cap",
 }
 
 function HighRise:GetHPBonus() return self.hpBonus end
+function HighRise:GetSupplyCapBonus() return self.supplyCapBonus end
 
 function HighRise:Apply()
     local unitID = self:GetUnitID()
@@ -177,6 +181,10 @@ function HighRise:Apply()
     local health, maxHealth = Spring.GetUnitHealth(unitID)
     Spring.SetUnitMaxHealth(unitID, maxHealth + hpBonus)
     Spring.SetUnitHealth(unitID, health + hpBonus)
+
+    local supplyCapBonus = self:GetSupplyCapBonus()
+    local village = self:GetVillage()
+    village:SetSupplyCap(village:GetSupplyCap() + supplyCapBonus)
 end
 
 function HighRise:Unapply(oldTeam)
@@ -185,6 +193,10 @@ function HighRise:Unapply(oldTeam)
     local health, maxHealth = Spring.GetUnitHealth(unitID)
     Spring.SetUnitMaxHealth(unitID, maxHealth - hpBonus)
     Spring.SetUnitHealth(unitID, health - hpBonus)
+
+    local supplyCapBonus = self:GetSupplyCapBonus()
+    local village = self:GetVillage()
+    village:SetSupplyCap(village:GetSupplyCap() - supplyCapBonus)
 end
 
 ------------------------------------------------------------
