@@ -116,6 +116,12 @@ function gadget:UnitGiven(unitID, unitDefID, newTeam, oldTeam)
     vobj:Transfer(oldTeam)
 end
 
+function gadget:GameFrame(n)
+    if n % 3 == 0 then
+        VillageManager:CallOnAll("Update")
+    end
+end
+
 function gadget:RecvLuaMsg(msg, playerID)
     msgtype, params = LuaMessages.deserialize(msg)
     if msgtype == MSG_TYPES.UNIT_LEVELLED_UP then

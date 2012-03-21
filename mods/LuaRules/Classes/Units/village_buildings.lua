@@ -5,7 +5,11 @@ include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/multipliers.h.lua")
 include("LuaUI/Headers/villages.h.lua")
 
+local GetUnitBasePosition = Spring.GetUnitBasePosition
+local GetUnitsInSphere = Spring.GetUnitsInSphere
 local GetUnitTeam = Spring.GetUnitTeam
+local GetUnitHealth = Spring.GetUnitHealth
+local SetUnitHealth = Spring.SetUnitHealth
 local gaiaTeamID = Spring.GetGaiaTeamID()
 
 Building = Object:Inherit{
@@ -24,6 +28,9 @@ Building = Object:Inherit{
 function Building:New(village)
     obj = Building.inherited.New(self, {village=village})
     return obj
+end
+
+function Building:Update()
 end
 
 function Building:ExecuteCommand(cmdID) 
@@ -143,20 +150,28 @@ Motel = Building:Inherit{
     classname = "Motel",
     buildingName = "Motel",
     buildTime = 90,
+    radius = 100,
+    hpBonus = 0.1,
     multipliers = {
         [Multipliers.TYPES.VILLAGER] = {1},
     },
     tooltip = "Allows units to sleep to regain health, and increases villager generation rate",
 }
 
-function Motel:Apply()
-    Motel.inherited.Apply(self)
-    self:GetVillage():AllowCommand(CMD.REPAIR)
-end
+function Motel:GetHPBonus() return self.hpBonus end
+function Motel:GetRadius() return self.radius end
 
-function Motel:Unapply(oldTeam)
-    Motel.inherited.Unapply(self, oldTeam)
-    self:GetVillage():DisallowCommand(CMD.REPAIR)
+function Motel:Update()
+    -- XXX save village's position somewhere so we don't have to do this
+    local x,y,z = GetUnitBasePosition(self:GetUnitID())
+    local nearbyUnits = GetUnitsInSphere(x,y,z,self:GetRadius(), self:GetTeamID())
+    local myUnitID = self:GetUnitID()
+    local hpBonus = self:GetHPBonus()
+    for _, unitID in pairs(nearbyUnits) do
+        if unitID ~= myUnitID then
+            SetUnitHealth(unitID, GetUnitHealth(unitID) + hpBonus)
+        end
+    end
 end
 
 ------------------------------------------------------------
@@ -178,7 +193,7 @@ function HighRise:GetSupplyCapBonus() return self.supplyCapBonus end
 function HighRise:Apply()
     local unitID = self:GetUnitID()
     local hpBonus = self:GetHPBonus()
-    local health, maxHealth = Spring.GetUnitHealth(unitID)
+    local health, maxHealth = GetUnitHealth(unitID)
     Spring.SetUnitMaxHealth(unitID, maxHealth + hpBonus)
     Spring.SetUnitHealth(unitID, health + hpBonus)
 
@@ -190,7 +205,7 @@ end
 function HighRise:Unapply(oldTeam)
     local unitID = self:GetUnitID()
     local hpBonus = self:GetHPBonus()
-    local health, maxHealth = Spring.GetUnitHealth(unitID)
+    local health, maxHealth = GetUnitHealth(unitID)
     Spring.SetUnitMaxHealth(unitID, maxHealth - hpBonus)
     Spring.SetUnitHealth(unitID, health - hpBonus)
 

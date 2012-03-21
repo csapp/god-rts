@@ -147,6 +147,12 @@ function Village:ExecuteCommand(cmdID)
     end
 end
 
+function Village:Update()
+    for _, building in pairs(self:GetBuildings()) do
+        building:Update()
+    end
+end
+
 function Village:Transfer(oldTeam)
     for key, building in pairs(self:GetBuildings()) do
         building:Transfer(oldTeam)
