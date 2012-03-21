@@ -117,7 +117,7 @@ function widget:Initialize()
 		parent = screen0,
 		x = 0,
 		y = -250,
-		width = -250,
+		width = -350,
 		height = 250,
 		draggable = false,
 		resizable = false,

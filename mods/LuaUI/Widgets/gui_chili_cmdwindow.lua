@@ -23,7 +23,7 @@ end
 VFS.Include("LuaUI/Headers/utilities.lua")
 
 -- CONSTANTS
-local MAXBUTTONSONROW = 3
+local MAXBUTTONSONROW = 4
 local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard"}
 local Chili
 
@@ -35,6 +35,12 @@ local commandWindow
 local stateCommandWindow
 local buildCommandWindow
 local updateRequired = true
+local selected_units
+local buildQueue = {}
+local buildQueueUnsorted = {}
+local spGetFullBuildQueue = Spring.GetFullBuildQueue
+local selectedFac 
+local spGetUnitDefID = Spring.GetUnitDefID
 
 -- CONTROLS
 local spGetActiveCommand 	= Spring.GetActiveCommand
@@ -66,6 +72,7 @@ function ClickFunc(button)
 		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
 		Spring.SetActiveCommand(index,3,left,right,alt,ctrl,meta,shift)
 	end
+	
 end
 
 -- Returns the caption, parent container and commandtype of the button	
@@ -83,7 +90,7 @@ function findButtonData(cmd)
 		buttontext = cmd.params[indexChoice]
 		container = commandWindow
 	elseif isBuild then
-		container = commandWindow
+		container = buildCommandWindow
 		buttontext = cmd.name:gsub("^%l", string.upper)
 	else
 		texture = cmd.texture
@@ -141,7 +148,8 @@ function createMyButton(cmd)
 			cmdid = cmd.id,
 			OnMouseDown = {ClickFunc},
 		}
-		
+
+		local image
 		if texture then
 			if DEBUG then Spring.Echo("texture",texture) end
 			button:Resize(72,72)
@@ -153,12 +161,54 @@ function createMyButton(cmd)
 				file = texture;
 				parent = button;
 			}
+			
+		if isBuild then
+		local countText = ''
+		countText = tostring(buildQueueUnsorted[-cmd.id])
+		if(countText == 'nil') then countText = '' end
+					countLabel = Chili.Label:New {
+							parent = image,
+							autosize=false;
+							width="100%";
+							height="100%";
+							align="right";
+							valign="bottom";
+							caption = countText;
+							fontSize = 16;
+							fontShadow = true;
+					}
+					local costLabel = Chili.Label:New {
+							parent = button,
+							right = 0;
+							y = 0;
+							x = 3;
+							bottom = 3;
+							autosize=false;
+							align="left";
+							valign="bottom";
+							caption = string.format("%d m", UnitDefs[-cmd.id].metalCost);
+							fontSize = 11;
+							fontShadow = true;
+					}
+			end
+			
 		end
 		
 		if(increaseRow)then
 			container.ystep = container.ystep+1
 		end		
 	end
+end
+
+local function UpdateFactoryBuildQueue() 
+        buildQueue = spGetFullBuildQueue(selectedFac)
+        buildQueueUnsorted = {}
+        for i=1, #buildQueue do
+                for udid, count in pairs(buildQueue[i]) do
+                        buildQueueUnsorted[udid] = (buildQueueUnsorted[udid] or 0) + count
+                        --Spring.Echo(udid .. "\t" .. buildQueueUnsorted[udid])
+                end
+        end
 end
 
 function filterUnwanted(commands)
@@ -223,7 +273,7 @@ function widget:Initialize()
 
 	stateCommandWindow = Chili.Control:New{
 		x = 0,
-		y = "40%",
+		y = 72,
 		width = "100%",
 		height = "20%",
 		xstep = 1,
@@ -236,7 +286,7 @@ function widget:Initialize()
 
 	buildCommandWindow = Chili.Control:New{
 		x = 0,
-		y = "60%",
+		y = 144,
 		width = "100%",
 		height = "40%",
 		xstep = 1,
@@ -248,9 +298,9 @@ function widget:Initialize()
 	}		
 	
 	window0 = Chili.Window:New{
-		x = -250,
+		x = -350,
 		y = -250,	
-		width = 250,
+		width = 350,
 		height = 250,
 		dockable = true,
 		parent = screen0,
@@ -267,7 +317,35 @@ end
 
 function widget:CommandsChanged()
 	if DEBUG then Spring.Echo("commandChanged called") end
+	newSelection = Spring.GetSelectedUnits()
 	updateRequired = true
+	
+	for i=1,#newSelection do
+                local id = newSelection[i]
+                if UnitDefs[spGetUnitDefID(id)].isFactory then
+                        selectedFac = id
+						UpdateFactoryBuildQueue() 
+                        return
+                end
+        end
+        selectedFac = nil
+end
+
+function widget:SelectionChanged(newSelection)
+        --get new selected fac, if any
+        for i=1,#newSelection do
+                local id = newSelection[i]
+                if UnitDefs[spGetUnitDefID(id)].isFactory then
+                        if selectedFac ~= id then
+                                alreadyRemovedTag = {}
+                        end
+                        selectedFac = id
+						UpdateFactoryBuildQueue() 
+						Spring.Echo('SELFAC\n');
+                        return
+                end
+        end
+        selectedFac = nil
 end
 
 function widget:DrawScreen()
