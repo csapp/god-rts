@@ -49,7 +49,6 @@ function gadget:UnitFinished(unitID, unitDefID, teamID)
 
     local sm = SupplyManagers[teamID]
     sm:UseSupplies(unitDefID)
-    Spring.Echo("finished",sm:GetUsedSupplies())
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
