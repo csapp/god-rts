@@ -22,6 +22,8 @@ include("LuaUI/Headers/msgs.h.lua")
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local god_unitdef_id = UnitDefNames["god"].id
 
+local listOfGodIDs = {}
+
 local POWERS_DIR = "LuaRules/Classes/Powers/"
 
 local power_bases = {
@@ -84,6 +86,39 @@ local function SpawnGod(teamID)
     Spring.SpawnCEG("whitesmoke", sx, Spring.GetGroundHeight(sx, sz) + 10, sz)
     local god = Spring.CreateUnit("God", sx, sy, sz, 0, teamID)
     LuaMessages.SendLuaUIMsg(MSG_TYPES.GOD_CREATED, {god})
+	table.insert(listOfGodIDs, god)
+end
+
+local function DestroyPlayer(teamID)
+	--Destroy all units on team
+	local listOfUnits = Spring.GetTeamUnits(teamID)
+	local listOfVillageUnitDefIDs = {UnitDefNames["smallvillage"].id, UnitDefNames["mediumvillage"].id, UnitDefNames["largevillage"].id}
+	Spring.Echo("B")
+	for i, uID in pairs(listOfUnits) do
+		if table.contains(listOfVillageUnitDefIDs, Spring.GetUnitDefID(uID)) then
+			Spring.Echo("C")
+			Spring.TransferUnit(uID, Spring.GetGaiaTeamID())	--transfer villages to neutral team
+		else
+			Spring.DestroyUnit(uID)
+		end
+	end
+
+	Spring.KillTeam(teamID)
+end
+
+local function EndGame(teamID)
+	local allyTeamList = Spring.GetAllyTeamList()
+	local teamList = {}
+	for i, allyTeamID in pairs(allyTeamList) do
+		teamList = Spring.GetTeamList(allyTeamID)
+			for j,tID in pairs(teamList) do
+				if tID == teamID then
+					table.remove(allyTeamList, allyTeamID)
+				end
+			end
+	end
+	
+	Spring.GameOver(allyTeamList)
 end
 
 function gadget:Initialize()
@@ -114,6 +149,20 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
             InsertUnitCmdDesc(unitID, powerID, power:GetCmdDesc())
         end
     end
+end
+
+function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDefID, attackerTeamID)
+	if table.contains(listOfGodIDs, unitID) then 
+		table.remove(listOfGodIDs, unitID)
+		if #listOfGodIDs > 1 then
+			Spring.Echo("A")
+			DestroyPlayer(teamID)
+		else
+			EndGame(attackerTeamID)
+		end
+	else
+		return
+	end	
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
