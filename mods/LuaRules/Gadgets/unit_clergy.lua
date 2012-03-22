@@ -151,22 +151,15 @@ local function CanConvert(clergyID, villageID)
 end
 
 local function StartResurrect(unitID,  resurrectPosition, radius)
+-- Create a unit at feature's location for every feature within a given radius
+-- The unit to create is found via the unit's custom param 'resurrectinto'
 		resurrect_pending[unitID] = nil
 		local center_x, center_y, center_z = unpack(resurrectPosition)
 		local radius = resurrectCmd.params[1]
 		local corpseList = Spring.GetFeaturesInSphere(center_x, center_y, center_z, radius)
 		
 		for i,featureID in pairs(corpseList) do 
-		--[[	Spring.Echo(featureID)
-			local featureDefID = Spring.GetFeatureDefID(featureID)
-			local resurrectinto = FeatureDefs[featureDefID].customParams.resurrectintounit	
-			if resurrectinto ~= nil then
-				Spring.Echo(resurrectinto)
-				Spring.SetFeatureResurrect(featureID, resurrectinto, 0) --This doesnt work for some reason... Alternate way below
-			end]]--
-			
 			local teamID = Spring.GetFeatureTeam(featureID)
-
 			if teamID == Spring.GetUnitTeam(unitID) then
 				local x,y,z = Spring.GetFeaturePosition(featureID)
 				local featureDefID = Spring.GetFeatureDefID(featureID)
@@ -177,7 +170,6 @@ local function StartResurrect(unitID,  resurrectPosition, radius)
 				end	
 			end
 		end
-		--Spring.Echo("Resurrect")
 end
 
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)

@@ -13,7 +13,6 @@ end
 local corpseList = {}
 
 function destroyFeature(featureID)
-	--Spring.Echo("DESTROYED")
 	Spring.DestroyFeature(featureID)
 end
 
@@ -21,10 +20,10 @@ function gadget:FeatureCreated(featureID)
 	local featureDefID = Spring.GetFeatureDefID(featureID)
 	local decayTime = FeatureDefs[featureDefID].customParams.featuredecaytime
 	local currentFrame = Spring.GetGameFrame()
-	local destroyTime = currentFrame + decayTime*30
+	local destroyTime = currentFrame + decayTime*30 -- multiply by 30 because we are dealing with frames
 	local corpse = {featureID, destroyTime}
 	table.insert(corpseList, corpse)
 	if decayTime ~= nil then
-		GG.Delay.CallLater(decayTime, destroyFeature, {featureID})
+		GG.Delay.CallLater(decayTime, destroyFeature, {featureID}) -- call the destroyFeature command after decayTime has passed
 	end
 end

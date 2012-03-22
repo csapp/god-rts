@@ -1,4 +1,3 @@
-
 function gadget:GetInfo()
     return {
         name = "Resource Generator",
@@ -62,6 +61,13 @@ function InitTeamManagers()
     end
 end
 
+--**********
+--Function: generateVillagers
+--Input: teamID - the player's team ID
+--Output: None
+--Purpose: Generates Villagers for each player at set time intervals based on the 
+-- 		   number and level of the villages that the player has under their control.
+--**********
 local function generateVillagers(teamID)
     -- Each timestamp, a team will generate villagers according to this formula:
     -- villagersGenerated = sum(GetLevel(v)*GetMultiplierValue(v) for v in ownedVillages(teamID))

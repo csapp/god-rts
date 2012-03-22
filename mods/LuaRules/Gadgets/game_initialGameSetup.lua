@@ -1,4 +1,3 @@
-
 function gadget:GetInfo()
     return {
         name = "Initial Setup",
@@ -21,6 +20,12 @@ local team_positions = {}
 local listOfUnits = {"smallVillage", "priest"}
 local spawnOffset = 50
 
+--**********
+--Function: getPlayerAndStartLocation
+--Input: None
+--Output: None
+--Purpose: Gets a list of start positions for each team.
+--**********
 local function getPlayerAndStartLocation()
     local gaia = Spring.GetGaiaTeamID()
 	for index, ID in ipairs(Spring.GetTeamList()) do
@@ -31,6 +36,12 @@ local function getPlayerAndStartLocation()
     end
 end
 
+--**********
+--Function: spawnInitialUnits
+--Input: None
+--Output: None
+--Purpose: Creates the initial units.
+--**********
 local function spawnInitialUnits()
 	for player_id, start_pos in pairs(team_positions) do	--------- For each row
 		for j=1, #listOfUnits do	-- for each unit in this list
@@ -39,6 +50,13 @@ local function spawnInitialUnits()
 	end
 end
 
+
+--**********
+--Function: setDefaultResources
+--Input: None
+--Output: None
+--Purpose: Initializes the Villager starting amount and maximum amount.
+--**********
 local function setDefaultResources()
     local tm = _G.TeamManagers
 	for teamID, start_pos in pairs(team_positions) do
