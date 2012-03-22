@@ -423,6 +423,9 @@ local function getPowerNames()
 end
 
 function printPowerInfo()
+    -- Wait until we populate the powerNames table before calling this function
+    if table.isempty(powerNames) then return end
+
 	local function getCharges(returnCharges)
         local powerString = "Charges \n"
         for k,v in pairs(returnCharges) do
