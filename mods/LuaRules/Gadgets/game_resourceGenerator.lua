@@ -12,6 +12,9 @@ function gadget:GetInfo()
     }
 end
 
+if not gadgetHandler:IsSyncedCode() then
+    return false
+end
 ------------------------------------------------------------
 -- SYNCED
 ------------------------------------------------------------
@@ -50,7 +53,8 @@ function gadget:Initialize()
         end
     end
     -- XXX Delay this call in case the TeamManagers aren't set up yet
-    GG.Delay.DelayCall(InitTeamManagers)
+    --GG.Delay.DelayCall(InitTeamManagers)
+    InitTeamManagers()
 end
 
 function InitTeamManagers()
@@ -84,39 +88,6 @@ local function generateVillagers(teamID)
 	return villagersGenerated 
 end
 
-local function generateFaith(teamID)
-    local am = _G.TeamManagers[teamID]:GetAttributeManager()
-    return am:GetFaithMultiplier():GetValue()
-end
-
-local function addFaith(teamID, amt)
-    AddTeamResource(teamID, "energy", amt)
-end
-
-local function removeFaith(teamID, amt)
-    UseTeamResource(teamID, "energy", amt)
-end
-
-function gadget:RecvLuaMsg(msg, playerID)
-    local msg_type, params = LuaMessages.deserialize(msg)
-    if msg_type == MSG_TYPES.CONVERT_FINISHED then
-        local clergyID = tonumber(params[1])
-        -- XXX is this a static value or should we get it from somewhere?
-        addFaith(Spring.GetUnitTeam(clergyID), 1000)
-    end
-end
-
-function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, adefID, ateamID)
-    -- Unit is leveling up, don't remove faith
-    -- XXX Does this have any undesired side effects?
-    if attackerID == nil then 
-        return 
-    end
-
-    _, maxHealth = GetUnitHealth(unitID)
-    removeFaith(teamID, maxHealth/10)
-end
-
 function gadget:GameFrame(n)
 	if (n % timeInterval == 0) then --denotes one second
 		counter = counter + 1
@@ -124,7 +95,6 @@ function gadget:GameFrame(n)
 	if (counter == counterMaxValue) then --every five seconds generate resources
 		for i=1, #teams do
 			AddTeamResource(teams[i], "metal", generateVillagers(teams[i]))
-            addFaith(teams[i], generateFaith(teams[i]))
 			if DEBUG then getResources(teams[i]) end
 		end
 		counter = 0

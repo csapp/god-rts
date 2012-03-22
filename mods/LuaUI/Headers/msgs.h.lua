@@ -15,11 +15,14 @@ MSG_TYPES = {
 
     GOD_SELECTED = "godselected",
     GOD_CREATED = "god_created",
+
     UNIT_LEVELLED_UP = "unit_levelled_up",
     MORPH = "MORPH",
 
     GADGET_STATE_QUERY = "GADGET_STATE_QUERY",
     GADGET_STATE_REPLY = "GADGET_STATE_REPLY",
+
+    ADD_FAITH = "ADD_FAITH",
 }
 
 ACTION_TYPES = {

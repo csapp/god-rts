@@ -4,6 +4,7 @@ include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/multipliers.h.lua")
 include("LuaUI/Headers/villages.h.lua")
+include("LuaUI/Headers/msgs.h.lua")
 
 local GetUnitBasePosition = Spring.GetUnitBasePosition
 local GetUnitsInSphere = Spring.GetUnitsInSphere
@@ -30,7 +31,7 @@ function Building:New(village)
     return obj
 end
 
-function Building:Update()
+function Building:Update(n)
 end
 
 function Building:ExecuteCommand(cmdID) 
@@ -86,7 +87,6 @@ function Building:Apply()
     local am = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager()
     for key, multiplier in pairs(self:GetMultipliers()) do
         local value, classes = unpack(multiplier)
-        Spring.Echo("adding multiplier", key, value, classes)
         am:AddMultiplier(key, value, classes)
     end
 end
@@ -96,7 +96,6 @@ function Building:Unapply(oldTeam)
     local am = _G.TeamManagers[oldTeam]:GetAttributeManager()
     for key, multiplier in pairs(self:GetMultipliers()) do
         local value, classes = unpack(multiplier)
-        Spring.Echo("adding multiplier", key, value, classes)
         am:AddMultiplier(key, -value, classes)
     end
 end
@@ -115,14 +114,29 @@ end
 Shrine = Building:Inherit{
     classname = "Shrine",
     buildingName = "Shrine",
-    buildTime = 60,
+    buildTime = 6,
     multipliers = {
-        [Multipliers.TYPES.FAITH] = {2},
         [Multipliers.TYPES.XP] = {0.1, {Units.CLASSES.CLERGY}},
     },
+    faithBonus = 2,
+    faithTimeInterval = 5,
+    faithCounter = 0, -- to count up to faithTimeInterval seconds
     tooltip = "Provides automatic faith generation and an XP bonus for Clergy",
 }
 
+function Shrine:GetFaithBonus() return self.faithBonus end
+function Shrine:GetFaithTimeInterval() return self.faithTimeInterval end
+
+function Shrine:Update(n)
+    -- Adds faithBonus faith every faithTimeInterval seconds
+    if n % 30 ~= 0 then return end
+    self.faithCounter = self.faithCounter + 1
+    if self.faithCounter == self:GetFaithTimeInterval() then
+        LuaMessages.SendLuaRulesMsg(MSG_TYPES.ADD_FAITH, {self:GetTeamID(), self:GetFaithBonus()})
+        self.faithCounter = 0
+    end
+end
+    
 ------------------------------------------------------------
 -- TURRET
 ------------------------------------------------------------
@@ -161,7 +175,8 @@ Motel = Building:Inherit{
 function Motel:GetHPBonus() return self.hpBonus end
 function Motel:GetRadius() return self.radius end
 
-function Motel:Update()
+function Motel:Update(n)
+    if n % 3 ~= 0 then return end
     -- XXX save village's position somewhere so we don't have to do this
     local x,y,z = GetUnitBasePosition(self:GetUnitID())
     local nearbyUnits = GetUnitsInSphere(x,y,z,self:GetRadius(), self:GetTeamID())
@@ -283,7 +298,6 @@ function Upgrade:Apply()
     local am = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager()
     for key, multiplier in pairs(self:GetMultipliers()) do
         local value, classes = unpack(multiplier)
-        Spring.Echo("adding multiplier", key, value, classes)
         am:AddMultiplier(key, value, classes)
     end
 end
@@ -292,7 +306,6 @@ function Upgrade:Unapply()
     local am = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager()
     for key, multiplier in pairs(self:GetMultipliers()) do
         local value, classes = unpack(multiplier)
-        Spring.Echo("adding multiplier", key, value, classes)
         am:AddMultiplier(key, value, classes)
     end
 end

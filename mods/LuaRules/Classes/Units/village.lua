@@ -12,7 +12,7 @@ Village = BaseUnit:Inherit{
         CMD.ATTACK,
         CMD.REPAIR,
     },
-    fortifyTime = 6,
+    fortifyTime = 60,
     supplyCap = 0, -- set in New()
 }
 
@@ -147,9 +147,9 @@ function Village:ExecuteCommand(cmdID)
     end
 end
 
-function Village:Update()
+function Village:Update(n)
     for _, building in pairs(self:GetBuildings()) do
-        building:Update()
+        building:Update(n)
     end
 end
 

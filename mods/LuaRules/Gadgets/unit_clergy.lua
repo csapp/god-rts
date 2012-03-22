@@ -73,12 +73,13 @@ local function FinishConvert(clergyID)
             break
         end
     end
-    if villageID == nil then return end
+    if not villageID then return end
 
     converting[villageID] = nil
+    local oldVillageTeam = GetUnitTeam(villageID)
     Spring.TransferUnit(villageID, GetUnitTeam(clergyID))
     Spring.SetUnitNeutral(villageID, false)
-    LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID})
+    LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID, oldVillageTeam})
 end
 
 local function StartConvert(clergyID, villageID)

@@ -44,9 +44,7 @@ local function setDefaultResources()
 	for teamID, start_pos in pairs(team_positions) do
         local initialVillagers = 50
 		Spring.SetTeamResource(teamID, "m", 50)
-		Spring.SetTeamResource(teamID, "e", 50)
 		Spring.SetTeamResource(teamID, "ms", 10000)
-		Spring.SetTeamResource(teamID, "es", 10000)
 	end
 end
 	

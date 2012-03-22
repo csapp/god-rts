@@ -98,6 +98,30 @@ function table.isempty(t)
     return next(t) == nil
 end
 
+function table.getkeys(t)
+    newtbl = {}
+    for k,v in pairs(t) do
+        table.insert(newtbl, k)
+    end
+    return newtbl
+end
+
+function table.getvalues(t)
+    newtbl = {}
+    for k,v in pairs(t) do
+        table.insert(newtbl, v)
+    end
+    return newtbl
+end
+
+function table.random(t)
+    local size = #t 
+    if size > 0 then
+        return t[math.random(size)]
+    end
+    return table.random(table.getkeys(t))
+end
+
 function table:merge(table2)
   for i,v in pairs(table2) do
     if (type(v)=='table') then

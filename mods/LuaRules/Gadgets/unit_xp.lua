@@ -68,6 +68,8 @@ local function Morph(unitID, noCopyCmds, noCopyStates)--, morphInto, teamID)
     Spring.SpawnCEG("blacksmoke", myX, myY, myZ)
     Spring.SpawnCEG("levelup", myX, myY, myZ)
     Spring.DestroyUnit(unitID, false, true)
+
+    LuaMessages.SendMsgToAll(MSG_TYPES.UNIT_LEVELLED_UP, {unitID, newUnitID})
 end
 
 local function AddXP(unitID, xp)
@@ -117,6 +119,9 @@ function gadget:RecvLuaMsg(msg, playerID)
         local xpGained = UnitDefs[GetUnitDefID(villageID)].customParams.convert_xp
         local xpMult = xpMultipliers[GetUnitTeam(clergyID)]:GetValue(clergyID)
         GG.Delay.DelayCall(AddXP, {clergyID, xpGained*xpMult})
+    elseif msgType == MSG_TYPES.MORPH then
+        local unitID, ncc, ncs = tonumber(params[1]), params[2], params[3]
+        GG.Delay.DelayCall(Morph, {unitID, ncc, ncs})
     end
 end
 
@@ -125,14 +130,6 @@ function gadget:Initialize()
     local TeamManagers = _G.TeamManagers
     for _, teamID in pairs(Spring.GetTeamList()) do
         xpMultipliers[teamID] = TeamManagers[teamID]:GetAttributeManager():GetXPMultiplier()
-    end
-end
-
-function gadget:RecvLuaMsg(msg, playerID)
-    local msgType, params = LuaMessages.deserialize(msg)
-    if msgType == MSG_TYPES.MORPH then
-        local unitID, ncc, ncs = tonumber(params[1]), params[2], params[3]
-        GG.Delay.DelayCall(Morph, {unitID, ncc, ncs})
     end
 end
 
