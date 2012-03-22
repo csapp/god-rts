@@ -3,6 +3,7 @@ function widget:GetInfo()
         name = "Query Gadget state",
         desc = "Widget that allows UI to query global gadget state",
         author = "cam",
+        tickets = "#152",
         date = "2012-03-19",
         license = "GNU GPL v2",
         layer = 1,

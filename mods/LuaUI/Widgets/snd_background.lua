@@ -3,6 +3,7 @@ function widget:GetInfo()
 		name	= "Music Player",
 		desc	= "Plays music based on situation",
 		author	= "cake, trepan, Smoth, Licho, xponen",
+        tickets = "#48",
 		date	= "Mar 01, 2008, Aug 20 2009, Nov 23 2011",
 		license	= "GNU GPL, v2 or later",
 		layer	= 0,

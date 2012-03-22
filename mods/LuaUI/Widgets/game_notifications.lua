@@ -6,6 +6,7 @@ function widget:GetInfo()
         name = "Notification widget",
         desc = "Widget that issues notifications when events occur.",
         author = "Mani",
+        tickets = "#78, #119",
         date = "2012-03-21",
         license = "Public Domain",
         layer = 0,

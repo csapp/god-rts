@@ -3,6 +3,7 @@ function widget:GetInfo()
 		name		= "DrawCircle",
 		desc		= "Draw circle on map based on mouse position.",
 		author		= "Mani",
+        tickets     = "#82",
 		date		= "2012-03-12",
 		license     = "GNU GPL v2",
 		layer		= 1,

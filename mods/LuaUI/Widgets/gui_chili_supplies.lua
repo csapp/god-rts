@@ -1,15 +1,16 @@
 
 function widget:GetInfo()
-  return {
-    name      = "Chili Supply count",
-    desc      = "Displays the supply count in the top right corner",
-    author    = "cam",
-    date      = "03-21-2012",
-    license   = "GNU GPL, v2 or later",
-    layer     = 0,
-    experimental = false,
-    enabled   = true
-  }
+    return {
+        name = "Chili Supply count",
+        desc = "Displays the supply count in the top right corner",
+        author = "cam",
+        tickets = "#151",
+        date = "03-21-2012",
+        license = "GNU GPL, v2 or later",
+        layer = 0,
+        experimental = false,
+        enabled   = true
+    }
 end
 
 include("managers.h.lua")
@@ -43,13 +44,13 @@ function widget:GameFrame(n)
 end
 
 function widget:Initialize()
- 	if (not WG.Chili) then
- 		widgetHandler:RemoveWidget()
- 		return
- 	end
- 	
- 	Chili = WG.Chili
- 	local screen0 = Chili.Screen0
+    if (not WG.Chili) then
+        widgetHandler:RemoveWidget()
+        return
+    end
+
+    Chili = WG.Chili
+    local screen0 = Chili.Screen0
 
     supplyLabel = Chili.Label:New{
         y = 10,
