@@ -3,6 +3,7 @@ function gadget:GetInfo()
         name = "Hero Unit gadget",
         desc = "Gadget to control Hero unit stuff",
         author = "Mani",
+        tickets = "#131",
         date = "2012-03-17",
         license = "Public Domain",
         layer = 0,

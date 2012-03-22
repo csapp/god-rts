@@ -2,8 +2,9 @@
 function gadget:GetInfo()
     return {
         name = "Supply handler",
-        desc = "Handles supplies for teams",
+        desc = "Handles supplies and supply caps for teams",
         author = "cam",
+        tickets = "#150",
         date = "March 20, 2012",
         license = "Public Domain",
         layer = -1,

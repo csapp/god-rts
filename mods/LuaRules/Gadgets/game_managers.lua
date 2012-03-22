@@ -2,7 +2,7 @@ function gadget:GetInfo()
     return {
         name = "Managers",
         desc = "Gadget to control team managers",
-        tickets = "#19",
+        tickets = "#161",
         author = "cam",
         date = "2012-02-29",
         license = "Public Domain",

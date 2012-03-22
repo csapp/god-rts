@@ -3,6 +3,7 @@ function gadget:GetInfo()
 		name		= "Corpse Destroyer",
 		desc		= "Destroys corpses on the map after decay time has passed.",
 		author		= "Mani",
+        tickets     = "#130",
 		date		= "2012-03-19",
 		license     = "GNU GPL v2",
 		layer		= 1,

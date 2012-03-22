@@ -2,7 +2,7 @@ function gadget:GetInfo()
     return {
         name = "God Unit gadget",
         desc = "Gadget to control god unit stuff",
-        tickets = "#19",
+        tickets = "#112, #129",
         author = "cam",
         date = "2012-02-29",
         license = "Public Domain",

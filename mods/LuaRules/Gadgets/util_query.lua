@@ -4,6 +4,7 @@ function gadget:GetInfo()
         name = "Game state queries",
         desc = "Gadget to answer game state queries from widgets",
         author = "cam",
+        tickets = "#152",
         date = "2012-03-19",
         license = "Public Domain",
         layer = 0,

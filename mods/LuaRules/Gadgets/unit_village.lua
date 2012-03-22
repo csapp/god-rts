@@ -4,6 +4,7 @@ function gadget:GetInfo()
         name = "Village handler",
         desc = "Handles village units",
         author = "cam",
+        tickets = "all village tickets...",
         date = "Feb 9, 2012",
         license = "Public Domain",
         layer = -1,
