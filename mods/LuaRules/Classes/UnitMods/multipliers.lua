@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Multipliers",
+        desc = "Objects that handle multiplier info",
+        tickets = "#132",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/utilities.lua")
 

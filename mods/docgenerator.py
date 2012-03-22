@@ -59,15 +59,19 @@ class SpringDocGenerator(object):
     def generate_unitmod_docs(self):
         self.generate_docs("LuaRules/Classes/UnitMods", "unitmods")
 
+    def generate_unit_docs(self):
+        self.generate_docs("LuaRules/Classes/Units", "unit")
+
     def generate_widget_docs(self):
         self.generate_docs("LuaUI/Widgets", "widget")
-
 
     def generate_all_docs(self):
         self.generate_gadget_docs()
         self.generate_widget_docs()
         self.generate_manager_docs()
         self.generate_power_docs()
+        self.generate_unitmod_docs()
+        self.generate_unit_docs()
 
 
 def main():

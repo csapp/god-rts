@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Base unit",
+        desc = "Base class from which all custom unit classes derive",
+        tickets = "#63, #162",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/units.h.lua")
 include("LuaRules/Classes/object.lua")
 

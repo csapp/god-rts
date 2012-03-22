@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Village buildings",
+        desc = "All buildings that can be built by villages are housed here",
+        tickets = "#116",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+--
 -- This file should probably be in UnitMods, not here
 
 include("LuaUI/Headers/utilities.lua")

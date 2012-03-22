@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Village objects",
+        desc = "Handles village operations (e.g. buildings, fortification)",
+        tickets = "#70, #116, #150",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/villages.h.lua")
 include("LuaUI/Headers/customcmds.h.lua")
