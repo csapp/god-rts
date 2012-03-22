@@ -426,7 +426,7 @@ function CreateWindow()
                 dockable = true,
                 name="ResourceBars",
                 padding = {0,0,0,0},
-                right = 0,
+                right = 40,
                 y = 0,
                 clientWidth  = 430,
                 clientHeight = 50,
