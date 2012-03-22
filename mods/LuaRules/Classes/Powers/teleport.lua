@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Teleport power",
+        desc = "Allows god to teleport to another location on the map",
+        tickets = "#19",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+--
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
 
@@ -18,14 +29,6 @@ function Teleport:Initialize()
     inherited.Initialize(self)
     self:SetCustomCursor("cursorTeleport")
 end
-
---function Teleport:GetRadius()
-    --return self.radius
---end
-
---function Teleport:SetRadius(r)
-    --self.radius = r
---end
 
 function Teleport:_Use(cmdParams, cmdOptions)
     local destX, destY, destZ = unpack(cmdParams)

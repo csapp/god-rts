@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Team Manager",
+        desc = "'Meta' manager that is an entry point to access other managers",
+        tickets = "#161",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/managers.h.lua")
 
 local MANAGER_DIR = "LuaRules/Classes/Managers/"

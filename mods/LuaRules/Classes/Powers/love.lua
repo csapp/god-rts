@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Whole Lotta Love power",
+        desc = "Heals units within a certain radius to full health",
+        tickets = "#125",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 -- Speed ups
 local GetUnitBasePosition = Spring.GetUnitBasePosition
 local GetUnitHealth = Spring.GetUnitHealth

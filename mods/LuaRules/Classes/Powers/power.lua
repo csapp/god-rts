@@ -1,3 +1,15 @@
+local function GetInfo()
+    return {
+        name = "Base power",
+        desc = "Base class from which all god powers are derived",
+        tickets = "#112",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
+
 -- Power functions are synced code
 include("LuaUI/Headers/customcmds.h.lua")
 

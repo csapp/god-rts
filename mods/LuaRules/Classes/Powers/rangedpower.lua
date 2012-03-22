@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Ranged power",
+        desc = "Base class for active powers that must only work in a certain range",
+        tickets = "107",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/utilities.lua")
 
 --Speedups

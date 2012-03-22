@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Volcanic Blast power",
+        desc = "Creates a badass volcano that destroys everything in sight",
+        tickets = "#18",
+        author = "Mani",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+--
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
 local AddUnitDamage = Spring.AddUnitDamage

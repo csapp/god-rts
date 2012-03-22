@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "BFB power",
+        desc = "Causes a big explosion and sends enemy units flying everywhere",
+        tickets = "#126",
+        author = "Mani",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+--
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
 local AddUnitDamage = Spring.AddUnitDamage

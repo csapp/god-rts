@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Unit Manager",
+        desc = "'Meta' manager that is an entry point to access other unit object managers",
+        tickets = "#162",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/units.h.lua")
 include("LuaRules/Classes/Managers/village.lua")
 

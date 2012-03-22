@@ -1,3 +1,13 @@
+local function GetInfo()
+    return {
+        name = "Passive Power",
+        desc = "Base class for passive powers",
+        tickets = "#112",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
 
 PassivePower = Power:Inherit{
     classname = "PassivePower",

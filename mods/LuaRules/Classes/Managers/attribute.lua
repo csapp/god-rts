@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Attribute Manager",
+        desc = "Manager to keep track of multipliers",
+        tickets = "#132",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/multipliers.h.lua")
 include("LuaRules/Classes/UnitMods/multipliers.lua")

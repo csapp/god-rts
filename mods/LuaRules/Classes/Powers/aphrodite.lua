@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Aphrodite",
+        desc = "Increases villager generation rate",
+        tickets = "#136",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/multipliers.h.lua")
 
 Aphrodite = PassivePower:Inherit{

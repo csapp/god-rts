@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Possesion power",
+        desc = "Transfers enemy units within a certain radius to your team",
+        tickets = "#43",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/units.h.lua")
 

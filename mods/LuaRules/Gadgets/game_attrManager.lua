@@ -3,6 +3,7 @@ function gadget:GetInfo()
         name = "Attribute manager",
         desc = "Gadget to control attribute managers",
         author = "cam",
+        tickets = "#132",
         date = "2012-02-29",
         license = "Public Domain",
         layer = 0,
@@ -37,3 +38,13 @@ function gadget:UnitPreDamaged(unitID, unitDefID, unitTeam, damage, paralyzer,
     local mult = am:GetDamageMultiplier():GetFromDamage(unitID, attackerID, weaponID)
     return damage*mult
 end
+
+--function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions)
+    --Spring.Echo('hi')
+    --local mult = TeamManagers[unitTeam]:GetAttributeManager():GetMoveSpeedMultiplier()
+    --mult:Apply(unitID)
+    ----GG.Delay.DelayCall(mult.Apply, {mult, unitID})
+    --GG.Delay.DelayCall(function () Spring.Echo('hey'); mult:Apply(unitID) end)
+    --return true
+--end
+

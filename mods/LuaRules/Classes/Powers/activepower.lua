@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Active Power Base class",
+        desc = "Base from which all active powers (i.e. non-passive) are derived",
+        tickets = "#112",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+--
 --Speedups
 local GetGameSeconds = Spring.GetGameSeconds
 

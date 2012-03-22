@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Zombie Apocalypse power",
+        desc = "Spawns a wave of hungry zombies for a short time",
+        tickets = "#124",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+--
 -- Speed ups
 local SpawnCEG = Spring.SpawnCEG
 local CreateUnit = Spring.CreateUnit

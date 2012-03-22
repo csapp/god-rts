@@ -14,7 +14,7 @@ class SpringDocGenerator(object):
         reading_info = False
         infile = open(filepath)
         for line in infile:
-            if "%s:getinfo" % doctype in line.lower():
+            if "getinfo" in line.lower():
                 reading_info = True
             if not reading_info:
                 continue
@@ -50,12 +50,24 @@ class SpringDocGenerator(object):
     def generate_gadget_docs(self):
         self.generate_docs("LuaRules/Gadgets", "gadget")
 
+    def generate_power_docs(self):
+        self.generate_docs("LuaRules/Classes/Powers", "power")
+
+    def generate_manager_docs(self):
+        self.generate_docs("LuaRules/Classes/Managers", "manager")
+
+    def generate_unitmod_docs(self):
+        self.generate_docs("LuaRules/Classes/UnitMods", "unitmods")
+
     def generate_widget_docs(self):
         self.generate_docs("LuaUI/Widgets", "widget")
+
 
     def generate_all_docs(self):
         self.generate_gadget_docs()
         self.generate_widget_docs()
+        self.generate_manager_docs()
+        self.generate_power_docs()
 
 
 def main():

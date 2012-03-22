@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Supply Manager",
+        desc = "Team manager that keeps track of supplies",
+        tickets = "#150",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 include("LuaUI/Headers/units.h.lua")
 
 local GetTeamUnits = Spring.GetTeamUnits

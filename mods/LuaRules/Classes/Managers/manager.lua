@@ -1,3 +1,14 @@
+local function GetInfo()
+    return {
+        name = "Base Manager",
+        desc = "Objects usually manipulate a collection of common elements",
+        tickets = "#161, #112",
+        author = "cam",
+        date = "2012-03-21",
+        license = "Public Domain",
+    }
+end
+
 Manager = Object:Inherit{
     classname = "Manager",
     teamID = -1,
