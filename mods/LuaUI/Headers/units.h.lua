@@ -83,10 +83,12 @@ function Units.IsVolcanoUnit(unitID)
 end
 
 function Units.IsTempUnit(unitID)
-    return GetCustomParam(unitID, 'temp_unit') == "true"
+    local temp = GetCustomParam(unitID, 'temp_unit') 
+    return temp and temp ~= "false"
 end
 
 function Units.IsHeroUnit(unitID)
-    return GetCustomParam(unitID, 'hero') == "true"
+    local hero = GetCustomParam(unitID, 'hero') 
+    return hero and hero ~= "false"
 end
 
