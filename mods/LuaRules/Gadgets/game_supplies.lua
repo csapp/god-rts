@@ -52,6 +52,9 @@ function gadget:UnitFinished(unitID, unitDefID, teamID)
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
+    if table.contains(exemptClasses, Units.GetClass(unitID)) or Units.IsTempUnit(unitID) then
+        return
+    end
     SupplyManagers[teamID]:ReturnSupplies(unitDefID)
 end
 
