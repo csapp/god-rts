@@ -22,6 +22,7 @@ local unitDef  =  {
         morph_into = "scout",
         max_xp = 750,
         level = 1,
+        supply_cost = 1,
     },
 
     sounds = {

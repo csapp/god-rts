@@ -22,6 +22,7 @@ local unitDef  =  {
         morph_into = "archer",
         max_xp = 1000,
         level = 2,
+        supply_cost = 2,
     },
 
     sounds = {

@@ -20,6 +20,7 @@ local unitDef  =  {
         real_speed = 90,
         class = "ranged",
         level = 3,
+        supply_cost = 3,
         morph_into = "heroranged",
         max_xp = 2000,
     },

@@ -22,6 +22,7 @@ local unitDef  =  {
         morph_into = "marksman",
         max_xp = 500,
         level = 1,
+        supply_cost = 1,
     },
 
     sounds = {

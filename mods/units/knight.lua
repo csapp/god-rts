@@ -20,6 +20,7 @@ local unitDef  =  {
         real_speed = 150,
         class = "cavalry",
         level = 3,
+        supply_cost = 3,
         morph_into = "herocavalry",
         max_xp = 2000,
     },

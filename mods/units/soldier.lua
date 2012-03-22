@@ -22,6 +22,7 @@ local unitDef  =  {
         morph_into = "warrior",
         max_xp = 100,
         level = 1,
+        supply_cost = 1,
     },
 
     sounds = {

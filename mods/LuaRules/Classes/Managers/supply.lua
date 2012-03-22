@@ -29,13 +29,17 @@ function SupplyManager:GetSupplyCap()
     return total
 end
 
+function SupplyManager:GetSupplyCost(unitDefID)
+    return UnitDefs[unitDefID].customParams.supply_cost
+end
+
 function SupplyManager:CanUse(unitDefID)
-    local s = UnitDefs[unitDefID].metalCost
+    local s = self:GetSupplyCost(unitDefID)
     return self:GetUsedSupplies() + s <= self:GetSupplyCap()
 end
 
 function SupplyManager:UseSupplies(unitDefID)
-    local s = UnitDefs[unitDefID].metalCost
+    local s = self:GetSupplyCost(unitDefID)
     if self:CanUse(unitDefID) then
         self:SetUsedSupplies(self:GetUsedSupplies() + s)
         return true
@@ -44,7 +48,7 @@ function SupplyManager:UseSupplies(unitDefID)
 end
 
 function SupplyManager:ReturnSupplies(unitDefID)
-    local s = UnitDefs[unitDefID].metalCost
+    local s = self:GetSupplyCost(unitDefID)
     self:SetUsedSupplies(self:GetUsedSupplies() - s)
     if self:GetUsedSupplies() < 0 then
         self:SetUsedSupplies(0)

@@ -21,6 +21,7 @@ local unitDef  =  {
         real_speed = 90,
         class = "clergy",
         level = 2,
+        supply_cost = 2,
         morph_into = "demigod",
         max_xp = 2000,
     },

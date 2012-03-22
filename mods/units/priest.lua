@@ -24,6 +24,7 @@ local unitDef  =  {
         morph_into = "prophet",
         max_xp = 1500,
         level = 1,
+        supply_cost = 1,
     },
 
     sounds = {

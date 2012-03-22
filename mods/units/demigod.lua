@@ -21,6 +21,7 @@ local unitDef  =  {
         real_speed = 90,
         class = "clergy",
         level = 3,
+        supply_cost = 3,
     },
 
     sounds = {
