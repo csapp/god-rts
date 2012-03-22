@@ -217,14 +217,6 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
 	end
 end
     
-function gadget:UnitDestroyed(unitID, unitDefID, teamID, aID, adefID, ateamID)
-    if Units.IsClergyUnit(unitID) then
-        CancelConvert(unitID)
-        local x,y,z = Spring.GetTeamStartPosition(teamID)
-        Spring.CreateUnit("priest", x, y, z, 0, teamID) 
-    end
-end
-
 function gadget:GameFrame(n)
     if n % 30 ~= 0 then
         return
