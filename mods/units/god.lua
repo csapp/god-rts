@@ -60,6 +60,7 @@ local unitDef  =  {
     CanMove = 1,
     CanPatrol = 1,
     CanStop = 1,
+    CanSelfDestruct = false,
     LeaveTracks = 0,
     Reclaimable = 0,
     
