@@ -11,6 +11,7 @@ end
 --
 -- Speed ups
 local GetUnitTeam = Spring.GetUnitTeam
+local GetUnitBasePosition = Spring.GetUnitBasePosition
 
 Teleport = RangedPower:Inherit{
     classname = "Teleport",
@@ -40,6 +41,12 @@ function Teleport:_Use(cmdParams, cmdOptions)
 
     -- XXX is this synced?
     Spring.PlaySoundFile("sounds/teleport.wav")
+end
+
+-- XXX this is a bad way to fix #143 since it only works on our map
+function Teleport:InRange(point)
+    local gx, gy, gz = GetUnitBasePosition(self:GetGodID())
+    return math.abs(gy-point[2]) < 5 and inherited.InRange(self, point)
 end
 
 return Teleport
