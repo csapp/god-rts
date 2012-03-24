@@ -27,7 +27,7 @@ local unitDef =
 	FootprintX = 5,
 	FootprintZ = 5,
 	MaxSlope = 10,	
-    yardMap ="ooooo occco ccccc ccccc ccccc",
+    yardMap ="ooooo occco occco occco occco",
 
 --Hitbox
 	collisionVolumeOffsets = "0 0 0",
