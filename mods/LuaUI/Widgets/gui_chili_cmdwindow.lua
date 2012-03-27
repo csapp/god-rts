@@ -11,7 +11,7 @@ function widget:GetInfo()
 		date		= "2011-06-15",
 		license     = "GNU GPL v2",
 		layer		= math.huge,
-		enabled   	= true,
+		enabled   	= false,
 		handler		= true,
 	}
 end
