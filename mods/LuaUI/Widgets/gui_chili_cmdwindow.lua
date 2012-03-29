@@ -214,13 +214,20 @@ end
 function filterUnwanted(commands)
 	local uniqueList = {}
 	if DEBUG then Spring.Echo("Total commands ", #commands) end
+	if (isVolcanoSelected()) then
+		--uniqueList[1] = "Attack"
+		--return uniqueList
+	end
 	if not(#commands == 0)then
 		j = 1
 		for _, cmd in ipairs(commands) do
 			if DEBUG then Spring.Echo("Adding command ", cmd.action) end
 			if not table.contains(COMMANDSTOEXCLUDE,cmd.action) then
-				uniqueList[j] = cmd
-				j = j + 1
+				if not(isVolcanoSelected()) then
+					uniqueList[j] = cmd
+					j = j + 1
+				end
+				if cmd.action == "attack" then uniqueList[1] = cmd end
 			end
 		end
 	end
@@ -315,6 +322,23 @@ function widget:Initialize()
 	
 end
 
+function isVolcanoSelected()
+	newSelection = Spring.GetSelectedUnits()
+	if #newSelection==1 and UnitDefs[spGetUnitDefID(newSelection[1])].name == "volcano" then 
+		return true
+	else 
+		return false
+	end
+end
+
+function getMainSelected(selection)
+	for i=1,#selection do
+		local id = selection[i]
+		local name = UnitDefs[spGetUnitDefID(id)].name
+	end
+end
+	
+
 function widget:CommandsChanged()
 	if DEBUG then Spring.Echo("commandChanged called") end
 	newSelection = Spring.GetSelectedUnits()
@@ -327,6 +351,7 @@ function widget:CommandsChanged()
 						UpdateFactoryBuildQueue() 
                         return
                 end
+				Spring.Echo(UnitDefs[spGetUnitDefID(id)].name);
         end
         selectedFac = nil
 end
