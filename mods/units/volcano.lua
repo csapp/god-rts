@@ -5,7 +5,6 @@ local HP = 2000000
 local ATKDMG = 20
 local ATKSPD = 0.5
 local ATKRNG = 400
-local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
 
 local unitDef  =  {
 --Internal settings
@@ -15,7 +14,7 @@ local unitDef  =  {
     name = "Volcano",
     script = "volcanoscript.lua",
 	
-	    customParams = {
+    customParams = {
         class = "volcano",
 		temp_unit = true,
         level = 1,
@@ -36,24 +35,24 @@ local unitDef  =  {
     BuildCostMetal = 3,
     
 --Pathfinding and related
-    Acceleration = MOVESPD[2],
+    Acceleration = 0,
     BrakeRate = 0.1,
     FootprintX = 7,	--Affects Bounding Box (the green colored one)
     FootprintZ = 7,	--Affects Bounding Box (the green colored one)
     MaxSlope = 15,
-    MaxVelocity = MOVESPD[1],
+    MaxVelocity = 0,
     MaxWaterDepth = 20,
     MovementClass = "Default2x2",
     TurnRate = 900,
     
 --Abilities
-    Builder = 0,
     canAttack = true,
-	canFight = true,
+    CanStop = true,
+    Builder = 0,
+	canFight = 0,
     CanGuard = 0,
-    CanMove = 0,
+    CanMove = 0, 
     CanPatrol = 0,
-    CanStop = 1,
     LeaveTracks = 0,
     Reclaimable = 0,
     
