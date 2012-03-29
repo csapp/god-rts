@@ -24,6 +24,7 @@ include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/customcmds.h.lua")
 include("LuaUI/Headers/msgs.h.lua")
 include("LuaUI/Headers/units.h.lua")
+include("LuaUI/Headers/villages.h.lua")
 
 -- Speed ups
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
@@ -82,13 +83,24 @@ local function FinishConvert(clergyID)
     LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID, oldVillageTeam})
 end
 
+local function GetConvertTime(clergyID, villageID)
+    local convertTime = Units.GetConvertTime(villageID)
+    local am = _G.TeamManagers[GetUnitTeam(clergyID)]:GetAttributeManager()
+    local multValue = am:GetConvertTimeMultiplier():GetValue(clergyID)
+
+    vhealth, vmaxhealth = GetUnitHealth(villageID)
+    if vhealth / vmaxhealth <= Villages.WEAK_HP_PCT then
+        multValue = multValue - 0.3
+    end
+
+    return convertTime * multValue
+end
+
 local function StartConvert(clergyID, villageID)
     convert_pending[clergyID] = nil
     converting[villageID] = clergyID
-    local am = _G.TeamManagers[GetUnitTeam(clergyID)]:GetAttributeManager()
-    local convert_time = Units.GetConvertTime(villageID)
-    convert_time = convert_time * am:GetConvertTimeMultiplier():GetValue(clergyID)
-    GG.ProgressBars.AddProgressBar(clergyID, "Converting...", convert_time, FinishConvert)
+    local convertTime = GetConvertTime(clergyID, villageID)
+    GG.ProgressBars.AddProgressBar(clergyID, "Converting...", convertTime, FinishConvert)
 end
 
 local function CancelConvert(clergyID)
@@ -142,7 +154,7 @@ local function CanConvert(clergyID, villageID)
 
     if not GetUnitNeutral(villageID) then
         local curHealth, maxHealth = GetUnitHealth(villageID)
-        if curHealth / maxHealth > 0.1 then
+        if curHealth / maxHealth > Villages.WEAK_HP_PCT then
             return false
         end
     end

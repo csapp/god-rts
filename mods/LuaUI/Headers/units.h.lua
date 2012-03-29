@@ -23,6 +23,7 @@ Units.UNITDEF_NAMES = {
     SCOUT = "scout",
     PROPHET = "Prophet",
     PRIEST = "priest",
+    DEMIGOD = "demigod",
     MARKSMAN = "marksman",
     KNIGHT = "knight",
     HORSEMAN = "horseman",
@@ -44,6 +45,10 @@ end
 
 function Units.GetConvertTime(villageID)
     return tonumber(GetCustomParam(villageID, 'convert_time'))
+end
+
+function Units.GetConvertTimeBonus(clergyID)
+    return tonumber(GetCustomParam(clergyID, 'convert_time_bonus'))
 end
 
 function Units.GetClass(unitID)

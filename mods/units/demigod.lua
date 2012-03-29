@@ -22,6 +22,7 @@ local unitDef  =  {
         class = "clergy",
         level = 3,
         supply_cost = 3,
+        convert_time_bonus = 0.4,
     },
 
     sounds = {

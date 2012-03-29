@@ -18,6 +18,7 @@ local unitDef  =  {
     --capturespeed = 900,
 
     customParams = {
+        convert_time_bonus = 0.2,
         real_speed = 90,
         class = "clergy",
         level = 2,

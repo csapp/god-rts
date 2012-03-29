@@ -186,6 +186,15 @@ function ConvertTimeMultiplier:Add(value)
     ConvertTimeMultiplier.inherited.Add(self, -value, {Units.CLASSES.CLERGY})
 end
 
+function ConvertTimeMultiplier:GetValue(unitID)
+    local mult = ConvertTimeMultiplier.inherited.GetValue(self, unitID)
+    if Units.IsClergyUnit(unitID) then
+        return mult - Units.GetConvertTimeBonus(unitID)
+    else
+        return mult
+    end
+end
+
 ------------------------------------------------------------
 -- FAITH MULTIPLIER
 ------------------------------------------------------------

@@ -4,6 +4,8 @@ Villages.CMDS = {
     FORTIFY = 33000,
 }
 
+Villages.WEAK_HP_PCT = 0.1
+
 Buildings = {}
 
 Buildings.TYPES = {
