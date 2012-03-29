@@ -351,7 +351,6 @@ function widget:CommandsChanged()
 						UpdateFactoryBuildQueue() 
                         return
                 end
-				Spring.Echo(UnitDefs[spGetUnitDefID(id)].name);
         end
         selectedFac = nil
 end

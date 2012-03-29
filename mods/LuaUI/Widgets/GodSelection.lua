@@ -22,6 +22,7 @@ function widget:GetInfo()
  local ID = Spring.GetMyPlayerID()
  local godselLabel
  local godselWindow
+ local errorText = ""
  
  -- SCRIPT FUNCTIONS
 function selectPower(row, power, button)
@@ -35,6 +36,8 @@ end
 
 function done()
     if(listOfPowers[1] == "" or listOfPowers[2] == "" or listOfPowers[3] == "") then
+		errorText = "You must select a power from each tier"
+		loadPanel()
 	    return false
     end
     LuaMessages.SendLuaRulesMsg(MSG_TYPES.GOD_SELECTED, listOfPowers)
@@ -240,6 +243,18 @@ end
 		cmdid = 4,
 		OnMouseDown = {ClickFunc},
 		}
+		
+	local errorLabel = Chili.Label:New {
+							parent = godselWindow,
+							autosize=false;
+							width="100%";
+							height="100%";
+							align="left";
+							valign="bottom";
+							caption = errorText;
+							fontSize = 16;
+							fontShadow = true;
+						}
  end
  
  function resetWindow(container)
