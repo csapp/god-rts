@@ -25,6 +25,8 @@ VFS.Include("LuaUI/Headers/utilities.lua")
 -- CONSTANTS
 local MAXBUTTONSONROW = 4
 local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard"}
+local VILLAGECOMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard", "move", "attack", "fight", "wait", "stop"}
+local VOLCANOCOMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard", "move", "fight", "wait", "stop"}
 local Chili
 
 -- MEMBERS
@@ -213,21 +215,18 @@ end
 
 function filterUnwanted(commands)
 	local uniqueList = {}
+	local exclude = COMMANDSTOEXCLUDE
+	if isVolcanoSelected() then exclude = VOLCANOCOMMANDSTOEXCLUDE end
+	if isVillageSelected() then exclude = VILLAGECOMMANDSTOEXCLUDE end
+	
 	if DEBUG then Spring.Echo("Total commands ", #commands) end
-	if (isVolcanoSelected()) then
-		--uniqueList[1] = "Attack"
-		--return uniqueList
-	end
+
 	if not(#commands == 0)then
 		j = 1
 		for _, cmd in ipairs(commands) do
-			if DEBUG then Spring.Echo("Adding command ", cmd.action) end
-			if not table.contains(COMMANDSTOEXCLUDE,cmd.action) then
-				if not(isVolcanoSelected()) then
-					uniqueList[j] = cmd
-					j = j + 1
-				end
-				if cmd.action == "attack" then uniqueList[1] = cmd end
+			if not table.contains(exclude,cmd.action) then
+				uniqueList[j] = cmd
+				j = j + 1
 			end
 		end
 	end
@@ -325,6 +324,15 @@ end
 function isVolcanoSelected()
 	newSelection = Spring.GetSelectedUnits()
 	if #newSelection==1 and UnitDefs[spGetUnitDefID(newSelection[1])].name == "volcano" then 
+		return true
+	else 
+		return false
+	end
+end
+
+function isVillageSelected()
+	newSelection = Spring.GetSelectedUnits()
+	if #newSelection==1 and (UnitDefs[spGetUnitDefID(newSelection[1])].name == "smallvillage" or UnitDefs[spGetUnitDefID(newSelection[1])].name == "mediumvillage" or UnitDefs[spGetUnitDefID(newSelection[1])].name == "largevillage") then 
 		return true
 	else 
 		return false
