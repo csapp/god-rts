@@ -180,7 +180,7 @@ function createMyButton(cmd)
 							fontShadow = true;
 					}
 					local costLabel = Chili.Label:New {
-							parent = button,
+							parent = image,
 							right = 0;
 							y = 0;
 							x = 3;
