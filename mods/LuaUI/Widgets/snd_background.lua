@@ -77,8 +77,7 @@ end
 local function PlayNewTrack()
 	Spring.StopSoundStream()
 	local newTrack = previousTrack
-		newTrack = 'music/springambient.ogg'
-		Spring.Echo('BACKGROUND\n')
+    newTrack = 'music/springambient.ogg'
 	-- for key, val in pairs(oggInfo) do
 		-- Spring.Echo(key, val)	
 	-- end
