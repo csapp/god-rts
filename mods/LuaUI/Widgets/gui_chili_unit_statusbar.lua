@@ -205,6 +205,7 @@ end
 
 function widget:CommandsChanged()
     local selected_units = Spring.GetSelectedUnits()
+	
 	if not game_start then
         return
     end
@@ -224,7 +225,7 @@ function widget:CommandsChanged()
     end
     -- XXX need to decide what to do if multiple units are selected
 	-- This just handles showing the first unit selected in a group
-    setUnitInfo(selected_units[1])
+    --setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
 	setUnitStats(selected_units[1])
 	resetWindow(imageWindow)
@@ -252,6 +253,19 @@ function widget:CommandsChanged()
 	
 	updateRequired = true
 	
+end
+
+-- Put any information into this function which you need to update on the fly.
+function widget:Update(dt)
+	local selected_units = Spring.GetSelectedUnits()
+	
+	if not game_start then
+        return
+    end
+	
+	if selected_units[1] ~= nil then
+		setUnitInfo(selected_units[1])
+	end
 end
 
 function drawPortrait()
