@@ -24,17 +24,17 @@ local function UpdateLabel()
 end
 
 local function UpdateCurrentSupplies(cs)
-    if not cs then 
-        cs = ""
-    end
+    --if not cs then 
+        --cs = ""
+    --end
     currentSupplies = cs
     UpdateLabel()
 end
 
 local function UpdateSupplyCap(cap)
-    if not cap then
-        cap = ""
-    end
+    --if not cap then
+        --cap = ""
+    --end
     supplyCap = cap
     UpdateLabel()
 end

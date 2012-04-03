@@ -107,5 +107,5 @@ function widget:RecvLuaMsg(msg, playerID)
     local msgtype, params = LuaMessages.deserialize(msg)
     if msgtype ~= MSG_TYPES.GADGET_STATE_REPLY then return end
     local msgID, reply = unpack(params)
-    Callback(tonumber(msgID), reply)
+    Callback(msgID, reply)
 end
