@@ -30,16 +30,6 @@ local function AddToQueue(item)
     end
     queue[id] = item
     return id
-    --counter = 1
-    --for k,v in pairs(queue) do
-        --if k ~= counter then
-            --queue[k] = item
-            --return k
-        --end
-        --counter = counter + 1
-    --end
-    --queue[counter] = item
-    --return counter
 end
 
 local function Callback(id, reply)
@@ -83,7 +73,6 @@ local function CallManagerElementFunction(callback, key, elementID, funcname, ar
     args = args or {} 
     local q = StartManagerQueryString(key).."GetElement("..elementID.."):"..funcname.."("
     q = q..table.concat(utils.map(utils.to_string, args), ",")..")"
-    --q = q..table.concat(args, ",")..")"
     CallFunction(q, GetCallbackWrapper(callback))
 end
 
