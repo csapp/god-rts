@@ -24,17 +24,23 @@ local function UpdateLabel()
 end
 
 local function UpdateCurrentSupplies(cs)
+    if not cs then 
+        cs = ""
+    end
     currentSupplies = cs
     UpdateLabel()
 end
 
 local function UpdateSupplyCap(cap)
+    if not cap then
+        cap = ""
+    end
     supplyCap = cap
     UpdateLabel()
 end
 
 function widget:GameFrame(n)
-    if n % 5 ~= 1 then return end
+    if n % 15 ~= 1 then return end
 
     WG.GadgetQuery.CallManagerFunction(
         UpdateCurrentSupplies, Managers.TYPES.SUPPLY, "GetUsedSupplies")

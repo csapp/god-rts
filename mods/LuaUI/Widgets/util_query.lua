@@ -24,16 +24,22 @@ WG.GadgetQuery = {}
 
 local function AddToQueue(item)
     -- Add item to queue and return index where it was added
-    counter = 1
-    for k,v in pairs(queue) do
-        if k ~= counter then
-            queue[k] = item
-            return k
-        end
-        counter = counter + 1
+    local id
+    while not id or table.contains(table.getkeys(queue), id) do
+        id = utils.string.random(16, "%l%d")
     end
-    queue[counter] = item
-    return counter
+    queue[id] = item
+    return id
+    --counter = 1
+    --for k,v in pairs(queue) do
+        --if k ~= counter then
+            --queue[k] = item
+            --return k
+        --end
+        --counter = counter + 1
+    --end
+    --queue[counter] = item
+    --return counter
 end
 
 local function Callback(id, reply)
