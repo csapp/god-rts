@@ -461,7 +461,7 @@ local function createProgressBar(unitID, caption)
 	
 	local bar_convert = Chili.Progressbar:New{
                 parent = pbarWindow,
-                color  = {0,0,1,1},
+                color  = {0.41,0.53,0.16,1},
                 --height = p(100/bars),
                 --right  = 0,
                 min = 0,
@@ -487,7 +487,7 @@ local function createProgressBar(unitID, caption)
 		valign  = "center",
 		align   = "center",
 		autosize = false,
-		font   = {size = 12, outline = true, color = {0,1,0,1}},
+		font   = {size = 12, outline = true, color = {0.83,0.8,0.52,1}},
 		tooltip = "Amount of time until conversion is complete.",
 	}
 
