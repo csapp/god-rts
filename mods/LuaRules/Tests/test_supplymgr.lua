@@ -7,7 +7,7 @@ SupplyMgrTest = UnitTest:Inherit{
     classname = "SupplyMgrTest"
 }
 
-local manager, old_manager
+local manager
 local teamID = 0
 
 function SupplyMgrTest:Setup()

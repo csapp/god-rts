@@ -23,7 +23,7 @@ function ManagerTest:TestAddElement()
     elem = {2,4}
     key = "e"
     manager:AddElement(key, elem)
-    assert(manager:GetElement(key)==elem)
+    assert_equal(manager:GetElement(key), elem)
 end
 
 function ManagerTest:TestCallOnAll()
@@ -45,9 +45,9 @@ function ManagerTest:TestCallOnAll()
     local count = 0
     for k,v in pairs(actual) do
         count = count + 1
-        assert(actual[k]==expected[k])
+        assert_equal(actual[k], expected[k])
     end
-    assert(count==3)
+    assert_equal(count, 3)
 end
 
 
