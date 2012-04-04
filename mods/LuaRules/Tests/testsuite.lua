@@ -1,9 +1,11 @@
 
 -- FIXME is there a better way to do this?
+-- Maybe with fancy module() stuff like lunit does?
+--
 local TEST_DIR = "LuaRules/Tests/"
-
 local TESTS = {
     "test_manager.lua",
+    "test_supplymgr.lua",
 }
 
 local function RunTestSuite()

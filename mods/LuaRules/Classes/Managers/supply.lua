@@ -41,7 +41,7 @@ function SupplyManager:GetSupplyCap()
 end
 
 function SupplyManager:GetSupplyCost(unitDefID)
-    return UnitDefs[unitDefID].customParams.supply_cost
+    return tonumber(UnitDefs[unitDefID].customParams.supply_cost)
 end
 
 function SupplyManager:CanUse(unitDefID)

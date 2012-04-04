@@ -1,4 +1,5 @@
 include("LuaRules/Classes/object.lua")
+include("LuaRules/Tests/utils.lua")
 
 UnitTest = Object:Inherit{
     classname = "UnitTest",
