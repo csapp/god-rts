@@ -87,8 +87,10 @@ function widget:UnitFromFactory(unitID, unitDefID, unitTeam, factID, factDefID, 
 end
 
 function widget:RecvLuaMsg(msg, playerID)
-	local msg_type, params = LuaMessages.deserialize(msg)
-	if msg_type == MSG_TYPES.CONVERT_FAILED or msg_type == MSG_TYPES.POWER_FAILED or msg_type == MSG_TYPES.BUILD_UNIT_FAILED then
-		Spring.SendMessageToPlayer(playerID, params[1])
+	if playerID == Spring.GetLocalPlayerID() then
+		local msg_type, params = LuaMessages.deserialize(msg)
+		if msg_type == MSG_TYPES.CONVERT_FAILED or msg_type == MSG_TYPES.POWER_FAILED or msg_type == MSG_TYPES.BUILD_UNIT_FAILED then
+			Spring.SendMessageToPlayer(playerID, params[1])
+		end
 	end
 end
