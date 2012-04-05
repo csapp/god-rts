@@ -32,7 +32,7 @@ function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdO
 	local reason
 	if cmdID < 0 and not hasEnoughVillagers(unitDefID, unitTeam) then
 		reason = "Not Enough Villagers (Minerals :P)"
-		LuaMessages.SendLuaUIMsg(MSG_TYPES.BUILD_UNIT_FAILED, {reason})
+		LuaMessages.SendLuaUIMsg(MSG_TYPES.BUILD_UNIT_FAILED, {reason, unitTeam})
 		return false
 	end
 	return true

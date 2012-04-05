@@ -44,18 +44,19 @@ end
 
 function RangedPower:CanUse(cmdParams, cmdOptions)
     local reason
+	local teamID = Spring.GetUnitTeam(self:GetGodID())
 	if inherited.CanUse(self, cmdParams, cmdOptions) then
 		if self:InRange(cmdParams) then
 			return true
 		else
 			reason = "You do not have line of sight in that area."
-			LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason})
+			LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason, teamID})
 			return false
 		end
 	else
 		local charge = math.floor(inherited.GetCharge(self) * 100)
 		reason = "This God Power is on cooldown. " .. charge .. "% recharged."
-		LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason})
+		LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason, teamID})
 		return false
 	end
 	--return inherited.CanUse(self, cmdParams, cmdOptions) and self:InRange(cmdParams)

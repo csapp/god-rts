@@ -90,7 +90,10 @@ function widget:RecvLuaMsg(msg, playerID)
 	if playerID == Spring.GetLocalPlayerID() then
 		local msg_type, params = LuaMessages.deserialize(msg)
 		if msg_type == MSG_TYPES.CONVERT_FAILED or msg_type == MSG_TYPES.POWER_FAILED or msg_type == MSG_TYPES.BUILD_UNIT_FAILED then
-			Spring.SendMessageToPlayer(playerID, params[1])
+			--Apparently the teamID being passed in isn't actually an integer, so floor it!
+			if math.floor(params[2]) == Spring.GetLocalTeamID() then
+				Spring.Echo(params[1])
+			end
 		end
 	end
 end
