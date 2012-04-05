@@ -16,7 +16,6 @@ end
 
 include("LuaUI/Headers/msgs.h.lua")
 
-if gadgetHandler:IsSyncedCode() then
 
 function hasEnoughVillagers(unitDefID, unitTeam)
 	local mCurr, mStor, mPull, mInco, mExpe, mShar, mSent, mReci = Spring.GetTeamResources(unitTeam, "metal")
@@ -33,25 +32,8 @@ function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdO
 	local reason
 	if cmdID < 0 and not hasEnoughVillagers(unitDefID, unitTeam) then
 		reason = "Not Enough Villagers (Minerals :P)"
-		--LuaMessages.SendLuaUIMsg(MSG_TYPES.BUILD_UNIT_FAILED, {reason})
-        SendToUnsynced("failed_command", reason)
+		LuaMessages.SendLuaUIMsg(MSG_TYPES.BUILD_UNIT_FAILED, {reason})
 		return false
 	end
 	return true
-end
-
-else 
-
-local function SendMsg(cmd, reason)
-    LuaMessages.SendLuaUIMsg(MSG_TYPES.BUILD_UNIT_FAILED, {reason})
-end
-
-function gadget:Initialize()
-    gadgetHandler:AddSyncAction("failed_command", SendMsg)
-end
-
-function gadget:Shutdown()
-    gadgetHandler:RemoveSyncAction("failed_command")
-end
-
 end
