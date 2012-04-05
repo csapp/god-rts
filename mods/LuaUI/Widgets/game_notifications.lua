@@ -81,7 +81,7 @@ function widget:UnitFromFactory(unitID, unitDefID, unitTeam, factID, factDefID, 
 	if not Spring.IsUnitInView(unitID) then
 		soundCounter = math.random(#listOfUnitFromFactorySounds)
 		local builtUnit = unitName (unitID) or "unit"
-		Spring.Echo ("Your " .. builtUnit  .." is ready for battle.")
+		Spring.Echo("Your " .. builtUnit  .." is ready for battle.")
 		Spring.PlaySoundFile(listOfUnitFromFactorySounds[soundCounter])
 	end
 end
@@ -89,6 +89,6 @@ end
 function widget:RecvLuaMsg(msg, playerID)
 	local msg_type, params = LuaMessages.deserialize(msg)
 	if msg_type == MSG_TYPES.CONVERT_FAILED or msg_type == MSG_TYPES.POWER_FAILED or msg_type == MSG_TYPES.BUILD_UNIT_FAILED then
-		Spring.Echo(params[1])
+		Spring.SendMessageToPlayer(playerID, params[1])
 	end
 end
