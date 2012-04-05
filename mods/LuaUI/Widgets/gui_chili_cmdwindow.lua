@@ -21,6 +21,7 @@ end
 
 -- INCLUDES
 VFS.Include("LuaUI/Headers/utilities.lua")
+include("managers.h.lua")
 
 -- CONSTANTS
 local MAXBUTTONSONROW = 4
@@ -101,7 +102,7 @@ function findButtonData(cmd)
 	else
 		texture = cmd.texture
 	end
-	return buttontext, container, isState, isBuild, texture	
+	return buttontext, container, isState, isBuild, isPower, texture	
 end
 
 --sets texture to correct path depending on command. Yes I'm I know there is a "right" way to do this but it was taking forever to find
@@ -125,7 +126,7 @@ function createMyButton(cmd)
 	local tooltip = cmd.tooltip
 
 	if(type(cmd) == 'table')then
-		buttontext, container, isState, isBuild, texture = findButtonData(cmd)
+		buttontext, container, isState, isBuild, isPower, texture = findButtonData(cmd)
 
 		local result = container.xstep % MAXBUTTONSONROW
 		container.xstep = container.xstep + 1
@@ -171,34 +172,50 @@ function createMyButton(cmd)
 				parent = button;
 			}
 			
-		if isBuild then
-		local countText = ''
-		countText = tostring(buildQueueUnsorted[-cmd.id])
-		if(countText == 'nil') then countText = '' end
-					countLabel = Chili.Label:New {
-							parent = image,
-							autosize=false;
-							width="100%";
-							height="100%";
-							align="right";
-							valign="bottom";
-							caption = countText;
-							fontSize = 16;
-							fontShadow = true;
-					}
-					local costLabel = Chili.Label:New {
-							parent = image,
-							right = 0;
-							y = 0;
-							x = 3;
-							bottom = 3;
-							autosize=false;
-							align="left";
-							valign="bottom";
-							caption = string.format("%d m", UnitDefs[-cmd.id].metalCost);
-							fontSize = 11;
-							fontShadow = true;
-					}
+			if isBuild then
+				local countText = ''
+				countText = tostring(buildQueueUnsorted[-cmd.id])
+				if(countText == 'nil') then countText = '' end
+							countLabel = Chili.Label:New {
+									parent = image,
+									autosize=false;
+									width="100%";
+									height="100%";
+									align="right";
+									valign="bottom";
+									caption = countText;
+									fontSize = 16;
+									fontShadow = true;
+							}
+							local costLabel = Chili.Label:New {
+									parent = image,
+									right = 0;
+									y = 0;
+									x = 3;
+									bottom = 3;
+									autosize=false;
+									align="left";
+									valign="bottom";
+									caption = string.format("%d vil", UnitDefs[-cmd.id].metalCost);
+									fontSize = 11;
+									fontShadow = true;
+							}
+			end
+			
+			if isPower then
+				local costLabel = Chili.Label:New {
+						parent = image,
+						right = 0;
+						y = 0;
+						x = 3;
+						bottom = 3;
+						autosize=false;
+						align="top";
+						valign="left";
+						caption = string.format("%d", getPowerCharge());
+						fontSize = 11;
+						fontShadow = true;
+				}
 			end
 			
 		end
@@ -207,6 +224,22 @@ function createMyButton(cmd)
 			container.ystep = container.ystep+1
 		end		
 	end
+end
+
+local function getPowerNames()
+    local function getNames(names) powerNames = names end
+	WG.GadgetQuery.CallManagerFunctionOnAll(getNames, Managers.TYPES.POWER, "GetName")
+end
+
+function getPowerCharge()
+	local charge = 100
+	local function getCharges(returnCharges)
+        for k,v in pairs(returnCharges) do
+            charge = (math.floor(v*100))
+        end
+	end
+    WG.GadgetQuery.CallManagerFunctionOnAll(getCharges, Managers.TYPES.POWER, "GetCharge")	
+	return charge
 end
 
 local function UpdateFactoryBuildQueue() 
