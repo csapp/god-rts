@@ -21,8 +21,6 @@ local warningDelay = 30 * 5     --in frames
 local lastWarning = 0                   --in frames
 local localTeamID = Spring.GetLocalTeamID ()
 local soundCounter
-local message
-local messageSwitch = false
 
 local listOfUnitDamagedSounds = {
 	"sounds/fanfare10.wav",
@@ -92,16 +90,7 @@ function widget:RecvLuaMsg(msg, playerID)
 	if playerID == Spring.GetLocalPlayerID() then
 		local msg_type, params = LuaMessages.deserialize(msg)
 		if msg_type == MSG_TYPES.CONVERT_FAILED or msg_type == MSG_TYPES.POWER_FAILED or msg_type == MSG_TYPES.BUILD_UNIT_FAILED then
-			message = params[1]
-			messageSwitch = true
-		--			Spring.SendMessageToPlayer(playerID, params[1])
+			Spring.SendMessageToPlayer(playerID, params[1])
 		end
-	end
-end
-
-function widget:GameFrame(n)
-	if messageSwitch == true then
-		Spring.Echo(message)
-		messageSwitch = false
 	end
 end
