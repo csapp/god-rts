@@ -118,6 +118,8 @@ function getTexture(action)
 end
 
 function createMyButton(cmd)
+	local tooltip = cmd.tooltip
+
 	if(type(cmd) == 'table')then
 		buttontext, container, isState, isBuild, texture = findButtonData(cmd)
 
@@ -149,6 +151,7 @@ function createMyButton(cmd)
 			isDisabled = false,
 			cmdid = cmd.id,
 			OnMouseDown = {ClickFunc},
+			tooltip = tooltip,
 		}
 
 		local image

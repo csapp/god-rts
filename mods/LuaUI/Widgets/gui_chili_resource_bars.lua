@@ -25,12 +25,6 @@ include("colors.h.lua")
 WG.energyWasted = 0
 WG.energyForOverdrive = 0
 WG.allies = 1
---[[
-WG.windEnergy = 0 
-WG.highPriorityBP = 0
-WG.lowPriorityBP = 0
---]]
-
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
@@ -265,35 +259,10 @@ function widget:GameFrame(n)
         local totalOtherE = Format(-totalExpense + (WG.energyForOverdrive or 0) + totalConstruction + (WG.energyWasted or 0))
         local totalConstruction = Format(-totalConstruction)
         
-        bar_metal.tooltip = "Local Metal Economy" ..
-        "\nBase Extraction: " .. mexInc ..
-        "\nOverdrive: " .. odInc ..
-        "\nReclaim and Cons: " .. otherM ..
-        "\nSharing: " .. shareM .. 
-        "\nConstruction: " .. constuction ..
-    "\nReserve: " .. math.ceil(WG.metalStorageReserve or 0) ..
-        "\n" .. 
-        "\nTeam Metal Economy" ..
-        "\nTotal Income: " .. totalMetalIncome ..
-        "\nBase Extraction: " .. teamMexInc ..
-        "\nOverdrive: " .. teamODInc ..
-        "\nReclaim and Cons: " .. teamOtherM ..
-        "\nConstruction: " .. totalConstruction ..
-        "\nWaste: " .. teamWasteM 
+        bar_metal.tooltip = "Local Villagers Economy"
         
-        bar_energy.tooltip = "Local Energy Economy" ..
-        "\nIncome: " .. energyInc ..
-        "\nSharing & Overdrive: " .. energyShare .. 
-        "\nConstruction: " .. constuction .. 
-        "\nOther: " .. otherE ..
-        "\n" .. 
-        "\nTeam Energy Economy" ..
-        "\nIncome: " .. teamIncome .. 
-        "\nOverdrive: " .. totalODE .. " -> " .. totalODM .. " metal" ..
-        "\nConstruction: " .. totalConstruction ..
-        "\nOther: " .. totalOtherE ..
-        "\nWaste: " .. totalWaste
-
+        bar_energy.tooltip = "Local Faith Economy" 
+		
         local mTotal
         if options.onlyShowExpense.value then
                 mTotal = mInco - mExpe + mReci
@@ -391,8 +360,6 @@ function widget:Initialize()
 
         widgetHandler:RegisterGlobal("MexEnergyEvent", MexEnergyEvent)
     widgetHandler:RegisterGlobal("MetalReserveState", MetalReserveState)
-        --widgetHandler:RegisterGlobal("SendWindProduction", SendWindProduction)
-        --widgetHandler:RegisterGlobal("PriorityStats", PriorityStats)
 
         time_old = GetTimer()
 
@@ -490,7 +457,7 @@ function CreateWindow()
                 right  = 26,
                 x      = 110,
                 y      = p(100/bars),
-                tooltip = "This shows your current metal reserves",
+                tooltip = "This shows your current number of villagers",
                 font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
         }
         
@@ -505,7 +472,7 @@ function CreateWindow()
                 caption = "0",
                 autosize = false,
                 font   = {size = 19, outline = true, outlineWidth = 4, outlineWeight = 3,},
-                tooltip = "Your net metal income",
+                tooltip = "Your net villager generation",
         }
         lbl_m_income = Chili.Label:New{
                 parent = window,
@@ -518,7 +485,7 @@ function CreateWindow()
                 align  = "center",
                 autosize = false,
                 font   = {size = 12, outline = true, color = {0,1,0,1}},
-                tooltip = "Your metal Income.\nGained primarilly from metal extractors, overdrive and reclaim",
+                tooltip = "Your villager generation",
         }
         lbl_m_expense = Chili.Label:New{
                 parent = window,
@@ -531,7 +498,7 @@ function CreateWindow()
                 align  = "center",
                 autosize = false,
                 font   = {size = 12, outline = true, color = {1,0,0,1}},
-                tooltip = "This is the metal demand of your construction",
+                tooltip = "This is the villager demand of your construction.",
         }
 
 
@@ -567,7 +534,7 @@ function CreateWindow()
                 right  = 36,
                 x      = 100,
                 y      = 1,
-                tooltip = "Shows your current energy reserves.\n Anything above 100% will be burned by 'mex overdrive'\n which increases production of your mines",
+                tooltip = "Shows your current faith reserves.",
                 font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
         }
     
@@ -584,7 +551,7 @@ function CreateWindow()
                 caption = "0",
                 autosize = false,
                 font   = {size = 19, outline = true, outlineWidth = 4, outlineWeight = 3,},
-                tooltip = "Your net energy income.",
+                tooltip = "Your net faith generation.",
         }
         lbl_e_income = Chili.Label:New{
                 parent = window,
@@ -597,7 +564,7 @@ function CreateWindow()
                 align   = "center",
                 autosize = false,
                 font   = {size = 12, outline = true, color = {0,1,0,1}},
-                tooltip = "Your energy income.\nGained from powerplants.",
+                tooltip = "Your faith generation.",
         }
         lbl_e_expense = Chili.Label:New{
                 parent = window,
@@ -610,7 +577,7 @@ function CreateWindow()
                 align  = "center",
                 autosize = false,
                 font   = {size = 12, outline = true, color = {1,0,0,1}},
-                tooltip = "This is the energy demand of your economy, cloakers, shields and overdrive",
+                tooltip = "This is the faith demand of your units.",
         }
         
         -- Activate tooltips for lables and bars, they do not have them in default chili

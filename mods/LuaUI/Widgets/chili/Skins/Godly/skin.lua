@@ -37,8 +37,6 @@ skin.window = {
 
   captionColor = {1, 1, 1, 0.45},
 
-  backgroundColor = {0.1, 0.1, 0.1, 0.7},
-
   boxes = {
     resize = {-21, -21, -10, -10},
     drag = {0, 0, "100%", 10},

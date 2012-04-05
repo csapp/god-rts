@@ -65,6 +65,7 @@ function widget:Initialize()
         parent = screen0,
         caption = "",
         fontsize = 14,
+		tooltip = "Your current population, out of the max possible population.",
         font = {
             size = 16,
             outline = true,
@@ -72,6 +73,9 @@ function widget:Initialize()
             outlineWeight = 3,
         },
     }
+	
+	-- Activate the tooltip for a label, because Spring doesn't do this by default.
+	function supplyLabel:HitTest(x,y) return self end
 
 end
 

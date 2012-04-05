@@ -83,6 +83,7 @@ end
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Cause massive fire damage to units within a certain radius.",
 	}
 
 	selected = "unpressed"
@@ -100,6 +101,7 @@ end
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Spawn a wave of hungry zombies for a short time.",
 		}
 
 	selected = "unpressed"
@@ -117,6 +119,7 @@ end
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Explode a Massive Bomb causing knockback and damage within a certain radius.",
 		}
 
 --Row 2
@@ -136,6 +139,7 @@ end
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Teleport to another location on the map.",
 	}
 	
 
@@ -154,6 +158,7 @@ end
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Revive units within a certain radius to full health.",
 		}
 		
 	selected = "unpressed"
@@ -171,6 +176,7 @@ end
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Transfer all normal units within radius to your team.",
 		}
 
 
@@ -209,6 +215,7 @@ end
 		cmdid = 3,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Halves the conversion time of villages.",
 		}
 
 	selected = "unpressed"
@@ -226,6 +233,7 @@ end
 		cmdid = 3,
 		OnMouseDown = {ClickFunc},
 		state = selected,
+		tooltip = "Increase villager generation rate.",
 		}
 
 --Done

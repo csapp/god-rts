@@ -24,7 +24,7 @@ WholeLottaLove = ActivePower:Inherit{
     powerType = POWERS.TYPES.DEFENSIVE,
     rechargeRate = 1/300,
     cmdType = CMDTYPE.ICON_MAP,
-    tooltip = "Revive units with radius to full health",
+    tooltip = "Revive units within a certain radius to full health",
 }
 
 local this = WholeLottaLove
