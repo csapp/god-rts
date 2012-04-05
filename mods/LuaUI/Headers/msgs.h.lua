@@ -11,6 +11,8 @@ MSG_TYPES = {
     PBAR_PROGRESS = "pbar_progress",
     PBAR_DESTROY = "pbar_destroy",
 
+	BUILD_UNIT_FAILED = "build_unit_failed",
+	
     CONVERT_FINISHED = "convert_finished",
 	CONVERT_FAILED = "convert_failed",
 

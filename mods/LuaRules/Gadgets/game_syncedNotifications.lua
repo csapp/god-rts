@@ -14,8 +14,6 @@ function gadget:GetInfo()
     }
 end
 
-include("LuaUI/Headers/customcmds.h.lua")
-include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/msgs.h.lua")
 
 
@@ -31,16 +29,11 @@ function hasEnoughVillagers(unitDefID, unitTeam)
 end
 
 function gadget:AllowCommand(unitID, unitDefID, unitTeam, cmdID, cmdParams, cmdOptions, cmdTag)
+	local reason
 	if cmdID < 0 and not hasEnoughVillagers(unitDefID, unitTeam) then
-		Spring.Echo("Not Enough Villagers (Minerals :P)")
+		reason = "Not Enough Villagers (Minerals :P)"
+		LuaMessages.SendLuaUIMsg(MSG_TYPES.BUILD_UNIT_FAILED, {reason})
 		return false
 	end
 	return true
-end
-
-function gadget:RecvLuaMsg(msg, playerID)
-	local msg_type, params = LuaMessages.deserialize(msg)
-	if msg_type == MSG_TYPES.CONVERT_FAILED or msg_type == MSG_TYPES.POWER_FAILED then
-		Spring.Echo(params[1])
-	end
 end

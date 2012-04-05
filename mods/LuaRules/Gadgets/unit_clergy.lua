@@ -146,14 +146,14 @@ local function CanConvert(clergyID, villageID)
 	local reason
     if converting[villageID] then
 		reason = "This village is already being converted."
-		LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FAILED, {reason})
+		LuaMessages.SendLuaUIMsg(MSG_TYPES.CONVERT_FAILED, {reason})
         return false
     end
 
     -- FIXME this is throwing a weird error sometimes for some reason
     if GetUnitTeam(clergyID) == GetUnitTeam(villageID) then
 		reason = "This village is already in your control."
-		LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FAILED, {reason})
+		LuaMessages.SendLuaUIMsg(MSG_TYPES.CONVERT_FAILED, {reason})
         return false
     end
 
@@ -161,7 +161,7 @@ local function CanConvert(clergyID, villageID)
         local curHealth, maxHealth = GetUnitHealth(villageID)
         if curHealth / maxHealth > Villages.WEAK_HP_PCT then
 			reason = "This village is still too protected to convert. Reduce the village's HP to weaken it and convert again."
-			LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FAILED, {reason})
+			LuaMessages.SendLuaUIMsg(MSG_TYPES.CONVERT_FAILED, {reason})
             return false
         end
     end

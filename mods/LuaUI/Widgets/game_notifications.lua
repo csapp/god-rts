@@ -14,6 +14,9 @@ function widget:GetInfo()
     }
 end
 
+include("customcmds.h.lua")
+include("msgs.h.lua")
+
 local warningDelay = 30 * 5     --in frames
 local lastWarning = 0                   --in frames
 local localTeamID = Spring.GetLocalTeamID ()
@@ -80,5 +83,12 @@ function widget:UnitFromFactory(unitID, unitDefID, unitTeam, factID, factDefID, 
 		local builtUnit = unitName (unitID) or "unit"
 		Spring.Echo ("Your " .. builtUnit  .." is ready for battle.")
 		Spring.PlaySoundFile(listOfUnitFromFactorySounds[soundCounter])
+	end
+end
+
+function widget:RecvLuaMsg(msg, playerID)
+	local msg_type, params = LuaMessages.deserialize(msg)
+	if msg_type == MSG_TYPES.CONVERT_FAILED or msg_type == MSG_TYPES.POWER_FAILED or msg_type == MSG_TYPES.BUILD_UNIT_FAILED then
+		Spring.Echo(params[1])
 	end
 end
