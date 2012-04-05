@@ -113,7 +113,7 @@ local function EndGame(teamID)
 		teamList = Spring.GetTeamList(allyTeamID)
 			for j,tID in pairs(teamList) do
 				if tID == teamID then
-					table.remove(allyTeamList, allyTeamID)
+					table.remove(allyTeamList, i)
 				end
 			end
 	end
