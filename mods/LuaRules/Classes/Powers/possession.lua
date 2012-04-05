@@ -18,7 +18,7 @@ local SpawnCEG = Spring.SpawnCEG
 local GetUnitTeam = Spring.GetUnitTeam
 local TransferUnit = Spring.TransferUnit
 
-Possession = ActivePower:Inherit{
+Possession = RangedPower:Inherit{
     classname = "Possession",
     radius = 150,
     id = CMD_POSSESSION,

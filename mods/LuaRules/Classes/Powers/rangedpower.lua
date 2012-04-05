@@ -10,6 +10,8 @@ local function GetInfo()
 end
 
 include("LuaUI/Headers/utilities.lua")
+include("LuaUI/Headers/customcmds.h.lua")
+include("LuaUI/Headers/msgs.h.lua")
 
 --Speedups
 local IsPosInLos = Spring.IsPosInLos
@@ -43,5 +45,20 @@ function RangedPower:InRange(point)
 end
 
 function RangedPower:CanUse(cmdParams, cmdOptions)
-    return inherited.CanUse(self, cmdParams, cmdOptions) and self:InRange(cmdParams)
+    local reason
+	if inherited.CanUse(self, cmdParams, cmdOptions) then
+		if self:InRange(cmdParams) then
+			return true
+		else
+			reason = "You do not have line of sight in that area."
+			LuaMessages.SendLuaRulesMsg(MSG_TYPES.POWER_FAILED, {reason})
+			return false
+		end
+	else
+		local charge = math.floor(inherited.GetCharge(self) * 100)
+		reason = "This God Power is on cooldown. " .. charge .. "% recharged."
+		LuaMessages.SendLuaRulesMsg(MSG_TYPES.POWER_FAILED, {reason})
+		return false
+	end
+	--return inherited.CanUse(self, cmdParams, cmdOptions) and self:InRange(cmdParams)
 end

@@ -16,7 +16,7 @@ local SetUnitHealth = Spring.SetUnitHealth
 local SpawnCEG = Spring.SpawnCEG
 local GetUnitTeam = Spring.GetUnitTeam
 
-WholeLottaLove = ActivePower:Inherit{
+WholeLottaLove = RangedPower:Inherit{
     classname = "WholeLottaLove",
     radius = 150,
     id = CMD_LOVE,

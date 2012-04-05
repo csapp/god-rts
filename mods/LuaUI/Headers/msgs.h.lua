@@ -12,7 +12,10 @@ MSG_TYPES = {
     PBAR_DESTROY = "pbar_destroy",
 
     CONVERT_FINISHED = "convert_finished",
+	CONVERT_FAILED = "convert_failed",
 
+	POWER_FAILED = "power_failed",
+	
     GOD_SELECTED = "godselected",
     GOD_CREATED = "god_created",
 
