@@ -49,13 +49,15 @@ function RangedPower:CanUse(cmdParams, cmdOptions)
 			return true
 		else
 			reason = "You do not have line of sight in that area."
-			LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason})
+			--LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason})
+            SendToUnsynced("failed_command", reason)
 			return false
 		end
 	else
-		local charge = math.floor(inherited.GetCharge(self) * 100)
+		local charge = math.floor(self:GetCharge() * 100)
 		reason = "This God Power is on cooldown. " .. charge .. "% recharged."
-		LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason})
+		--LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason})
+        SendToUnsynced("failed_command", reason)
 		return false
 	end
 	--return inherited.CanUse(self, cmdParams, cmdOptions) and self:InRange(cmdParams)
