@@ -27,6 +27,9 @@ local MAXBUTTONSONROW = 4
 local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard"}
 local VILLAGECOMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard", "move", "attack", "fight", "wait"}
 local VOLCANOCOMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard", "move", "fight", "wait", "stop"}
+local BUILDCOMMANDSTOEXCLUDE = {"building_Turret", "building_High Rise", "building_Training Facility", "building_Motel", "building_Shrine"}
+local GODPOWERS = {"VolcanicBlast", "Teleport", "WholeLottaLove"}
+local exclude
 local Chili
 
 -- MEMBERS
@@ -80,18 +83,19 @@ end
 -- Returns the caption, parent container and commandtype of the button	
 function findButtonData(cmd)
 	local isState = (cmd.type == CMDTYPE.ICON_MODE and #cmd.params > 1)
-	local isBuild = (cmd.id < 0)	
+	local isBuild = ((cmd.id < 0))
+	local isPower = table.contains(GODPOWERS,cmd.action)
 	local buttontext = ""
 	local texture = getTexture(cmd.action)--'bitmaps/icons/'..(cmd.action)..'.png'
 	local container
-	if not isState and not isBuild then
+	if not isState and not isBuild and not isPower then
 		buttontext = cmd.name
 		container = commandWindow
 	elseif isState then
 		local indexChoice = cmd.params[1] + 2
 		buttontext = cmd.params[indexChoice]
 		container = commandWindow
-	elseif isBuild then
+	elseif isBuild or isPower then
 		container = buildCommandWindow
 		buttontext = cmd.name:gsub("^%l", string.upper)
 	else
@@ -219,15 +223,20 @@ end
 function filterUnwanted(commands)
 	local uniqueList = {}
 	local exclude = COMMANDSTOEXCLUDE
+	local excludeBuild = false
 	if isVolcanoSelected() then exclude = VOLCANOCOMMANDSTOEXCLUDE end
-	if isVillageSelected() then exclude = VILLAGECOMMANDSTOEXCLUDE end
-	
-	if DEBUG then Spring.Echo("Total commands ", #commands) end
+	if isVillageSelected() then 
+		exclude = VILLAGECOMMANDSTOEXCLUDE 
+	else
+		excludeBuild = true
+	end
+	--if isClergySelected() then exclude = CLERGYCOMMANDSTOEXCLUDE end
+	--if isGodSelected() then exclude = CLERGYCOMMANDSTOEXCLUDE end
 
 	if not(#commands == 0)then
 		j = 1
 		for _, cmd in ipairs(commands) do
-			if not table.contains(exclude,cmd.action) then
+			if not table.contains(exclude,cmd.action) and not(excludeBuild and ((cmd.id<0) or table.contains(BUILDCOMMANDSTOEXCLUDE,cmd.action))) then
 				uniqueList[j] = cmd
 				j = j + 1
 			end
@@ -331,6 +340,26 @@ function isVolcanoSelected()
 	else 
 		return false
 	end
+end
+
+function isGodSelected()
+	newSelection = Spring.GetSelectedUnits()
+	for i=1,#newSelection do
+		if (UnitDefs[spGetUnitDefID(newSelection[i])].name == "god") then 
+			return true
+		end 
+	end
+	return false
+end
+
+function isClergySelected()
+	newSelection = Spring.GetSelectedUnits()
+	for i=1,#newSelection do
+		if (UnitDefs[spGetUnitDefID(newSelection[i])].name == "priest" or UnitDefs[spGetUnitDefID(newSelection[i])].name == "prophet") then 
+			return true
+		end 
+	end
+	return false
 end
 
 function isVillageSelected()
