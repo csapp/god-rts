@@ -203,15 +203,17 @@ function widget:GameStart()
     game_start = true
 end
 
-function widget:CommandsChanged()
+function widget:GameFrame(n)
     local selected_units = Spring.GetSelectedUnits()
 	
 	if not game_start then
         return
     end
 
+    if n % 10 ~= 4 then return end
+    
     if Spring.GetSelectedUnitsCount() == 0 then
-        if current_progress_bar ~= nil then
+        if current_progress_bar then
             pbarWindow:RemoveChild(current_progress_bar)
             current_progress_bar = nil
         end
@@ -225,7 +227,7 @@ function widget:CommandsChanged()
     end
     -- XXX need to decide what to do if multiple units are selected
 	-- This just handles showing the first unit selected in a group
-    --setUnitInfo(selected_units[1])
+    setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
 	setUnitStats(selected_units[1])
 	resetWindow(imageWindow)
@@ -233,12 +235,12 @@ function widget:CommandsChanged()
 	drawPortrait()
 	printPowerInfo()
     
-    if current_progress_bar ~= nil then
+    if current_progress_bar then
         pbarWindow:RemoveChild(current_progress_bar)
         current_progress_bar = nil
     end
     current_progress_bar = progressBars[selected_units[1]]
-    if current_progress_bar ~= nil then
+    if current_progress_bar then
         pbarWindow:AddChild(current_progress_bar)
     end
 	
@@ -256,17 +258,17 @@ function widget:CommandsChanged()
 end
 
 -- Put any information into this function which you need to update on the fly.
-function widget:Update(dt)
-	local selected_units = Spring.GetSelectedUnits()
+--function widget:Update(dt)
+	--local selected_units = Spring.GetSelectedUnits()
 	
-	if not game_start then
-        return
-    end
+	--if not game_start then
+        --return
+    --end
 	
-	if selected_units[1] ~= nil then
-		setUnitInfo(selected_units[1])
-	end
-end
+	--if selected_units[1] ~= nil then
+		--setUnitInfo(selected_units[1])
+	--end
+--end
 
 function drawPortrait()
 	unitPic = Image:New {
@@ -459,23 +461,24 @@ local function createProgressBar(unitID, caption)
         return tostring(a).."%"
     end
 	
-	local bar_convert = Chili.Progressbar:New{
-                parent = pbarWindow,
-                color  = {0.41,0.53,0.16,1},
-                --height = p(100/bars),
-                --right  = 0,
-                min = 0,
-                max = 100,
-                --x      = statusBar.width/2,
-                --align = "center",
-                --valign = "center",
-                --y      = p(100/bars),
-				value = 0,
-                width = "100%",
-                height = "100%",
-                tooltip = "This shows your current conversion progress.",
-                font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
-        }
+    local bar_convert = Chili.Progressbar:New{
+        --parent = pbarWindow,
+        parent = nil,
+        color  = {0.41,0.53,0.16,1},
+        --height = p(100/bars),
+        --right  = 0,
+        min = 0,
+        max = 100,
+        --x      = statusBar.width/2,
+        --align = "center",
+        --valign = "center",
+        --y      = p(100/bars),
+        value = 0,
+        width = "100%",
+        height = "100%",
+        tooltip = "This shows your current conversion progress.",
+        font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
+    }
 	
 	local lbl_convert = Chili.Label:New{
 		parent = bar_convert,
@@ -492,8 +495,10 @@ local function createProgressBar(unitID, caption)
 	}
 
     progressBars[unitID] = bar_convert
-    current_progress_bar = bar_convert
+    --current_progress_bar = bar_convert
 		
+    --pbarWindow:RemoveChild(current_progress_bar)
+
 end
 
 function destroyProgressBar(unitID)
