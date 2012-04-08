@@ -133,15 +133,6 @@ function gadget:Initialize()
     end
 end
 
-function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
-    if Units.IsClergyUnit(unitID) then
-        InsertUnitCmdDesc(unitID, CMD_CONVERT, convertCmd)
-		if Units.GetLevel(unitID) > 1 then
-			InsertUnitCmdDesc(unitID, CMD_RESURRECT, resurrectCmd)
-		end
-    end
-end
-
 function gadget:AllowUnitCreation(unitDefID, builderID, builderTeam, x, y, z, facing)
     if not table.contains(clergyUnitDefs, unitDefID) then return true end
     return clergyUnitCount[builderTeam] < MAX_CLERGY_COUNT
@@ -150,6 +141,10 @@ end
 function gadget:UnitCreated(unitID, unitDefID, teamID)
     if Units.IsClergyUnit(unitID) then
         clergyUnitCount[teamID] = clergyUnitCount[teamID] + 1
+        InsertUnitCmdDesc(unitID, CMD_CONVERT, convertCmd)
+		if Units.GetLevel(unitID) > 1 then
+			InsertUnitCmdDesc(unitID, CMD_RESURRECT, resurrectCmd)
+		end
     end
 end
 
