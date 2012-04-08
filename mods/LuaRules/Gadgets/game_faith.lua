@@ -95,7 +95,7 @@ end
 local function RemoveFaithMultiplier(teamID, level)
     local multKey, multValue = unpack(multsAdded[teamID][level])
     attrManagers[teamID]:AddMultiplier(multKey, -multValue)
-    teamMultsAdded[level] = nil
+    multsAdded[teamID][level] = nil
 end
 
 local function UpdateFaithMultipliers(teamID)
