@@ -42,6 +42,7 @@ local spGetMouseState			= Spring.GetMouseState
 local spTraceScreenRay			= Spring.TraceScreenRay
 local spGetUnitHealth			= Spring.GetUnitHealth
 local spGetUnitExp			    = Spring.GetUnitExperience
+local spGetGameSeconds          = Spring.GetGameSeconds
 
 local game_start = false
 
@@ -452,7 +453,28 @@ function printPowerInfo()
     WG.GadgetQuery.CallManagerFunctionOnAll(getCharges, Managers.TYPES.POWER, "GetCharge")	
 end
 
-local function createProgressBar(unitID, caption)
+function destroyProgressBar(unitID)
+    local progressBar = progressBars[unitID] 
+    if not progressBar then return end
+    progressBar:Dispose()
+    progressBars[unitID] = nil
+end
+
+local function updateProgressBar(unitID, duration, startTime)
+    -- progress given as a decimal e.g. for 10% pass 0.1, not 10
+    local progressBar = progressBars[unitID] 
+    if not progressBar then return end
+    local progress = (spGetGameSeconds()-startTime)/duration
+    if progress >= 1 then
+        destroyProgressBar(unitID)
+        LuaMessages.SendLuaRulesMsg(MSG_TYPES.PBAR_FINISHED, {unitID})
+    else
+        progressBar:SetValue(progress*100)
+        WG.Delay.DelayCall(updateProgressBar, {unitID, duration, startTime})
+    end
+end
+
+local function createProgressBar(unitID, caption, duration)
 
 	local bars = 2
 	local function p(a)
@@ -494,35 +516,21 @@ local function createProgressBar(unitID, caption)
     progressBars[unitID] = bar_convert
     current_progress_bar = bar_convert
 		
+    updateProgressBar(unitID, duration, spGetGameSeconds())
 end
 
-function destroyProgressBar(unitID)
-    local progressBar = progressBars[unitID] 
-    if not progressBar then
-        return 
-    end
-    progressBar:Dispose()
-    progressBars[unitID] = nil
-end
-
-local function updateProgressBar(unitID, progress)
-    -- progress given as a decimal e.g. for 10% pass 0.1, not 10
-    local progressBar = progressBars[unitID] 
-    if not progressBar then
-        return
-    end
-    progressBar:SetValue(progress*100)
-end
 
 function widget:RecvLuaMsg(msg, playerID)
     if playerID ~= MY_PLAYER_ID then return end
     local msg_type, params = LuaMessages.deserialize(msg)
     if msg_type == MSG_TYPES.PBAR_CREATE then
-        unitID, caption = tonumber(params[1]), params[2]
-		createProgressBar(unitID, caption)
-    elseif msg_type == MSG_TYPES.PBAR_PROGRESS then
-        unitID, progress = tonumber(params[1]), tonumber(params[2])
-        updateProgressBar(unitID, progress)
+        unitID, teamID, caption, duration = tonumber(params[1]), tonumber(params[2]),
+                                            params[3], tonumber(params[4])
+        if teamID == Spring.GetMyTeamID() then
+            createProgressBar(unitID, caption, duration)
+        end
+    --elseif msg_type == MSG_TYPES.PBAR_PROGRESS then
+        --unitID, progress = tonumber(params[1]), tonumber(params[2])
     elseif msg_type == MSG_TYPES.PBAR_DESTROY then
         unitID = tonumber(params[1])
 		destroyProgressBar(unitID)

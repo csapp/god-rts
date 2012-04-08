@@ -10,6 +10,7 @@ MSG_TYPES = {
     PBAR_CREATE = "pbar_create",
     PBAR_PROGRESS = "pbar_progress",
     PBAR_DESTROY = "pbar_destroy",
+    PBAR_FINISHED= "pbar_finished",
 
 	BUILD_UNIT_FAILED = "build_unit_failed",
 	

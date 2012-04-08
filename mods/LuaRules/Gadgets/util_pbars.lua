@@ -11,34 +11,22 @@ function gadget:GetInfo()
     }
 end
 
-
 ------------------------------------------------------------
 -- SYNCED
 ------------------------------------------------------------
 if (gadgetHandler:IsSyncedCode()) then
 
+local progress_bars = {}
 include("LuaUI/Headers/msgs.h.lua")
 
 local GetGameSeconds = Spring.GetGameSeconds
+local GetUnitTeam = Spring.GetUnitTeam
 
 GG.ProgressBars = {}
 
-local progress_bars = {}
-
 local function AddProgressBar(unitID, caption, duration, callback, cancel_callback)
     progress_bars[unitID] = {GetGameSeconds(), duration, callback, cancel_callback}
-    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_CREATE, {unitID, caption})
-end
-
-local function UpdateProgressBar(unitID, progress)
-    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_PROGRESS, {unitID, progress})
-end
-
-local function FinishProgressBar(unitID)
-    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_DESTROY, {unitID})
-    local callback = progress_bars[unitID][3]
-    if callback then callback(unitID) end
-    progress_bars[unitID] = nil
+    LuaMessages.SendLuaUIMsg(MSG_TYPES.PBAR_CREATE, {unitID, GetUnitTeam(unitID), caption, duration})
 end
 
 local function CancelProgressBar(unitID)
@@ -51,16 +39,19 @@ end
 GG.ProgressBars.AddProgressBar = AddProgressBar
 GG.ProgressBars.CancelProgressBar = CancelProgressBar
 
-function gadget:GameFrame(n)
-    if n % 30 ~= 5 then return end
-    local cur_time = GetGameSeconds()
-    for unitID, pbar_info in pairs(progress_bars) do
-        local start_time, duration = pbar_info[1], pbar_info[2] 
-        if cur_time - start_time >= duration then
-            FinishProgressBar(unitID)
-        else
-            UpdateProgressBar(unitID, (cur_time-start_time)/duration)
-        end
+local function FinishProgressBar(unitID)
+    local callback = progress_bars[unitID][3]
+    if callback then 
+        callback(unitID)
+    end
+    progress_bars[unitID] = nil
+end
+
+function gadget:RecvLuaMsg(msg, playerID)
+    msgtype, params = LuaMessages.deserialize(msg)
+    if msgtype == MSG_TYPES.PBAR_FINISHED then
+        unitID = tonumber(params[1])
+        GG.Delay.DelayCall(FinishProgressBar, {unitID})
     end
 end
 
