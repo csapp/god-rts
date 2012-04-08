@@ -155,17 +155,17 @@ function gadget:UnitDestroyed(unitID, unitDefID, teamID)
 end
 
 
---function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
-    --if Units.IsClergyUnit(unitID) then
-        --return true
-    --end
+function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
+    if not Units.IsClergyUnit(unitID) then
+        return true
+    end
 
-    --if cmdID ~= CMD_CONVERT and convert_pending[unitID] ~= nil then
-        --CancelConvert(unitID)
-    --end
+    if cmdID ~= CMD_CONVERT then
+        CancelConvert(unitID)
+    end
 
-    --return true
---end
+    return true
+end
 
 local function CanConvert(clergyID, villageID)
 	local reason
@@ -234,7 +234,7 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
         if utils.distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
             StartConvert(unitID, villageID)
         else
-            GiveOrderToUnit(unitID, CMD.MOVE, {villageX, villageY, villageZ}, {}) 
+            Spring.SetUnitMoveGoal(unitID, villageX, villageY, villageZ)
             convert_pending[unitID] = villageID
         end
         return true, false
