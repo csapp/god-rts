@@ -61,6 +61,14 @@ local resurrect_pending = {}
 local CONVERT_DISTANCE = 100 
 local RESURRECT_DISTANCE = 100 
 
+local MAX_CLERGY_COUNT = 2
+local clergyUnitCount = {}
+local clergyUnitDefs = {
+    UnitDefNames[Units.UNITDEF_NAMES.PRIEST].id,
+    UnitDefNames[Units.UNITDEF_NAMES.PROPHET].id,
+    UnitDefNames[Units.UNITDEF_NAMES.DEMIGOD].id,
+}
+
 local gaiaTeamID = Spring.GetGaiaTeamID()
 local function GetUnitNeutral(unitID)
     return GetUnitTeam(unitID) == gaiaTeamID
@@ -119,6 +127,10 @@ function gadget:Initialize()
     gadgetHandler:RegisterCMDID(CMD_CONVERT)
     Spring.AssignMouseCursor("Convert", "cursorConvert", true, true)
     Spring.SetCustomCommandDrawData(CMD_CONVERT, "Convert", {0,1,1,0.5}, false)
+
+    for _, teamID in pairs(Spring.GetTeamList()) do
+        clergyUnitCount[teamID] = 0
+    end
 end
 
 function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
@@ -129,6 +141,26 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
 		end
     end
 end
+
+function gadget:AllowUnitCreation(unitDefID, builderID, builderTeam, x, y, z, facing)
+    if not table.contains(clergyUnitDefs, unitDefID) then return true end
+    return clergyUnitCount[builderTeam] < MAX_CLERGY_COUNT
+end
+
+function gadget:UnitCreated(unitID, unitDefID, teamID)
+    if Units.IsClergyUnit(unitID) then
+        clergyUnitCount[teamID] = clergyUnitCount[teamID] + 1
+        Spring.Echo(clergyUnitCount[teamID])
+    end
+end
+
+function gadget:UnitDestroyed(unitID, unitDefID, teamID)
+    if Units.IsClergyUnit(unitID) then
+        clergyUnitCount[teamID] = clergyUnitCount[teamID] - 1
+        Spring.Echo(clergyUnitCount[teamID])
+    end
+end
+
 
 --function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
     --if Units.IsClergyUnit(unitID) then
@@ -195,25 +227,24 @@ end
 
 function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
     if cmdID == CMD_CONVERT then
+        local villageID = cmdParams[1]
+        if Units.IsVillageUnit(unitID) then
+            return false
+        end
 
-    local villageID = cmdParams[1]
-    if Units.IsVillageUnit(unitID) then
-        return false
-    end
+        if not CanConvert(unitID, villageID) then 
+            return false 
+        end
 
-    if not CanConvert(unitID, villageID) then 
-        return false 
-    end
+        local villageX, villageY, villageZ = Spring.GetUnitBasePosition(villageID)
 
-    local villageX, villageY, villageZ = Spring.GetUnitBasePosition(villageID)
-
-    if utils.distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
-        StartConvert(unitID, villageID)
-    else
-        GiveOrderToUnit(unitID, CMD.MOVE, {villageX, villageY, villageZ}, {}) 
-        convert_pending[unitID] = villageID
-    end
-    return true, false
+        if utils.distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
+            StartConvert(unitID, villageID)
+        else
+            GiveOrderToUnit(unitID, CMD.MOVE, {villageX, villageY, villageZ}, {}) 
+            convert_pending[unitID] = villageID
+        end
+        return true, false
 	
 	elseif cmdID == CMD_RESURRECT then
 		local x,y,z = Spring.GetUnitBasePosition(unitID)
