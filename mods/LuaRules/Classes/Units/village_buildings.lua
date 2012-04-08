@@ -125,7 +125,7 @@ end
 Shrine = Building:Inherit{
     classname = "Shrine",
     buildingName = "Shrine",
-    buildTime = 6,
+    buildTime = 90,
     multipliers = {
         [Multipliers.TYPES.XP] = {0.1, {Units.CLASSES.CLERGY}},
     },
@@ -359,7 +359,7 @@ AttackSpeedUpgrade = Upgrade:Inherit{
 TrainingFacility = Building:Inherit{
     classname = "TrainingFacility",
     buildingName = "Training Facility",
-    buildTime = 5,
+    buildTime = 45,
     tooltip = "Opens research possibilities for unit upgrades",
 }
 
