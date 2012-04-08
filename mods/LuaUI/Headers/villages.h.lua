@@ -25,7 +25,7 @@ Buildings.CMD_IDS = {
 }
 
 Buildings.CMD_IDS.RESEARCH = {
-    SPEED = 32500,
+    DAMAGE = 32500,
     ATTACK_RANGE = 32501,
     ATTACK_SPEED = 32502,
 }

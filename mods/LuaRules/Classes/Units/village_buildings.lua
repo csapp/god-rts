@@ -321,13 +321,14 @@ function Upgrade:Unapply()
     end
 end
 
-SpeedUpgrade = Upgrade:Inherit{
-    classname = "SpeedUpgrade",
-    upgradeName = "Speed Boots",
-    upgradeType = "SPEED",
-    researchTime = 5,
+DamageUpgrade = Upgrade:Inherit{
+    classname = "DamageUpgrade",
+    upgradeName = "Battleswords",
+    upgradeType = "DAMAGE",
+    tooltip = "Increases damage for infantry units",
+    researchTime = 120,
     multipliers = {
-        [Multipliers.TYPES.MOVE_SPEED] = {.5},
+        [Multipliers.TYPES.DAMAGE] = {.2, {Units.CLASSES.INFANTRY}},
     }
 }
 
@@ -336,7 +337,7 @@ AttackRangeUpgrade = Upgrade:Inherit{
     upgradeName = "Long range arrows",
     upgradeType = "ATTACK_RANGE",
     tooltip = "Increases attack range for ranged units",
-    researchTime = 5,
+    researchTime = 120,
     multipliers = {
         [Multipliers.TYPES.ATTACK_RANGE] = {.5, {Units.CLASSES.RANGED}},
     }
@@ -346,10 +347,10 @@ AttackSpeedUpgrade = Upgrade:Inherit{
     classname = "AttackSpeedUpgrade",
     upgradeName = "Quick swords",
     upgradeType = "ATTACK_SPEED",
-    researchTime = 5,
-    tooltip = "Increases melee attack speed",
+    researchTime = 120,
+    tooltip = "Increases attack speed for cavalry units",
     multipliers = {
-        [Multipliers.TYPES.ATTACK_SPEED] = {.5, {Units.CLASSES.INFANTRY, Units.CLASSES.CAVALRY}},
+        [Multipliers.TYPES.ATTACK_SPEED] = {.5, {Units.CLASSES.CAVALRY}},
     }
 }
 ------------------------------------------------------------
@@ -366,7 +367,7 @@ TrainingFacility = Building:Inherit{
 function TrainingFacility:New(village)
     local obj = TrainingFacility.inherited.New(self, village)
     obj.availableUpgrades = {
-        [SpeedUpgrade:GetCmdID()] = SpeedUpgrade:New(obj),
+        [DamageUpgrade:GetCmdID()] = DamageUpgrade:New(obj),
         [AttackRangeUpgrade:GetCmdID()] = AttackRangeUpgrade:New(obj),
         [AttackSpeedUpgrade:GetCmdID()] = AttackSpeedUpgrade:New(obj),
     }
