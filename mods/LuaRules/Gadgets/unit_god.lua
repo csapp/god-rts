@@ -155,15 +155,16 @@ function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDef
 	for i=1, #listOfGodIDs do
 		if listOfGodIDs[i] == unitID then
 			table.remove(listOfGodIDs, i)
+			if #listOfGodIDs > 1 then
+				Spring.Echo("A")
+				DestroyPlayer(teamID)
+			else
+				EndGame(attackerTeamID)
+			end
 		end
 	end
 	
-	if #listOfGodIDs > 1 then
-		Spring.Echo("A")
-		DestroyPlayer(teamID)
-	else
-		EndGame(attackerTeamID)
-	end
+
 end
 
 function gadget:RecvLuaMsg(msg, playerID)
