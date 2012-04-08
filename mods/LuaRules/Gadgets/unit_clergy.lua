@@ -150,14 +150,12 @@ end
 function gadget:UnitCreated(unitID, unitDefID, teamID)
     if Units.IsClergyUnit(unitID) then
         clergyUnitCount[teamID] = clergyUnitCount[teamID] + 1
-        Spring.Echo(clergyUnitCount[teamID])
     end
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, teamID)
     if Units.IsClergyUnit(unitID) then
         clergyUnitCount[teamID] = clergyUnitCount[teamID] - 1
-        Spring.Echo(clergyUnitCount[teamID])
     end
 end
 
