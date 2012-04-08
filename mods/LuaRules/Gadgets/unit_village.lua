@@ -26,6 +26,7 @@ include("LuaUI/Headers/villages.h.lua")
 include("LuaRules/Classes/Units/village.lua")
 
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
+local GiveOrderToUnit = Spring.GiveOrderToUnit
 
 local VillageManager
 local CMD_KEY_MAP = {}
@@ -69,10 +70,6 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
     -- At the beginning of the game, we don't have village objects yet
     if not v then return false end
 
-    if table.contains(v:GetDisallowedCommands(), cmdID) then
-        return false
-    end
-
     if cmdID == CMD.STOP then
         v:Stop()
         return true
@@ -83,19 +80,21 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
     end
 
     if cmdID == Villages.CMDS.FORTIFY then
+        GiveOrderToUnit(unitID, CMD.WAIT, {}, {})
         v:Fortify()
-        return true
+        return false
     end
 
     local buildingkey = CMD_KEY_MAP[cmdID]
     if buildingkey then 
+        GiveOrderToUnit(unitID, CMD.WAIT, {}, {})
         v:AddBuilding(buildingkey)
-        return true
+        return false
     end
 
     if table.containsvalue(Buildings.CMD_IDS.RESEARCH, cmdID) then
         v:ExecuteCommand(cmdID)
-        return true
+        return false
     end
     
     return true

@@ -15,6 +15,27 @@ include("LuaUI/Headers/customcmds.h.lua")
 include("LuaRules/Classes/Units/unit.lua")
 include("LuaRules/Classes/Units/village_buildings.lua")
 
+-- speed ups
+local GiveOrderToUnit = Spring.GiveOrderToUnit
+
+local fortifyCmdDesc = {
+    id = Villages.CMDS.FORTIFY,
+    name = "Fortify",
+    action = "Fortify",
+    type = CMD.ICON,
+    tooltip = "Fortify the village to level up",
+    params = {},
+}
+
+local CLASS_MAP = {
+    [Buildings.TYPES.SHRINE] = Shrine,
+    [Buildings.TYPES.TURRET] = Turret,
+    [Buildings.TYPES.MOTEL] = Motel,
+    [Buildings.TYPES.HIGH_RISE] = HighRise,
+    [Buildings.TYPES.TRAINING_FACILITY] = TrainingFacility,
+}
+
+
 Village = BaseUnit:Inherit{
     classname = "Village",
     buildings = {},
@@ -27,25 +48,9 @@ Village = BaseUnit:Inherit{
     supplyCap = 0, -- set in New()
 }
 
-local CLASS_MAP = {
-    [Buildings.TYPES.SHRINE] = Shrine,
-    [Buildings.TYPES.TURRET] = Turret,
-    [Buildings.TYPES.MOTEL] = Motel,
-    [Buildings.TYPES.HIGH_RISE] = HighRise,
-    [Buildings.TYPES.TRAINING_FACILITY] = TrainingFacility,
-}
-
 local this = Village
 local inherited = this.inherited
 
-local fortifyCmdDesc = {
-    id = Villages.CMDS.FORTIFY,
-    name = "Fortify",
-    action = "Fortify",
-    type = CMD.ICON,
-    tooltip = "Fortify the village to level up",
-    params = {},
-}
 
 function Village:New(unitID)
     local obj = inherited.New(self, unitID)
@@ -109,11 +114,14 @@ function Village:GetSlots()
 end
 
 function Village:IsBusy() return self.busy end
-function Village:SetBusy(b) self.busy = b end
+function Village:SetBusy(b)
+    self.busy = b
+end
 
 function Village:Stop()
     if not self:IsBusy() then return end
     GG.ProgressBars.CancelProgressBar(self:GetUnitID())
+    GiveOrderToUnit(self:GetUnitID(), CMD.WAIT, {}, {})
 end
 
 function Village:GetBuildingCount()
