@@ -242,33 +242,6 @@ function table.tostring( tbl )
   return "{" .. table.concat( result, "," ) .. "}"
 end
 
--- Count the number of times a value occurs in a table 
-function table.count(tt, item)
-  local count
-  count = 0
-  for ii,xx in pairs(tt) do
-    if item == xx then count = count + 1 end
-  end
-  return count
-end
-
--- Remove duplicates from a table array (doesn't currently work
--- on key-value tables)
-function table.unique(tt)
-  local newtable
-  newtable = {}
-  for ii,xx in ipairs(tt) do
-    if(table_count(newtable, xx) == 0) then
-      newtable[#newtable+1] = xx
-    end
-  end
-  return newtable
-end
-
-------------------------------------------------------------
--- MISC
-------------------------------------------------------------
-
 function utils.distance_between_points(p1, p2)
     local x1, y1, z1 = unpack(p1)
     local x2, y2, z2 = unpack(p2)
