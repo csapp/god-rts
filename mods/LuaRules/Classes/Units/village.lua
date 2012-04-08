@@ -115,13 +115,18 @@ end
 
 function Village:IsBusy() return self.busy end
 function Village:SetBusy(b)
-    self.busy = b
+    if b then
+        GiveOrderToUnit(self:GetUnitID(), CMD.WAIT, {}, {CMD_OPTS.ALLOW})
+        self.busy = b
+    else
+        self.busy = b
+        GiveOrderToUnit(self:GetUnitID(), CMD.WAIT, {}, {CMD_OPTS.ALLOW})
+    end
 end
 
 function Village:Stop()
     if not self:IsBusy() then return end
     GG.ProgressBars.CancelProgressBar(self:GetUnitID())
-    GiveOrderToUnit(self:GetUnitID(), CMD.WAIT, {}, {})
 end
 
 function Village:GetBuildingCount()

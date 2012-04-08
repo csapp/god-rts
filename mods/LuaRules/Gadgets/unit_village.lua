@@ -20,6 +20,7 @@ if (not gadgetHandler:IsSyncedCode()) then
 end
 
 include("LuaUI/Headers/utilities.lua")
+include("LuaUI/Headers/customcmds.h.lua")
 include("LuaUI/Headers/msgs.h.lua")
 include("LuaUI/Headers/units.h.lua")
 include("LuaUI/Headers/villages.h.lua")
@@ -75,19 +76,17 @@ function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOpt
         return true
     end
 
-    if v:IsBusy() then
+    if v:IsBusy() and cmdOptions[1] ~= CMD_OPTS.ALLOW then
         return false
     end
 
     if cmdID == Villages.CMDS.FORTIFY then
-        GiveOrderToUnit(unitID, CMD.WAIT, {}, {})
         v:Fortify()
         return false
     end
 
     local buildingkey = CMD_KEY_MAP[cmdID]
     if buildingkey then 
-        GiveOrderToUnit(unitID, CMD.WAIT, {}, {})
         v:AddBuilding(buildingkey)
         return false
     end
