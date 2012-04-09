@@ -109,17 +109,7 @@ end
 --so in the interest of time.... this works
 function getTexture(action)
 	--Spring.Echo("texture",action)
-	if action == 'VolcanicBlast' then return 'bitmaps/icons/VolcanicBlast.png' end
-	if action == 'Teleport' then return 'bitmaps/icons/Teleport.png' end
-	if action == 'stop' then return 'bitmaps/icons/stop.png' end
-	if action == 'wait' then return 'bitmaps/icons/wait.png' end
-	if action == 'move' then return 'bitmaps/icons/move.png' end
-	if action == 'attack' then return 'bitmaps/icons/attack.png' end
-	if action == 'fight' then return 'bitmaps/icons/fight.png' end
-	if action == 'buildunit_horseman' then return 'bitmaps/icons/buildunit_horseman.png' end
-	if action == 'buildunit_hunter' then return 'bitmaps/icons/buildunit_hunter.png' end
-	if action == 'buildunit_soldier' then return 'bitmaps/icons/buildunit_soldier.png' end
-	return nil
+	return 'bitmaps/icons/'..action..'.png'
 end
 
 function createMyButton(cmd)
@@ -404,7 +394,6 @@ function isVillageSelected()
 	--end
 	local sel
 	for i=1,#newSelection do
-	Spring.Echo("Loop")
 		if (not(UnitDefs[spGetUnitDefID(newSelection[i])].name == "smallvillage") and not(UnitDefs[spGetUnitDefID(newSelection[i])].name == "mediumvillage") and not(UnitDefs[spGetUnitDefID(newSelection[i])].name == "largevillage")) then
 			return false
 		end
