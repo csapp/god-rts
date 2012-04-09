@@ -397,11 +397,19 @@ end
 
 function isVillageSelected()
 	newSelection = Spring.GetSelectedUnits()
-	if #newSelection==1 and (UnitDefs[spGetUnitDefID(newSelection[1])].name == "smallvillage" or UnitDefs[spGetUnitDefID(newSelection[1])].name == "mediumvillage" or UnitDefs[spGetUnitDefID(newSelection[1])].name == "largevillage") then 
-		return true
-	else 
-		return false
+	--if #newSelection==1 and (UnitDefs[spGetUnitDefID(newSelection[1])].name == "smallvillage" or UnitDefs[spGetUnitDefID(newSelection[1])].name == "mediumvillage" or UnitDefs[spGetUnitDefID(newSelection[1])].name == "largevillage") then 
+	--	return true
+	--else 
+	--	return false
+	--end
+	local sel
+	for i=1,#newSelection do
+	Spring.Echo("Loop")
+		if (not(UnitDefs[spGetUnitDefID(newSelection[i])].name == "smallvillage") and not(UnitDefs[spGetUnitDefID(newSelection[i])].name == "mediumvillage") and not(UnitDefs[spGetUnitDefID(newSelection[i])].name == "largevillage")) then
+			return false
+		end
 	end
+	return true
 end
 
 function getMainSelected(selection)
