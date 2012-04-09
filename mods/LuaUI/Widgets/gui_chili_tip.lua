@@ -51,7 +51,7 @@ local color = {}
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
-
+include("managers.h.lua")
 include("keysym.h.lua")
 local tildepressed, drawing, erasing
 local glColor		= gl.Color
@@ -96,7 +96,7 @@ local changeNow = false
 local window_tooltip2
 local windows = {}
 --local tt_buildpic
-local tt_healthbar, tt_unitID, tt_fid, tt_ud, tt_fd
+local tt_unitID, tt_fid, tt_ud, tt_fd
 local controls = {}
 local controls_icons = {}
 
@@ -421,48 +421,6 @@ end
 
 ----------------------------------------------------------------
 
-local function SetHealthbar()
-	if 
-		not ( tt_unitID or tt_fid )
-		then 
-		return 'err' 
-	end
-	
-	local tt_healthbar
-	
-	local health, maxhealth
-	if tt_unitID then
-		health, maxhealth = spGetUnitHealth(tt_unitID)
-		tt_healthbar = globalitems.hp_unit
-	elseif tt_fid then
-		health, maxhealth = Spring.GetFeatureHealth(tt_fid)
-		tt_healthbar = tt_ud and globalitems.hp_corpse or globalitems.hp_feature
-	end
-	
-	if health then
-		tt_healthbar.color = {0,1,0, 1}
-		
-		tt_health_fraction = health/maxhealth
-		tt_healthbar:SetValue(tt_health_fraction)
-		if options.hpshort.value then
-			tt_healthbar:SetCaption(numformat(health) .. ' / ' .. numformat(maxhealth))
-		else
-			tt_healthbar:SetCaption(math.ceil(health) .. ' / ' .. math.ceil(maxhealth))
-		end
-		
-	else
-		tt_healthbar.color = {0,0,0.5, 1}
-		local maxhealth = (tt_fd and tt_fd.health) or (tt_ud and tt_ud.health) or 0
-		tt_healthbar:SetValue(1)
-		if options.hpshort.value then
-			tt_healthbar:SetCaption('??? / ' .. numformat(maxhealth))
-		else
-			tt_healthbar:SetCaption('??? / ' .. math.ceil(maxhealth))
-		end
-	end
-end
-
-
 local function KillTooltip(force)
 	--[[
 	if options.statictip.value and not force then
@@ -545,14 +503,6 @@ local function UpdateResourceStack(tooltip_type, unitID, ud, tooltip, fontSize)
 	end
 	
 	if globalitems[resource_tt_name] then
-		local metalcontrol 	= globalitems[resource_tt_name]:GetChildByName('metal')
-		local energycontrol = globalitems[resource_tt_name]:GetChildByName('energy')
-		
-		metalcontrol.font:SetColor(color_m)
-		energycontrol.font:SetColor(color_e)
-		
-		metalcontrol:SetCaption( numformat(metal, true) )
-		energycontrol:SetCaption( numformat(energy, true) )
 		return
 	end
 	
@@ -569,12 +519,6 @@ local function UpdateResourceStack(tooltip_type, unitID, ud, tooltip, fontSize)
 		padding = {0,0,0,0},
 		itemPadding = {0,0,0,0},
 		itemMargin = {5,0,0,0},
-		children = {
-			Image:New{file='LuaUI/images/ibeam.png',height= icon_size,width= icon_size, fontSize=ttFontSize,},
-			lbl_metal2,
-			Image:New{file='LuaUI/images/energy.png',height= icon_size,width= icon_size, fontSize=ttFontSize,},
-			lbl_energy2,
-		},
 	}
 end
 
@@ -616,27 +560,12 @@ local function UpdateMorphControl(morph_data)
 		globalitems.morphs:GetChildByName('time'):SetCaption(morph_time)
 		globalitems.morphs:GetChildByName('cost'):SetCaption(morph_cost)
 		globalitems.morphs:GetChildByName('prereq'):SetCaption(morph_prereq and ('Need Unit: '..morph_prereq) or '')
-		
-		--[[
-		globalitems.morphs:GetChildByName('time').height=height
-		globalitems.morphs:GetChildByName('time'):Invalidate()
-		globalitems.morphs:Invalidate()
-		globalitems.morphs:UpdateLayout()
-		--]]
+
 		return
 	end
 	height = icon_size+1
-	
-	morph_controls[#morph_controls + 1] = Label:New{ caption = 'Morph: ', height= icon_size, valign='center', textColor=color.tooltip_info, autosize=false, width=45, fontSize=ttFontSize,}
-	morph_controls[#morph_controls + 1] = Image:New{file='LuaUI/images/clock.png',height= icon_size,width= icon_size, fontSize=ttFontSize,}
-	morph_controls[#morph_controls + 1] = Label:New{ name='time', caption = morph_time, valign='center', textColor=color.tooltip_info, autosize=false, width=25, fontSize=ttFontSize,}
-	morph_controls[#morph_controls + 1] = Image:New{file='LuaUI/images/ibeam.png',height= icon_size,width= icon_size, fontSize=ttFontSize,}
-	morph_controls[#morph_controls + 1] = Label:New{ name='cost', caption = morph_cost, valign='center', textColor=color.tooltip_info, autosize=false, width=25, fontSize=ttFontSize,}
-	
-	--if morph_prereq then
-		--morph_controls[#morph_controls + 1] = Label:New{ 'prereq' caption = 'Need Unit: '..morph_prereq, valign='center', textColor=color.tooltip_info, autosize=false, width=180, fontSize=ttFontSize,}
-		morph_controls[#morph_controls + 1] = Label:New{ name='prereq', caption = morph_prereq and ('Need Unit: '..morph_prereq) or '', valign='center', textColor=color.tooltip_info, autosize=false, width=80, fontSize=ttFontSize,}
-	--end
+
+	morph_controls[#morph_controls + 1] = Label:New{ name='prereq', caption = morph_prereq and ('Need Unit: '..morph_prereq) or '', valign='center', textColor=color.tooltip_info, autosize=false, width=80, fontSize=ttFontSize,}
 	
 	
 	globalitems.morphs = StackPanel:New {
@@ -651,38 +580,6 @@ local function UpdateMorphControl(morph_data)
 		itemMargin = {0,0,0,0},
 		children = morph_controls,
 	}
-end
-
-
-local function GetHelpText(tooltip_type)
-	local _,_,_,buildUnitName = Spring.GetActiveCommand()
-	if buildUnitName then
-		return ''
-	end
-
-	local sc_caption = ''
-	if tooltip_type == 'build' then
-		sc_caption = 'Space+click: Show unit stats'
-	elseif tooltip_type == 'buildunit' then
-			if showExtendedTip then
-			
-				sc_caption = 
-					'Shift+click: x5 multiplier.\n'..
-					'Ctrl+click: x20 multiplier.\n'..
-					'Alt+click: Add units to front of queue. \n'..
-					'Rightclick: remove units from queue.\n'..
-					'Space+click: Show unit stats'
-			else
-				sc_caption = '(Hold Spacebar for help)'
-			end
-	
-	elseif tooltip_type == 'morph' then
-		sc_caption = 'Space+click: Show unit stats'
-	else
-		sc_caption = 'Space+click: Show unit stats'
-	end
-	return sc_caption
-	
 end
 
 local function MakeStack(ttname, ttstackdata, leftbar)
@@ -701,11 +598,6 @@ local function MakeStack(ttname, ttstackdata, leftbar)
 			local curFontSize = ttFontSize + (item.fontSize or 0)
 			local itemtext =  item.text or ''
 			local stackchildren = {}
-
-			if item.icon then
-				controls_icons[ttname][item.name] = Image:New{ file = item.icon, height= icon_size,width= icon_size, fontSize=curFontSize,}
-				stack_children[#stack_children+1] = controls_icons[ttname][item.name]
-			end
 			
 			if item.wrap then
 				controls[ttname][item.name] = TextBox:New{
@@ -717,10 +609,14 @@ local function MakeStack(ttname, ttstackdata, leftbar)
 				}
 				stack_children[#stack_children+1] = controls[ttname][item.name]
 			else
-				local rightmargin = item.icon and icon_size or 0
-				local width = (leftbar and 50 or 230) - rightmargin
-				
-				controls[ttname][item.name] = Label:New{ fontShadow=true, defaultHeight=0, autosize=true, name=item.name, caption = itemtext, fontSize=curFontSize, valign='center', height=icon_size+5, x=icon_size+5, right=1,}
+				controls[ttname][item.name] = Label:New{
+												fontShadow=false,
+												defaultHeight=0,
+												autosize=true,
+												name=item.name,
+												caption = itemtext,
+												fontSize=curFontSize,
+												}
 				stack_children[#stack_children+1] = controls[ttname][item.name]
 			end
 			
@@ -740,11 +636,11 @@ local function MakeStack(ttname, ttstackdata, leftbar)
 				orientation='horizontal',
 				resizeItems=false,
 				width = '100%',
-				height = '100%',
+				height = 100,
 				autosize=false,
-				padding = {1,1,1,1},
+				padding = {0,0,0,0},
 				itemPadding = {0,0,0,0},
-				itemMargin = {4,0,0,0},
+				itemMargin = {0,0,0,0},
 				children = stack_children,
 			}
 		end
@@ -757,15 +653,7 @@ local function UpdateStack(ttname, stack)
 		local name = item.name
 		
 			if item.directcontrol then
-				--local directitem = (type( item.directcontrol ) == 'string') and globalitems[item.directcontrol] or item.directcontrol
 				local directitem = globalitems[item.directcontrol]
-				--[[
-				if hideitems[item.directcontrol] then
-					directitem:Resize('100%',0)
-				else
-					directitem:Resize('100%',globalitemheights[item.directcontrol])
-				end
-				--]]
 			end
 			if controls[ttname][name] then			
 				if item.wrap then	
@@ -830,22 +718,21 @@ local function BuildTooltip2(ttname, ttdata)
 					width = 70,
 					children = children_leftbar,
 				}
-			leftside = true
+			--leftside = true
 		else
 			stack_leftbar_temp = StackPanel:New{ width=10, }
 		end
 		
 		stack_main_temp = StackPanel:New{
 			name = 'main',
-			autosize=true,
 			x = leftside and 60 or 0,
 			y = 0,
 			orientation='vertical',
 			centerItems = false,
-			width = 240,
-			height = 100,
-			padding = {0,0,0,0},
-			itemPadding = {1,0,0,0},
+			width = 300,
+			height = 40,
+			padding = {1,0,0,0},
+			itemPadding = {0,0,0,0},
 			itemMargin = {0,0,0,0},
 			resizeItems=false,
 			children = children_main,
@@ -857,9 +744,8 @@ local function BuildTooltip2(ttname, ttdata)
 			useDList = false,
 			resizable = false,
 			draggable = false,
-			autosize  = false,
-			width = 300,
-			height = 25,
+			width = 310,
+			height = 40,
 			--tweakDraggable = true,
 			backgroundColor = color.tooltip_bg, 
 			children = { stack_leftbar_temp, stack_main_temp, }
@@ -867,14 +753,6 @@ local function BuildTooltip2(ttname, ttdata)
 	end
 	SetTooltip(windows[ttname])
 end
-
-local function GetUnitIcon(ud)
-	if not ud then return false end
-	return icontypes 
-		and	icontypes[(ud and ud.iconType or "default")].bitmap
-		or 	'icons/'.. ud.iconType ..iconFormat
-end
-
 
 local function MakeToolTip_Text(text)
 	BuildTooltip2('tt_text',{
@@ -884,220 +762,58 @@ local function MakeToolTip_Text(text)
 	})
 end
 
-local function UpdateBuildpic( ud, globalitem_name )
-	if not ud then return end
-	
-	if not globalitems[globalitem_name] then
-		globalitems[globalitem_name] = Image:New{
-			file = "#" .. ud.id,
-			file2 = (WG.GetBuildIconFrame)and(WG.GetBuildIconFrame(ud)),
-			keepAspect = false,
-			height  = 55*(4/5),
-			width   = 55,
-		}
-		return
-	end
-	globalitems[globalitem_name].file = "#" .. ud.id
-	globalitems[globalitem_name].file2 = (WG.GetBuildIconFrame)and(WG.GetBuildIconFrame(ud))
-	globalitems[globalitem_name]:Invalidate()
-end
-
-local function MakeToolTip_UD(tt_table)
-	
-	local helptext = GetHelpText(tt_table.buildType)
-	local iconPath = GetUnitIcon(tt_table.unitDef)
-	
+-- Generate tooltips for unit building buttons
+local function MakeToolTip_UD(tt_table)	
 	local tt_structure = {
-		leftbar = {
-			tt_table.morph_data 
-				and { name= 'bp', directcontrol = 'buildpic_morph' }
-				or { name= 'bp', directcontrol = 'buildpic_ud' },
-			{ name = 'cost', icon = 'LuaUI/images/ibeam.png', text = cyan .. numformat(tt_table.unitDef.metalCost), },
+		leftbar = {			
 		},
 		main = {
-			{ name = 'udname', icon = iconPath, text = tt_table.unitDef.humanName, fontSize=2 },
-			{ name = 'tt', text = tt_table.unitDef.tooltip, wrap=true },
-			--{ name='health', icon = 'LuaUI/images/commands/Bold/health.png',  text = numformat(tt_table.unitDef.health), },
-			--[[
-			{ name = 'requires', text = tt_table.requires and ('REQUIRES' .. tt_table.requires) or '', },
-			{ name = 'provides', text = tt_table.provides and ('PROVIDES' .. tt_table.provides) or '', },
-			{ name = 'consumes', text = tt_table.consumes and ('CONSUMES' .. tt_table.consumes) or '', },
-			--]]
-			tt_table.morph_data and { name='morph', directcontrol = 'morphs' } or {},
-			{ name='helptext', text = green .. helptext, wrap=true},
-			
+			{ name = 'udname', icon = iconPath, text = tt_table.unitDef.humanName .. '\n' .. tt_table.unitDef.tooltip},			
 		},
 	}
 	
-	
-	if tt_table.morph_data then
-		UpdateBuildpic( tt_table.unitDef, 'buildpic_morph' )
-		UpdateMorphControl( tt_table.morph_data )
-		
-		BuildTooltip2('morph', tt_structure)
-	else
-		UpdateBuildpic( tt_table.unitDef, 'buildpic_ud' )
-		BuildTooltip2('ud', tt_structure)
-	end
-	
+	BuildTooltip2('ud', tt_structure)
+
 end
 
 
-local function MakeToolTip_Unit(data, tooltip)
+local function MakeToolTip_Village(data, tooltip)
 	local unitID = data
 	local team, fullname
 	tt_unitID = unitID
 	team = spGetUnitTeam(tt_unitID) 
 	tt_ud = UnitDefs[ spGetUnitDefID(tt_unitID) or -1]
 	
-	fullname = ((tt_ud and tt_ud.humanName) or "")	
+	fullname = ((tt_ud and tt_ud.humanName) or "")
 		
 	if not (tt_ud) then
 		--fixme
 		return false
 	end
-	--local alliance       = spGetUnitAllyTeam(tt_unitID)
+
 	local _, player		= spGetTeamInfo(team)
 	local playerName	= player and spGetPlayerInfo(player) or 'noname'
+	
 	local teamColor		= Chili.color2incolor(spGetTeamColor(team))
-	---local unittooltip	= tt_unitID and spGetUnitTooltip(tt_unitID) or (tt_ud and tt_ud.tooltip) or ""
+
 	local unittooltip	= GetUnitDesc(tt_unitID, tt_ud)
-	local iconPath		= GetUnitIcon(tt_ud)
+	local convertTime	= UnitDefs[Spring.GetUnitDefID(unitID)].customParams.convert_time
+	local maxVillagers	= UnitDefs[Spring.GetUnitDefID(unitID)].customParams.supply_cap
+	local amountUsed	= ""
 	
 	UpdateResourceStack( 'unit', unitID, tt_ud, tooltip, ttFontSize )
 	
 	local tt_structure = {
 		leftbar = {
-			{ name= 'bp', directcontrol = 'buildpic_unit' },
-			{ name= 'cost', icon = 'LuaUI/images/ibeam.png', text = cyan .. numformat((tt_ud and tt_ud.metalCost) or '0') },
 		},
 		main = {
-			{ name='uname', icon = iconPath, text = fullname .. ' (' .. teamColor .. playerName .. white ..')', fontSize=2, },
-			{ name='utt', text = unittooltip, wrap=true },
-			{ name='hp', directcontrol = 'hp_unit', },
-			{ name='res', directcontrol = 'resources_unit' },
-			{ name='help', text = green .. 'Space+click: Show unit stats', },
+			{ name='uname', text = unittooltip .. '\n' .. 'Base Convert Time: ' .. convertTime .. '\n' .. 'Max Villagers: ' .. maxVillagers, wrap=true},
 		},
 	}
-	
-	UpdateBuildpic( tt_ud, 'buildpic_unit' )
 	BuildTooltip2('unit', tt_structure)
-end
-
-local function MakeToolTip_Feature(data, tooltip)
-	local featureID = data
-	local tt_fd
-	local team, fullname
-	
-	tt_fid = featureID
-	team = spGetFeatureTeam(featureID)
-	local fdid = spGetFeatureDefID(featureID)
-	tt_fd = fdid and FeatureDefs[fdid or -1]
-	local feature_name = tt_fd and tt_fd.name
-
-	local live_name
-	if tt_fd and tt_fd.customParams and tt_fd.customParams.unit then
-		live_name = tt_fd.customParams.unit
-	else
-		live_name = feature_name:gsub('([^_]*).*', '%1')
-	end
-	
-	local desc = ''
-	if feature_name:find('dead2') or feature_name:find('heap') then
-		desc = ' (debris)'
-	elseif feature_name:find('dead') then
-		desc = ' (wreckage)'
-	end
-	tt_ud = UnitDefNames[live_name]
-	
-	fullname = ((tt_ud and tt_ud.humanName .. desc) or tt_fd.tooltip or "")
-	
-	if not (tt_fd) then
-		--fixme
-		return false
-	end
-	
-	if options.hide_for_unreclaimable.value and not tt_fd.reclaimable then
-		return false
-	end
-	
-	--local alliance       = spGetUnitAllyTeam(tt_unitID)
-	local _, player		= spGetTeamInfo(team)
-	local playerName	= player and spGetPlayerInfo(player) or 'noname'
-	local teamColor		= Chili.color2incolor(spGetTeamColor(team))
-	---local unittooltip	= tt_unitID and spGetUnitTooltip(tt_unitID) or (tt_ud and tt_ud.tooltip) or ""
-	local unittooltip	= GetUnitDesc(tt_unitID, tt_ud)
-	local iconPath		= GetUnitIcon(tt_ud)
-	
-	UpdateResourceStack( tt_ud and 'corpse' or 'feature', featureID, tt_ud or tt_fd, tooltip, ttFontSize )
-	
-	local tt_structure = {
-		leftbar =
-			tt_ud and
-			{
-				{ name= 'bp', directcontrol = 'buildpic_feature' },
-				{ name='cost', icon = 'LuaUI/images/ibeam.png', text = cyan .. numformat((tt_ud and tt_ud.metalCost) or '0'), },
-			}
-			or nil,
-		main = {
-			{ name='uname', icon = iconPath, text = fullname .. ' (' .. teamColor .. playerName .. white ..')', fontSize=2, },
-			{ name='utt', text = unittooltip, wrap=true },
-			(	options.featurehp.value
-					and { name='hp', directcontrol = (tt_ud and 'hp_corpse' or 'hp_feature'), } 
-					or {}),
-			{ name='res', directcontrol = tt_ud and 'resources_corpse' or 'resources_feature' },
-			{ name='help', text = green .. 'Space+click: Show unit stats', },
-		},
-	}
-	
-	
-	if tt_ud then
-		UpdateBuildpic( tt_ud, 'buildpic_feature' )
-		BuildTooltip2('corpse', tt_structure)
-	else
-		BuildTooltip2('feature', tt_structure)
-	end
-	return true
-end
-
-
-
-local function CreateHpBar(name)
-	globalitems[name] = Progressbar:New {
-		name = name,
-		width = '100%',
-		height = icon_size+2,
-		itemMargin    = {0,0,0,0},
-		itemPadding   = {0,0,0,0},	
-		padding = {0,0,0,0},
-		color = {0,1,0,1},
-		max=1,
-		caption = 'a',
-
-		children = {
-			--Image:New{file='LuaUI/images/commands/bold/health.png',height= icon_size,width= icon_size,  x=0,y=0},
-		},
-	}
-end
-
-local function MakeToolTip_Draw()
-	local tt_structure = {
-		main = {
-			{ name='lmb', 		icon = LUAUI_DIRNAME .. 'Images/drawingcursors/pencil.png', 		text = 'Left Mouse Button', },
-			{ name='rmb', 		icon = LUAUI_DIRNAME .. 'Images/drawingcursors/eraser.png', 		text = 'Right Mouse Button', },
-			{ name='mmb', 		icon = LUAUI_DIRNAME .. 'Images/Crystal_Clear_action_flag.png', 	text = 'Middle Mouse Button', },
-			{ name='dblclick', 	icon = LUAUI_DIRNAME .. 'Images/drawingcursors/flagtext.png', 		text = 'Double Click', },
-			
-		},
-	}
-	BuildTooltip2('drawing', tt_structure)
 end
 	
 local function MakeTooltip()
-	if options.showdrawtooltip.value and  tildepressed and not (drawing or erasing) then
-		MakeToolTip_Draw()
-		return
-	end
 	
 	local cur_ttstr = screen0.currentTooltip or spGetCurrentTooltip()
 	local type, data = spTraceScreenRay(mx, my)
@@ -1147,14 +863,12 @@ local function MakeTooltip()
 		or tooltip:find('TechLevel %d') --shows on units
 		or tooltip:find('Metal.*Energy') --shows on features
 
-	--unit(s) selected/pointed at
+	--unit(s) selected/pointed at	
 	if unit_tooltip then
-		-- For some reason, buttons and labels are considered "ground".
-		-- But if we want to add tooltips for more stuff, this is where you can add it.
-		--[[if type == 'unit' then
-			MakeToolTip_Unit(data, tooltip)
+		if type == 'unit' and spGetPlayerInfo(spGetTeamInfo(spGetUnitTeam(data))) == nil then
+			MakeToolTip_Village(data, tooltip)
 			return
-		end]]
+		end
 	
 		--holding meta or static tip
 		if (showExtendedTip) then
@@ -1218,8 +932,6 @@ function widget:Update(dt)
 		changeNow = false
 	end
 	
-	SetHealthbar()
-	
 	if cycle == 1 then
 		changeNow = true
 	end
@@ -1257,10 +969,6 @@ function widget:Initialize()
 	 screen0 = Chili.Screen0
 
 	widget:ViewResize(Spring.GetViewGeometry())
-
-	CreateHpBar('hp_unit')
-	CreateHpBar('hp_feature')
-	CreateHpBar('hp_corpse')
 	
 	
 	stack_main = StackPanel:New{
@@ -1292,25 +1000,6 @@ function widget:Shutdown()
 	end
 end
 
-
-
-function widget:KeyPress(key, modifier, isRepeat)
-	if key == KEYSYMS.BACKQUOTE then
-		if not tildepressed then
-			changeNow = true
-		end	
-		tildepressed = true
-	end
-end
-function widget:KeyRelease(key)
-	if key == KEYSYMS.BACKQUOTE then
-		if tildepressed then
-			changeNow = true
-		end
-		tildepressed = false
-	end
-end
-
 function widget:DrawScreen()
 	if not tildepressed then return end
 	local x, y, lmb, mmb, rmb = Spring.GetMouseState()
@@ -1318,11 +1007,6 @@ function widget:DrawScreen()
 	erasing = rmb
 	
 	local filefound
-	if drawing then
-		filefound = glTexture(LUAUI_DIRNAME .. 'Images/drawingcursors/pencil.png')
-	elseif erasing then
-		filefound = glTexture(LUAUI_DIRNAME .. 'Images/drawingcursors/eraser.png')
-	end
 	
 	if filefound then
 		--do teamcolor?
