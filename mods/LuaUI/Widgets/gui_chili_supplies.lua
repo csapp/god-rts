@@ -16,26 +16,20 @@ end
 include("managers.h.lua")
 
 local supplyLabel
-local currentSupplies = ""
-local supplyCap = ""
+local currentSupplies = 0 
+local supplyCap = 0 
 
 local function UpdateLabel()
-    supplyLabel:SetCaption(currentSupplies.."/"..supplyCap)
+    supplyLabel:SetCaption(currentSupplies.."/"..math.floor(supplyCap))
 end
 
 local function UpdateCurrentSupplies(cs)
-    --if not cs then 
-        --cs = ""
-    --end
-    currentSupplies = cs
+    currentSupplies = tonumber(cs)
     UpdateLabel()
 end
 
 local function UpdateSupplyCap(cap)
-    --if not cap then
-        --cap = ""
-    --end
-    supplyCap = cap
+    supplyCap = tonumber(cap)
     UpdateLabel()
 end
 
