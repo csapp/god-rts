@@ -20,9 +20,10 @@ end
 --DEBUG = 0
 
 -- INCLUDES
-include("msgs.h.lua")
 VFS.Include("LuaUI/Headers/utilities.lua")
+include("msgs.h.lua")
 include("managers.h.lua")
+include("units.h.lua")
 
 -- CONSTANTS
 local Chili
@@ -85,6 +86,7 @@ function LayoutHandler(xIcons, yIcons, cmdCount, commands)
 	return "", xIcons, yIcons, {}, customCmds, {}, {}, {}, {}, reParamsCmds, {[1337]=9001}
 end
 
+
 function setUnitStats(unit)
 	local unitStatString = printVelocity(unit) .. "\n" ..
 						   printDamage(unit) .. "\n" ..
@@ -98,6 +100,14 @@ function resetWindow(container)
 	container:ClearChildren()
 	container.xstep = 1
 	container.ystep = 1
+end
+
+local function getVillageBuildingInfo(villageID)
+    local function cb(result) 
+        for k,v in pairs(result) do Spring.Echo(k,v) end 
+    end
+    WG.GadgetQuery.CallManagerElementFunction(cb, Managers.TYPES.VILLAGE, 
+                                              villageID, "CallOnAll", {"GetName"})	
 end
 
 function widget:Initialize()
@@ -229,6 +239,9 @@ function widget:CommandsChanged()
     --setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
 	setUnitStats(selected_units[1])
+    if Units.IsVillageUnit(selected_units[1]) then
+        getVillageBuildingInfo(selected_units[1])
+    end
 	resetWindow(imageWindow)
 	resetWindow(commandWindow)
 	drawPortrait()
@@ -436,6 +449,7 @@ local function getPowerNames()
     local function getNames(names) powerNames = names end
 	WG.GadgetQuery.CallManagerFunctionOnAll(getNames, Managers.TYPES.POWER, "GetName")
 end
+
 
 function printPowerInfo()
     -- Wait until we populate the powerNames table before calling this function

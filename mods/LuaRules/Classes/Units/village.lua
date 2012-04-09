@@ -165,6 +165,18 @@ function Village:GetBuilding(key)
     return self.buildings[key]
 end
 
+function Village:CallOnAll(funcname, args)
+    args = args or {}
+    local results = {}
+    for id, element in pairs(self:GetBuildings()) do
+        local func = element[funcname]
+        if func then 
+            results[id] = func(element, unpack(args))
+        end
+    end
+    return results
+end
+
 function Village:ExecuteCommand(cmdID)
     for _, building in pairs(self:GetBuildings()) do
         building:ExecuteCommand(cmdID)

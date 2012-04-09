@@ -56,6 +56,8 @@ local function StartManagerQueryString(key)
     local q = ""
     if table.contains(Managers.Team.TYPES, key) then
         q = q.."_G.TeamManagers["..teamID.."]:"
+    elseif table.contains(Managers.Unit.TYPES, key) then
+        q = q.."_G.UnitManager:"
     else
         q = q.."_G."
     end
@@ -69,9 +71,18 @@ local function CallManagerFunction(callback, key, funcname, args)
     CallFunction(q, GetCallbackWrapper(callback))
 end
 
+local function _WrapString(s)
+    if type(s)=="string" then 
+        return "'"..s.."'" 
+    else 
+        return s 
+    end 
+end
+
 local function CallManagerElementFunction(callback, key, elementID, funcname, args)
     args = args or {} 
     local q = StartManagerQueryString(key).."GetElement("..elementID.."):"..funcname.."("
+    args = utils.map(_WrapString, args)
     q = q..table.concat(utils.map(utils.to_string, args), ",")..")"
     CallFunction(q, GetCallbackWrapper(callback))
 end
