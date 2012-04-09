@@ -200,6 +200,23 @@ end
 		--state = selected,
 	--}
 
+    selected = "unpressed"
+    if(listOfPowers[3] == "Metropolis") then selected = "pressed" end
+    local buttonSomething = Chili.Button:New {
+        parent = godselWindow,
+        x = 30,
+        y = 340,
+        padding = {5, 5, 5, 5},
+        margin = {0, 0, 0, 0},
+        minWidth = 120,
+        minHeight = 120,
+        caption = "Metropolis",
+        isDisabled = false,
+        cmdid = 3,
+        OnMouseDown = {ClickFunc},
+        state = selected,
+    }
+
 	selected = "unpressed"
 	if(listOfPowers[3] == "Express Conversion") then selected = "pressed" end
 	local buttonExpress = Chili.Button:New {

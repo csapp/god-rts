@@ -59,7 +59,9 @@ function Village:New(unitID)
 end
 
 function Village:GetSupplyCap()
-    return self.supplyCap
+    local am = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager()
+    local mult = am:GetSupplyCapMultiplier():GetValue(self:GetUnitID())
+    return self.supplyCap * mult
 end
 
 function Village:SetSupplyCap(cap)

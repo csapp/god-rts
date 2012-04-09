@@ -17,6 +17,7 @@ ExpressConversion = PassivePower:Inherit{
     id = 50001,
     multipliers = {
         [Multipliers.TYPES.CONVERT_TIME] = {0.5},
+        [Multipliers.TYPES.FAITH] = {0.5}, -- generate 0.5 faith every 5 seconds
     },
 }
 

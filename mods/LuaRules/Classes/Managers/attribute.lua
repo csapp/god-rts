@@ -40,6 +40,8 @@ function AttributeManager:New(teamID)
     obj:RegisterMultiplier(Multipliers.TYPES.POWER_RECHARGE, PowerRechargeMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.CONVERT_TIME, ConvertTimeMultiplier:New(teamID))
     obj:RegisterMultiplier(Multipliers.TYPES.FAITH, FaithMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.BUILDING_TIME, BuildingTimeMultiplier:New(teamID))
+    obj:RegisterMultiplier(Multipliers.TYPES.SUPPLY_CAP, SupplyCapMultiplier:New(teamID))
     return obj
 end
 
@@ -57,15 +59,13 @@ function AttributeManager:GetAllMultipliers()
     return self:GetElements()
 end
 
---function AttributeManager:GetAllValues(unitID)
-    ---- If unitID is not passed or nil, global values
-    ---- will be returned
-    --local values = {}
-    --for mtype, mult in pairs(self:GetAllMultipliers()) do 
-        --values[mtype] = mult:GetValue(unitID)
-    --end
-    --return values
---end
+function AttributeManager:GetBuildingTimeMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.BUILDING_TIME)
+end
+
+function AttributeManager:GetSupplyCapMultiplier()
+    return self:GetMultiplier(Multipliers.TYPES.SUPPLY_CAP)
+end
 
 function AttributeManager:GetDamageMultiplier()
     return self:GetMultiplier(Multipliers.TYPES.DAMAGE)

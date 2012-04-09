@@ -36,7 +36,8 @@ local power_bases = {
 local power_filepaths = {
     "volcanicblast.lua",
     "teleport.lua",
-    "hermes.lua",
+    "metropolis.lua",
+    --"hermes.lua",
     "expressconversion.lua",
     "aphrodite.lua",
 	"zombie.lua",

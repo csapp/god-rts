@@ -75,10 +75,15 @@ function Building:GetCmdID()
     return self.cmdID or Buildings.CMD_IDS[self:GetKey()]
 end
 
+function Building:GetBuildTime() 
+    local am = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager()
+    local mult = am:GetBuildingTimeMultiplier():GetValue(self:GetUnitID())
+    return self.buildTime * mult
+end
+
 function Building:GetResearchUpgrades() return self.researchUpgrades end
 function Building:GetCmds() return self.cmds end
 function Building:GetVillage() return self.village end
-function Building:GetBuildTime() return self.buildTime end
 function Building:GetUnitID() return self:GetVillage():GetUnitID() end
 function Building:GetTeamID() return self:GetVillage():GetTeamID() end
 function Building:GetName() return self.buildingName end

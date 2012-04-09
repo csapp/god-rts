@@ -95,6 +95,23 @@ EventMultiplier = Multiplier:Inherit{
 }
 
 ------------------------------------------------------------
+-- SUPPLY CAP MULTIPLIER
+------------------------------------------------------------
+SupplyCapMultiplier = EventMultiplier:Inherit{
+    classname = "SupplyCapMultiplier"
+}
+
+------------------------------------------------------------
+-- BUILDING TIME MULTIPLIER
+------------------------------------------------------------
+BuildingTimeMultiplier = EventMultiplier:Inherit{
+    classname = "BuildingTimeMultiplier"
+}
+
+function BuildingTimeMultiplier:Add(value)
+    BuildingTimeMultiplier.inherited.Add(self, -value, {Units.CLASSES.VILLAGE})
+end
+------------------------------------------------------------
 -- DAMAGE MULTIPLIER
 ------------------------------------------------------------
 DamageMultiplier = EventMultiplier:Inherit{
