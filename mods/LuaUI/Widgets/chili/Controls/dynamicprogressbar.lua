@@ -1,14 +1,21 @@
 -- Dynamic Progressbars change colours to reflect their value
 -- written by cam
 
+include("godlycolors.h.lua")
+
+local function color(r,g,b)
+    return {r/255, g/255, b/255, 1}
+end
+
 DynamicProgressbar = Progressbar:Inherit{
     classname = "dynamicprogressbar",
     dynvalues = {
         -- min percentage, max percentage, associated colour
-        {0, 0.1, {1,0,0,1}},
-        {0.10, 0.25, {250/255,167/255,58/255,1}},
-        {0.25, 0.50, {1,1,0,1}},
-        {0.50, 1, {0,1,0,1}},
+        {0, 0.1, GodlyColors.RED},
+        {0.10, 0.25, GodlyColors.ORANGE},
+        {0.25, 0.50, GodlyColors.LIGHT_YELLOW},
+        {0.50, 0.99, GodlyColors.LIGHT_GREEN},
+        {1, 1, GodlyColors.GREEN},
     },
 }
 

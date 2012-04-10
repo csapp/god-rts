@@ -14,6 +14,7 @@ function widget:GetInfo()
 end
 
 include("colors.h.lua")
+include("godlycolors.h.lua")
 include("managers.h.lua")
 
 local abs = math.abs
@@ -25,7 +26,8 @@ local DiffTimers = Spring.DiffTimers
 local Chili
 
 local col_metal = {136/255,214/255,251/255,1}
-local col_energy = {209/255,173/255,0,1}
+--local col_energy = {222/255,176/255,37/255,1}
+local col_energy = GodlyColors.YELLOW
 
 local window
 local bar_energy
@@ -258,16 +260,18 @@ function CreateWindow()
         right  = 40,
         x      = 100,
         y      = p(100/bars),
-        noSkin = true,
+        --skin = "Godly",
+        --noSkin = true,
         font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
     }
     bar_energy = Chili.Progressbar:New{
-        parent = window,
+        parent = nil,
         --color  = col_energy,
         height = p(100/bars),
         right  = 40,
         x      = 100,
         y      = p(100/bars),
+        --skin = "Godly",
         tooltip = "Local Faith Economy",
         font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
     }
