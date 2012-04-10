@@ -102,12 +102,20 @@ function resetWindow(container)
 	container.ystep = 1
 end
 
-local function getVillageBuildingInfo(villageID)
-    local function cb(result) 
-        for k,v in pairs(result) do Spring.Echo(k,v) end 
+local function printVillageBuildingInfo(villageID)	
+	local function cb(result)
+		local buildingInfoString = "Village Buildings:\n"
+		
+        for k,v in pairs(result) do 
+			Spring.Echo(k,v)
+			buildingInfoString = buildingInfoString .. v .. "\n"
+		end
+		
+		buildingInfo:SetCaption(buildingInfoString)
     end
+	
     WG.GadgetQuery.CallManagerElementFunction(cb, Managers.TYPES.VILLAGE, 
-                                              villageID, "CallOnAll", {"GetName"})	
+                                              villageID, "CallOnAll", {"GetName"})
 end
 
 function widget:Initialize()
@@ -163,18 +171,18 @@ function widget:Initialize()
 		caption = "",
 	}
 	
-	--powerInfo = Label:New{
-	--	parent = statusBar,
-	--	x = 110,
-	--	y = 65,
-	--	width = 200,
-	--	height = "100%",
-	--	fontsize = 13,
-	--	autosize = false,
-	--	autoObeyLineHeight = true,
-	--	anchors = {left=true,bottom=true,right=false,top=false},
-	--	caption = "",
-	--}
+	buildingInfo = Label:New{
+		parent = statusBar,
+		x = 110,
+		y = 65,
+		width = 200,
+		height = "100%",
+		fontsize = 13,
+		autosize = false,
+		autoObeyLineHeight = true,
+		anchors = {left=true,bottom=true,right=false,top=false},
+		caption = "",
+	}
 	
 	imageWindow = Control:New{
         parent = statusBar,
@@ -208,8 +216,6 @@ function widget:Initialize()
 		dragUseGrip = false,
 		caption = "Commands",
 	}
-
-
 end
 
 function widget:GameStart()
@@ -230,7 +236,7 @@ function widget:CommandsChanged()
         end
         unitInfo:SetCaption("")
 		unitStats:SetCaption("")
-		--powerInfo:SetCaption("")
+		buildingInfo:SetCaption("")
 		resetWindow(imageWindow)
 		resetWindow(commandWindow)
 		
@@ -240,14 +246,14 @@ function widget:CommandsChanged()
 	-- This just handles showing the first unit selected in a group
     --setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
-	setUnitStats(selected_units[1])
-    if Units.IsVillageUnit(selected_units[1]) then
-        getVillageBuildingInfo(selected_units[1])
+	setUnitStats(selected_units[1])	
+    if string.find(printDescription(selected_units[1]), "Village") ~= nil then
+        printVillageBuildingInfo(selected_units[1])
     end
+	
 	resetWindow(imageWindow)
 	resetWindow(commandWindow)
 	drawPortrait()
-	printPowerInfo()
     
     if current_progress_bar ~= nil then
         pbarWindow:RemoveChild(current_progress_bar)
@@ -452,7 +458,7 @@ local function getPowerNames()
 	WG.GadgetQuery.CallManagerFunctionOnAll(getNames, Managers.TYPES.POWER, "GetName")
 end
 
-
+--[[
 function printPowerInfo()
     -- Wait until we populate the powerNames table before calling this function
     if table.isempty(powerNames) then return end
@@ -463,11 +469,12 @@ function printPowerInfo()
             powerString = powerString..powerNames[k]..": "..math.floor(v*100).."%\n"
         end
 	
-        --powerInfo:SetCaption(powerString)
+        powerInfo:SetCaption(powerString)
 	end
 
     WG.GadgetQuery.CallManagerFunctionOnAll(getCharges, Managers.TYPES.POWER, "GetCharge")	
 end
+]]
 
 function destroyProgressBar(unitID)
     local progressBar = progressBars[unitID] 
