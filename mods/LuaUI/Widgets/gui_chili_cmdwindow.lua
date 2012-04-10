@@ -192,21 +192,21 @@ function createMyButton(cmd)
 							}
 			end
 			
-			if isPower then
-				local costLabel = Chili.Label:New {
-						parent = image,
-						right = 0;
-						y = 0;
-						x = 3;
-						bottom = 3;
-						autosize=false;
-						align="top";
-						valign="left";
-						caption = string.format("%d", getPowerCharge());
-						fontSize = 11;
-						fontShadow = true;
-				}
-			end
+			--if isPower then
+			--	local costLabel = Chili.Label:New {
+			--			parent = image,
+			--			right = 0;
+			--			y = 0;
+			--			x = 3;
+			--			bottom = 3;
+			--			autosize=false;
+			--			align="top";
+			--			valign="left";
+			--			caption = string.format("%d", getPowerCharge());
+			--			fontSize = 11;
+			--			fontShadow = true;
+			--	}
+			--end
 			
 		end
 		
