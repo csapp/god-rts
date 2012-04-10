@@ -26,7 +26,6 @@ local DiffTimers = Spring.DiffTimers
 local Chili
 
 local col_metal = {136/255,214/255,251/255,1}
---local col_energy = {222/255,176/255,37/255,1}
 local col_energy = GodlyColors.YELLOW
 
 local window
