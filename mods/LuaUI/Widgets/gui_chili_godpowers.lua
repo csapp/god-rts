@@ -76,6 +76,7 @@ local function PopulatePowerWindow(initialCharges)
     local count = 0
     local y
     for k, charge in pairs(initialCharges) do
+        Spring.Echo(k, charge)
         y = p(100/bars*count+5)
         powerImages[k] = Chili.Image:New{
             parent = window,
@@ -110,13 +111,17 @@ local function UpdatePowerBar(id, value)
     powerBars[id]:SetCaption(math.floor(value).."%")
 end
 
+local function QueryPowerCharge(id)
+    WG.GadgetQuery.CallManagerElementFunction(
+       function(value) UpdatePowerBar(id, tonumber(value)*100) end,
+       Managers.TYPES.POWER, id, "GetCharge")
+end
+
 function widget:GameFrame(n)
     if n % 30 ~= 13 then return end
     for id, bar in pairs(powerBars) do
         if bar.value < 100 then
-            WG.GadgetQuery.CallManagerElementFunction(
-               function(value) UpdatePowerBar(id, tonumber(value)*100) end,
-               Managers.TYPES.POWER, id, "GetCharge")
+            QueryPowerCharge(id)
         end
     end
 end
@@ -127,13 +132,11 @@ function widget:RecvLuaMsg(msg, playerID)
     if msg_type == MSG_TYPES.GOD_CREATED then
         window:RemoveChild(noPowerLabel)
         WG.GadgetQuery.CallManagerFunctionOnAll(
-                       PopulatePowerWindow, Managers.TYPES.POWER, "GetName")
+                PopulatePowerWindow, Managers.TYPES.POWER, "GetCharge")
     elseif msg_type == MSG_TYPES.GOD_POWER_USED then
         powerID, teamID = tonumber(params[1]), tonumber(params[2])
         if teamID == GetMyTeamID() then
-            WG.GadgetQuery.CallManagerElementFunction(
-               function(value) UpdatePowerBar(powerID, tonumber(value)*100) end,
-               Managers.TYPES.POWER, powerID, "GetCharge")
+            QueryPowerCharge(powerID)
         end
     end
 end
