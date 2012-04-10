@@ -64,6 +64,7 @@ skin.progressbar = {
 }
 
 skin.control = skin.general
+skin.dynamicprogressbar = skin.progressbar
 
 
 --//=============================================================================
