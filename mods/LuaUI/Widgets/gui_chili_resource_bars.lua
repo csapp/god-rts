@@ -25,8 +25,7 @@ local DiffTimers = Spring.DiffTimers
 local Chili
 
 local col_metal = {136/255,214/255,251/255,1}
-local col_energy = {1,1,0,1}
-local col_buildpower = {0.8, 0.8, 0.2, 1}
+local col_energy = {209/255,173/255,0,1}
 
 local window
 local bar_energy
@@ -152,12 +151,13 @@ function widget:GameFrame(n)
         excessE = wastingE
     elseif (blinkE_status) then
         blinkE_status = false
-        bar_energy:SetColor( col_energy )
+        --bar_energy:SetColor( col_energy )
     end
 
     local ePercent = 100 * eCurr / eStor
 
-    bar_energy:SetValue( ePercent )
+    --bar_energy:SetValue(ePercent)
+    bar_energy_overlay:SetValue(ePercent)
     if stallingE then
         bar_energy_overlay:SetCaption( (RedStr.."%i/%i"):format(eCurr, eStor) )
     elseif wastingE then
@@ -263,7 +263,7 @@ function CreateWindow()
     }
     bar_energy = Chili.Progressbar:New{
         parent = window,
-        color  = col_energy,
+        --color  = col_energy,
         height = p(100/bars),
         right  = 40,
         x      = 100,
