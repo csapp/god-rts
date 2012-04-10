@@ -21,6 +21,7 @@ MSG_TYPES = {
 	
     GOD_SELECTED = "godselected",
     GOD_CREATED = "god_created",
+    GOD_POWER_USED = "GOD_POWER_USED",
 
     UNIT_LEVELLED_UP = "unit_levelled_up",
     MORPH = "MORPH",

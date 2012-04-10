@@ -17,11 +17,13 @@ include("managers.h.lua")
 include("customcmds.h.lua")
 include("msgs.h.lua")
 
+-- speed ups
+local GetMyTeamID = Spring.GetMyTeamID
+
 local Chili
 local window
 local noPowerLabel
 local MY_PLAYER_ID = Spring.GetMyPlayerID()
-local powerNames = {}
 
 local powerBars = {}
 local powerImages = {}
@@ -65,7 +67,7 @@ function widget:Initialize()
 
 end
 
-local function PopulatePowerWindow()
+local function PopulatePowerWindow(initialCharges)
     local function p(a) return tostring(a).."%" end
 
     local bars = 2
@@ -73,7 +75,7 @@ local function PopulatePowerWindow()
     local barheight = p(80/bars)
     local count = 0
     local y
-    for k,_ in pairs(powerNames) do
+    for k, charge in pairs(initialCharges) do
         y = p(100/bars*count+5)
         powerImages[k] = Chili.Image:New{
             parent = window,
@@ -93,6 +95,7 @@ local function PopulatePowerWindow()
             width = barwidth,
             right  = 40,
             x      = 100,
+            value = math.floor((tonumber(charge) or 1)*100),
             y = y,
             font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
         }
@@ -102,14 +105,20 @@ local function PopulatePowerWindow()
     end
 end
 
-local function getPowerNames()
-    local function getNames(names) 
-        for k,v in pairs(names) do
-            powerNames[tonumber(k)]=v
+local function UpdatePowerBar(id, value)
+    powerBars[id]:SetValue(value)
+    powerBars[id]:SetCaption(math.floor(value).."%")
+end
+
+function widget:GameFrame(n)
+    if n % 30 ~= 13 then return end
+    for id, bar in pairs(powerBars) do
+        if bar.value < 100 then
+            WG.GadgetQuery.CallManagerElementFunction(
+               function(value) UpdatePowerBar(id, tonumber(value)*100) end,
+               Managers.TYPES.POWER, id, "GetCharge")
         end
-        PopulatePowerWindow()
     end
-	WG.GadgetQuery.CallManagerFunctionOnAll(getNames, Managers.TYPES.POWER, "GetName")
 end
 
 function widget:RecvLuaMsg(msg, playerID)
@@ -117,7 +126,15 @@ function widget:RecvLuaMsg(msg, playerID)
     local msg_type, params = LuaMessages.deserialize(msg)
     if msg_type == MSG_TYPES.GOD_CREATED then
         window:RemoveChild(noPowerLabel)
-        getPowerNames()
+        WG.GadgetQuery.CallManagerFunctionOnAll(
+                       PopulatePowerWindow, Managers.TYPES.POWER, "GetName")
+    elseif msg_type == MSG_TYPES.GOD_POWER_USED then
+        powerID, teamID = tonumber(params[1]), tonumber(params[2])
+        if teamID == GetMyTeamID() then
+            WG.GadgetQuery.CallManagerElementFunction(
+               function(value) UpdatePowerBar(powerID, tonumber(value)*100) end,
+               Managers.TYPES.POWER, powerID, "GetCharge")
+        end
     end
 end
 

@@ -8,7 +8,9 @@ local function GetInfo()
         license = "Public Domain",
     }
 end
---
+-- includes
+include("LuaUI/Headers/msgs.h.lua")
+
 --Speedups
 local GetGameSeconds = Spring.GetGameSeconds
 
@@ -121,5 +123,6 @@ function ActivePower:Use(cmdParams, cmdOptions)
         self:SpendCharge(self:GetCost())
         self:_Use(cmdParams, cmdOptions)
         self:Recharge()
+        LuaMessages.SendMsgToAll(MSG_TYPES.GOD_POWER_USED, {self:GetID(), self:GetTeamID()})
     end
 end
