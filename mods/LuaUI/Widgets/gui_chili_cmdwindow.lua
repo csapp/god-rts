@@ -128,20 +128,20 @@ function createMyButton(cmd)
 
 		local y_axis = 0;
 		if not texture then
-			y_axis = 72 * (container.ystep-1)
+			y_axis = 77 * (container.ystep-1)
 		else
-			y_axis = 72 * (container.ystep-1)
+			y_axis = 77 * (container.ystep-1)
 		end
 		
 		local color = {0,0,0,1}
 		local button = Chili.Button:New {
 			parent = container,
-			x = 72 * (result-1),
+			x = 80 * (result-1),
 			y = y_axis,
 			padding = {5, 5, 5, 5},
 			margin = {0, 0, 0, 0},
-			Width = 72,
-			minHeight = 72,
+			Width = 68,
+			minHeight = 68,
 			caption = buttontext,
 			isDisabled = false,
 			cmdid = cmd.id,
@@ -152,7 +152,7 @@ function createMyButton(cmd)
 		local image
 		if texture then
 			if DEBUG then Spring.Echo("texture",texture) end
-			button:Resize(72,72)
+			button:Resize(68,68)
 			image = Chili.Image:New {
 				width="100%";
 				height="90%";
@@ -327,7 +327,7 @@ function widget:Initialize()
 
 	buildCommandWindow = Chili.Control:New{
 		x = 0,
-		y = 144,
+		y = 154,
 		width = "100%",
 		height = "40%",
 		xstep = 1,
@@ -346,7 +346,7 @@ function widget:Initialize()
 		dockable = true,
 		parent = screen0,
 		textColor = {0.83,0.8,0.52,1},
-		caption = "Commands",
+		caption = "",
 		draggable = false,
 		resizable = false,
 		dragUseGrip = false,

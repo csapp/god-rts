@@ -128,7 +128,7 @@ function widget:Initialize()
 		parent = screen0,
 		x = 0,
 		y = -250,
-		width = -350,
+		width = 350,
 		height = 250,
 		draggable = false,
 		resizable = false,
@@ -140,7 +140,8 @@ function widget:Initialize()
 	unitInfo = Label:New{
 		parent = statusBar,
 		x = 110,
-		width = "25%",
+		valign="top",
+		width = 200,
 		height = "100%",
 		fontsize = 13,
 		autosize = false,
@@ -151,9 +152,9 @@ function widget:Initialize()
 
 	unitStats = Label:New{
 		parent = statusBar,
-		x = 500,
-		y = -220,
-		width = "25%",
+		x = 110,
+		y = 0,
+		width = 00,
 		height = "100%",
 		fontsize = 13,
 		autosize = false,
@@ -162,18 +163,18 @@ function widget:Initialize()
 		caption = "",
 	}
 	
-	powerInfo = Label:New{
-		parent = statusBar,
-		x = 890,
-		y = -220,
-		width = "25%",
-		height = "100%",
-		fontsize = 13,
-		autosize = false,
-		autoObeyLineHeight = true,
-		anchors = {left=true,bottom=true,right=false,top=false},
-		caption = "",
-	}
+	--powerInfo = Label:New{
+	--	parent = statusBar,
+	--	x = 110,
+	--	y = 65,
+	--	width = 200,
+	--	height = "100%",
+	--	fontsize = 13,
+	--	autosize = false,
+	--	autoObeyLineHeight = true,
+	--	anchors = {left=true,bottom=true,right=false,top=false},
+	--	caption = "",
+	--}
 	
 	imageWindow = Control:New{
         parent = statusBar,
@@ -187,6 +188,7 @@ function widget:Initialize()
 	pbarWindow = Control:New{
         parent = statusBar,
         x = statusBar.width/2 - 100,
+		y = 160,
 		width = 200,
 		height = 50,
 		padding = {0, 0, 0, 0},
@@ -228,7 +230,7 @@ function widget:CommandsChanged()
         end
         unitInfo:SetCaption("")
 		unitStats:SetCaption("")
-		powerInfo:SetCaption("")
+		--powerInfo:SetCaption("")
 		resetWindow(imageWindow)
 		resetWindow(commandWindow)
 		
@@ -461,7 +463,7 @@ function printPowerInfo()
             powerString = powerString..powerNames[k]..": "..math.floor(v*100).."%\n"
         end
 	
-        powerInfo:SetCaption(powerString)
+        --powerInfo:SetCaption(powerString)
 	end
 
     WG.GadgetQuery.CallManagerFunctionOnAll(getCharges, Managers.TYPES.POWER, "GetCharge")	
