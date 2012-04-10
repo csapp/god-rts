@@ -244,7 +244,8 @@ function CreateWindow()
         parent = window,
         height = p(100/bars),
         width  = 25,
-        right  = 10,
+        --right  = 10,
+        x = 70,
         y      = p(100/bars),
         file   = 'anims/cursorConvert_0.png',
     }
@@ -273,7 +274,8 @@ function CreateWindow()
         parent = window,
         height = p(100/bars),
         width  = 60,
-        x      = 0,
+        --x      = 0,
+        right = 1,
         y      = p(100/bars),
         valign = "center",
         align  = "right",
@@ -283,7 +285,7 @@ function CreateWindow()
         tooltip = "Your net faith generation.",
     }
     lbl_e_income = Chili.Label:New{
-        parent = window,
+        parent = nil,
         height = p(50/bars),
         width  = 40,
         x      = 60,
@@ -296,7 +298,7 @@ function CreateWindow()
         tooltip = "Your faith generation.",
     }
     lbl_e_expense = Chili.Label:New{
-        parent = window,
+        parent = nil,
         height = p(50/bars),
         width  = 40,
         x      = 60,
