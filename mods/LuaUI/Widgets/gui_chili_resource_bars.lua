@@ -240,6 +240,7 @@ function CreateWindow()
         tweakResizable = true,
         minimizable = false,
     }
+
     Chili.Image:New{
         parent = window,
         height = p(100/bars),
@@ -254,7 +255,7 @@ function CreateWindow()
         color  = col_energy,
         height = p(100/bars),
         value  = 100,
-        right  = 36,
+        right  = 40,
         x      = 100,
         y      = p(100/bars),
         noSkin = true,
@@ -264,7 +265,7 @@ function CreateWindow()
         parent = window,
         color  = col_energy,
         height = p(100/bars),
-        right  = 36,
+        right  = 40,
         x      = 100,
         y      = p(100/bars),
         tooltip = "Local Faith Economy",
@@ -315,16 +316,16 @@ function CreateWindow()
         parent = window,
         width  = 25,
         height = 25,
-        right  = 100,
+        right  = 105,
         y      = 1,
         file   = "bitmaps/icons/supplies.png",
     }
 
     supplyLabel = Chili.Label:New{
-        y = 1,
+        parent = window,
+        y = p(25/bars),
         --width = 100,
         right = 50,
-        parent = window,
         caption = "",
         --fontsize = 14,
 		tooltip = "Your current population, out of the max possible population.",
@@ -338,18 +339,18 @@ function CreateWindow()
 	
     Chili.Image:New{
         parent = window,
-        width  = 25,
-        height = 25,
-        right  = 180,
-        y      = 1,
+        width  = 20,
+        height = 20,
+        right  = 185,
+        y      = 3,
         file   = "bitmaps/icons/villagers.png",
     }
 
     villagerLabel = Chili.Label:New{
-        y = 1,
+        parent = window,
+        y = p(25/bars),
         --width = 100,
         right = 160,
-        parent = window,
         caption = "",
         --fontsize = 14,
 		tooltip = "Your current villager count",
