@@ -30,7 +30,9 @@ local powerImages = {}
 local imageDir = "bitmaps/icons/powers/"
 local CMD_ICON_MAP = {
     [CMD_VOLCANIC_BLAST] = imageDir.."volcanic_blast.png",
-    [CMD_TELEPORT] = imageDir.."teleport.png",
+    [CMD_ZOMBIE] = imageDir.."zombie_apocalypse.png",
+	[CMD_BFB] = imageDir.."bfb.png",
+	[CMD_TELEPORT] = imageDir.."teleport.png",
 }
 
 function widget:Initialize()
