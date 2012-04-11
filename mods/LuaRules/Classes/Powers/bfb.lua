@@ -34,7 +34,7 @@ local inherited = this.inherited
 
 function BFB:SetUp()
     inherited.SetUp(self)
-    --self:SetCustomCursor("cursorVolcanicBlast")
+    self:SetCustomCursor("cursorBFB")
 end
 
 function BFB:GetRadius()

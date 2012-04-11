@@ -32,6 +32,11 @@ ZombieApocalypse = RangedPower:Inherit{
 local this = ZombieApocalypse
 local inherited = this.inherited
 
+function ZombieApocalypse:SetUp()
+    inherited.SetUp(self)
+    self:SetCustomCursor("cursorZombieApocalypse")
+end
+
 function ZombieApocalypse:_SpawnZombie(x, y, z, teamID)
     Spring.PlaySoundFile("sounds/avalancheshort2.wav")
 	local zombieID
