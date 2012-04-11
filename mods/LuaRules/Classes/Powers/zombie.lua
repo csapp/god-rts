@@ -26,7 +26,6 @@ ZombieApocalypse = RangedPower:Inherit{
 	radius = 50,
     tooltip = "Spawn a wave of hungry zombies for a short time",
     cmdType = CMDTYPE.ICON_MAP,
-    cmdCursor = "Attack",
 }
 
 local this = ZombieApocalypse
