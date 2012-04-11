@@ -1,8 +1,8 @@
 local unitName  =  "scout"
 
 --Attribute Defintions
-local HP = 200
-local ATKDMG = 20
+local HP = 220
+local ATKDMG = 35
 local ATKSPD = 5
 local ATKRNG = 20
 local MOVESPD = {5,0.15} -- {walkspeed, acceleration}
@@ -36,7 +36,7 @@ local unitDef  =  {
     },
     
 ---Unit limitations and properties
-    BuildTime = 10,
+    BuildTime = 8,
     Description = "An awesomely powerful soldier.. ON A HORSE!",
     MaxDamage = HP,
 	mass = 500,
@@ -49,7 +49,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 15,
+    BuildCostMetal = 11,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],
@@ -110,7 +110,13 @@ local unitDef  =  {
 		weaponType = "Cannon",
 		weaponVelocity = 100,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = ATKDMG,
+			ranged   = 1.5*ATKDMG,
+			cavalry  = ATKDMG,
+			hero     = 1.25*ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = ATKDMG,
 		},
 		
 	},

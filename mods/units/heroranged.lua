@@ -1,8 +1,8 @@
 local unitName  =  "HeroRanged"
 
 --Attribute Defintions
-local HP = 100
-local ATKDMG = 2
+local HP = 200
+local ATKDMG = 5
 local ATKSPD = 2
 local ATKRNG = 100
 local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
@@ -90,7 +90,7 @@ local unitDef  =  {
 	BOW = {
         soundStart = "archery-arrowflyby.wav",
 		avoidFriendly = 1,
-		burst = 3,
+		burst = 5,
 		burstrate = 0.3,
 		collideFriendly = false,
 		collisionSize = 3,
@@ -113,7 +113,13 @@ local unitDef  =  {
 		weaponVelocity = 1000,
 		weaponAcceleration=200,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = 1.5*ATKDMG,
+			ranged   = ATKDMG,
+			cavalry  = ATKDMG,
+			hero     = ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = 1.5*ATKDMG,
 		},
 		
 	},

@@ -1,11 +1,11 @@
 local unitName  =  "soldier"
 
 --Attribute Defintions
-local HP = 200
+local HP = 100
 local ATKDMG = 20
-local ATKSPD = 2
+local ATKSPD = 3
 local ATKRNG = 20
-local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
+local MOVESPD = {2,0.15} -- {walkspeed, acceleration}
 
 local unitDef  =  {
 --Internal settings
@@ -36,7 +36,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 5,
+    BuildTime = 4,
     Description = "An awesomely powerful soldier",
     MaxDamage = HP,
 	mass = 500,
@@ -108,7 +108,13 @@ local unitDef  =  {
 		weaponType = "Cannon",
 		weaponVelocity = 100,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = ATKDMG,
+			ranged   = ATKDMG,
+			cavalry  = 1.5*ATKDMG,
+			hero     = 1.25*ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = ATKDMG,
 		},
         soundStart = "swordhit2.wav",
 	},

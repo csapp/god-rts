@@ -1,7 +1,7 @@
 local unitName  =  "Prophet"
 
 --Attribute Defintions
-local HP = 200
+local HP = 300
 local ATKDMG = 0
 local ATKSPD = 1
 local ATKRNG = 1
@@ -37,7 +37,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 30,
+    BuildTime = 8,
     Description = "An awesome evangelist",
     MaxDamage = HP,
 	mass = 500,
@@ -49,7 +49,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 30,
-    BuildCostMetal = 10,
+    BuildCostMetal = 15,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],

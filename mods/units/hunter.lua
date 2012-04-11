@@ -1,10 +1,10 @@
 local unitName  =  "hunter"
 
 --Attribute Defintions
-local HP = 100
-local ATKDMG = 2
+local HP = 80
+local ATKDMG = 5
 local ATKSPD = 2
-local ATKRNG = 100
+local ATKRNG = 50
 local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
 
 local unitDef  =  {
@@ -48,7 +48,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 5,
+    BuildCostMetal = 2,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],
@@ -92,8 +92,8 @@ local unitDef  =  {
 	BOW = {
         soundStart = "archery-arrowflyby.wav",
 		avoidFriendly = 1,
-		burst = 3,
-		burstrate = 0.3,
+		burst = 0.3,
+		burstrate = 1,
 		collideFriendly = false,
 		collisionSize = 3,
 		name = "Bow",
@@ -115,7 +115,13 @@ local unitDef  =  {
 		weaponVelocity = 1000,
 		weaponAcceleration=200,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = 1.5*ATKDMG,
+			ranged   = ATKDMG,
+			cavalry  = ATKDMG,
+			hero     = 1.25*ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = ATKDMG,
 		},
 		
 	},

@@ -1,8 +1,8 @@
 local unitName  =  "archer"
 
 --Attribute Defintions
-local HP = 100
-local ATKDMG = 2
+local HP = 160
+local ATKDMG = 5
 local ATKSPD = 2
 local ATKRNG = 100
 local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
@@ -36,7 +36,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 15,
+    BuildTime = 6,
     Description = "An awesomely powerful archer",
     MaxDamage = HP,
 	mass = 500,
@@ -48,7 +48,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 15,
+    BuildCostMetal = 4,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],
@@ -115,7 +115,13 @@ local unitDef  =  {
 		weaponVelocity = 1000,
 		weaponAcceleration=200,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = 1.5*ATKDMG,
+			ranged   = ATKDMG,
+			cavalry  = ATKDMG,
+			hero     = 1.25*ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = ATKDMG,
 		},
 		
 	},

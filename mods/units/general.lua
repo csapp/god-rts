@@ -2,10 +2,10 @@ local unitName  =  "general"
 
 --Attribute Defintions
 local HP = 200
-local ATKDMG = 20
-local ATKSPD = 2
+local ATKDMG = 30
+local ATKSPD = 1
 local ATKRNG = 20
-local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
+local MOVESPD = {2,0.15} -- {walkspeed, acceleration}
 
 local unitDef  =  {
 --Internal settings
@@ -36,7 +36,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 15,
+    BuildTime = 5,
     Description = "An awesomely powerful soldier",
     MaxDamage = HP,
     idleAutoHeal = 0,
@@ -48,7 +48,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 10,
+    BuildCostMetal = 5,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],
@@ -109,7 +109,13 @@ local unitDef  =  {
 		weaponType = "Cannon",
 		weaponVelocity = 100,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = ATKDMG,
+			ranged   = ATKDMG,
+			cavalry  = 1.5*ATKDMG,
+			hero     = 1.25*ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = ATKDMG,
 		},
 		
 	},

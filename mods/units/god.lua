@@ -2,7 +2,7 @@ local unitName  =  "god"
 
 --Attribute Defintions
 local HP = 2000
-local ATKDMG = 20
+local ATKDMG = 50
 local ATKSPD = 2
 local ATKRNG = 20
 local MOVESPD = {3,0.15} -- {walkspeed, acceleration}
@@ -104,7 +104,13 @@ local unitDef  =  {
 		weaponType = "Cannon",
 		weaponVelocity = 100,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = 1.5*ATKDMG,
+			ranged   = 1.5*ATKDMG,
+			cavalry  = 1.5*ATKDMG,
+			hero     = ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = ATKDMG,
 		},
 	},
 	

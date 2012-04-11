@@ -1,7 +1,7 @@
 local unitName  =  "priest"
 
 --Attribute Defintions
-local HP = 200
+local HP = 100
 local ATKDMG = 0
 local ATKSPD = 1
 local ATKRNG = 1
@@ -39,7 +39,7 @@ local unitDef  =  {
     },
     
 --Unit limitations and properties
-    BuildTime = 20,
+    BuildTime = 5,
     Description = "An awesome evangelist",
     MaxDamage = HP,
 	mass = 500,
@@ -51,7 +51,7 @@ local unitDef  =  {
     
 --Energy and metal related
     BuildCostEnergy = 0,
-    BuildCostMetal = 5,
+    BuildCostMetal = 8,
     
 --Pathfinding and related
     Acceleration = MOVESPD[2],

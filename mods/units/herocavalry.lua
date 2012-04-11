@@ -1,9 +1,9 @@
 local unitName  =  "HeroCavalry"
 
 --Attribute Defintions
-local HP = 200
-local ATKDMG = 20
-local ATKSPD = 5
+local HP = 400
+local ATKDMG = 45
+local ATKSPD = 4
 local ATKRNG = 20
 local MOVESPD = {5,0.15} -- {walkspeed, acceleration}
 
@@ -107,7 +107,13 @@ local unitDef  =  {
 		weaponType = "Cannon",
 		weaponVelocity = 100,
 		damage = {
-			default = ATKDMG,
+			default  = ATKDMG,
+			infantry = ATKDMG,
+			ranged   = 1.5*ATKDMG,
+			cavalry  = ATKDMG,
+			hero     = ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = 1.5*ATKDMG,
 		},
 		
 	},
