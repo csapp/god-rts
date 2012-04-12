@@ -47,6 +47,7 @@ local buildQueueUnsorted = {}
 local spGetFullBuildQueue = Spring.GetFullBuildQueue
 local selectedFac 
 local spGetUnitDefID = Spring.GetUnitDefID
+local cmdtab = false
 
 -- CONTROLS
 local spGetActiveCommand 	= Spring.GetActiveCommand
@@ -64,6 +65,17 @@ function LayoutHandler(xIcons, yIcons, cmdCount, commands)
 	local customCmds = {}
 
 	return "", xIcons, yIcons, {}, customCmds, {}, {}, {}, {}, reParamsCmds, {[1337]=9001}
+end
+
+local function TabClick(button)
+	Spring.Echo("Click")
+	if(button.caption == "Build") then
+		cmdtab = true
+		loadPanel()
+	else
+		cmdtab = false
+		loadPanel()
+   end
 end
 
 function ClickFunc(button) 
@@ -97,7 +109,7 @@ function findButtonData(cmd)
 		buttontext = cmd.params[indexChoice]
 		container = commandWindow
 	elseif isBuild or isPower then
-		container = buildCommandWindow
+		container = commandWindow--buildCommandWindow
 		buttontext = cmd.name:gsub("^%l", string.upper)
 	else
 		texture = cmd.texture
@@ -117,7 +129,11 @@ function createMyButton(cmd)
 
 	if(type(cmd) == 'table')then
 		buttontext, container, isState, isBuild, isPower, texture = findButtonData(cmd)
-
+		
+		if isBuild and not(cmdtab) then return end
+		
+		if not(isBuild) and cmdtab then return end
+		
 		local result = container.xstep % MAXBUTTONSONROW
 		container.xstep = container.xstep + 1
 		local increaseRow = false
@@ -281,6 +297,44 @@ function loadPanel()
 	local commands = Spring.GetActiveCmdDescs()
 	commands = filterUnwanted(commands)
 	table.sort(commands,function(x,y) return x.action < y.action end)
+	
+	local selected = "unpressed"
+	if cmdtab then selected = "pressed" end
+	local cmdtabbutton = Chili.Button:New {
+			parent = container,
+			x = -90,
+			y = 20,
+			padding = {5, 5, 5, 5},
+			margin = {0, 0, 0, 0},
+			Width = 100,
+			minHeight = 20,
+			caption = 'Build',
+			isDisabled = true,
+			state = selected,
+			OnMouseDown = {TabClick},
+			tooltip = "Build Units Tab",
+			cmdid = 1,
+			isDisabled = not(cmdtab),
+		}
+	selected = "unpressed"
+	if not(cmdtab) then selected = "pressed" end
+	local ActiveTabbutton = Chili.Button:New {
+			parent = container,
+			x = -90,
+			y = 60,
+			padding = {5, 5, 5, 5},
+			margin = {0, 0, 0, 0},
+			Width = 100,
+			minHeight = 20,
+			caption = 'Commands',
+			isDisabled = false,
+			state = selected,
+			OnMouseDown = {TabClick},
+			tooltip = "Active Commands Tab",
+			cmdid = 2,
+			isDisabled = cmdtab,
+		}
+	
 	for cmdid, cmd in pairs(commands) do
 		rowcount = createMyButton(commands[cmdid]) 
 	end
@@ -339,9 +393,9 @@ function widget:Initialize()
 	}		
 	
 	window0 = Chili.Window:New{
-		x = -350,
+		x = -450,
 		y = -250,	
-		width = 350,
+		width = 450,
 		height = 250,
 		dockable = true,
 		parent = screen0,
@@ -428,6 +482,7 @@ end
 function widget:DrawScreen()
     if updateRequired then
         updateRequired = false
+		if not(isVillageSelected()) then cmdtab = false end
 		loadPanel()
     end
 end
