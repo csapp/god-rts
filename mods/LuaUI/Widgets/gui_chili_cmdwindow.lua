@@ -22,6 +22,7 @@ end
 -- INCLUDES
 VFS.Include("LuaUI/Headers/utilities.lua")
 include("managers.h.lua")
+include("powers.h.lua")
 
 -- CONSTANTS
 local MAXBUTTONSONROW = 4
@@ -32,6 +33,8 @@ local BUILDCOMMANDSTOEXCLUDE = {"building_Turret", "building_High Rise", "buildi
 local GODPOWERS = {"VolcanicBlast", "Teleport", "WholeLottaLove"}
 local exclude
 local Chili
+local Powers
+local PowerNames
 
 -- MEMBERS
 local x
@@ -99,7 +102,7 @@ function findButtonData(cmd)
 	local isBuild = ((cmd.id < 0))
 	local isPower = table.contains(GODPOWERS,cmd.action)
 	local buttontext = ""
-	local texture = getTexture(cmd.action)--'bitmaps/icons/'..(cmd.action)..'.png'
+	local texture = getTexture(cmd.action, cmd.id)--'bitmaps/icons/'..(cmd.action)..'.png'
 	local container
 	if not isState and not isBuild and not isPower then
 		buttontext = cmd.name
@@ -119,8 +122,10 @@ end
 
 --sets texture to correct path depending on command. Yes I'm I know there is a "right" way to do this but it was taking forever to find
 --so in the interest of time.... this works
-function getTexture(action)
-	--Spring.Echo("texture",action)
+function getTexture(action, cmdid)
+    if action:sub(1,8) == "godpower" then
+        return Powers[cmdid]:GetLargeIcon()
+    end
 	return 'bitmaps/icons/'..action..'.png'
 end
 
@@ -349,6 +354,9 @@ function widget:Initialize()
 		widgetHandler:RemoveWidget()
 		return
 	end
+
+    Powers = WG.Powers
+    PowerNames = WG.PowerNames
 
 	Chili = WG.Chili
 	local screen0 = Chili.Screen0
