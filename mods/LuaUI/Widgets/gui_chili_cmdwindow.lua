@@ -142,7 +142,7 @@ function createMyButton(cmd)
 			margin = {0, 0, 0, 0},
 			Width = 68,
 			minHeight = 68,
-			caption = buttontext,
+			caption = '',
 			isDisabled = false,
 			cmdid = cmd.id,
 			OnMouseDown = {ClickFunc},
