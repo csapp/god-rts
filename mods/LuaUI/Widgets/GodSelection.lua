@@ -64,9 +64,12 @@ local function DrawButtonTier(tierNum, y0)
     local x0 = 130
     local dx = 110
     local dy = 90
-    local tierPowers = utils.filter(function(p) return p:GetType()==tierNum end, PowerNames)
+    local tierPowers = table.getvalues(utils.filter(
+                           function(p) return p:GetType()==tierNum end, PowerNames))
+    table.sort(tierPowers, function(t,u) return t:GetID() < u:GetID() end)
     local i = 0
-    for name, power in pairs(tierPowers) do
+    for _, power in pairs(tierPowers) do
+        local name = power:GetName()
         local button = Chili.Button:New {
             parent = godselWindow,
             x = x0+i*dx,
