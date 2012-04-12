@@ -9,8 +9,8 @@ local function GetInfo()
     }
 end
 
-include("LuaUI/Headers/multipliers.h.lua")
-include("LuaUI/Headers/units.h.lua")
+VFS.Include("LuaUI/Headers/multipliers.h.lua")
+VFS.Include("LuaUI/Headers/units.h.lua")
 
 Metropolis = PassivePower:Inherit{
     classname = "Metropolis",

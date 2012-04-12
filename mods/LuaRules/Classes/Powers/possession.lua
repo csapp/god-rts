@@ -9,8 +9,8 @@ local function GetInfo()
     }
 end
 
-include("LuaUI/Headers/utilities.lua")
-include("LuaUI/Headers/units.h.lua")
+VFS.Include("LuaUI/Headers/utilities.lua")
+VFS.Include("LuaUI/Headers/units.h.lua")
 
 -- Speed ups
 local GetUnitBasePosition = Spring.GetUnitBasePosition

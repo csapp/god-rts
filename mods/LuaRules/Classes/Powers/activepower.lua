@@ -8,15 +8,16 @@ local function GetInfo()
         license = "Public Domain",
     }
 end
+
 -- includes
-include("LuaUI/Headers/msgs.h.lua")
+VFS.Include("LuaUI/Headers/msgs.h.lua")
 
 --Speedups
 local GetGameSeconds = Spring.GetGameSeconds
 
 ActivePower = Power:Inherit{
     classname = "ActivePower",
-    tooltip = "",
+    --tooltip = "",
     damage = 0,
     
     -- 0 <= rechargeRate <= 1
@@ -34,14 +35,14 @@ local this = ActivePower
 local inherited = this.inherited
 
 function ActivePower:GetCmdType() return self.cmdType end
-function ActivePower:GetCmdDesc() return self.cmdDesc end
+--function ActivePower:GetCmdDesc() return self.cmdDesc end
 function ActivePower:GetDamage() return self.damage end
 function ActivePower:GetCost() return self.cost end
-function ActivePower:GetTooltip() return self.tooltip end
+--function ActivePower:GetTooltip() return self.tooltip end
 
 function ActivePower:SetUp()
     inherited.SetUp(self)
-    self:_SetCmdDesc()
+    --self:_SetCmdDesc()
     gadgetHandler:RegisterCMDID(self:GetID())
 end
 
@@ -51,11 +52,11 @@ function ActivePower:Initialize()
     self.rechargeRateMult = self.attrManager:GetPowerRechargeMultiplier()
 end
 
-function ActivePower:_SetCmdDesc()
-    self.cmdDesc = {
+function ActivePower:GetCmdDesc()
+    return {
         id = self:GetID(),
         name = self:GetName(),
-        action = self.classname,
+        action = "godpower_"..self.classname,
         type = self:GetCmdType(),
         tooltip = self:GetTooltip(),
         cursor = self.cmdCursor or self.classname,

@@ -9,7 +9,7 @@ local function GetInfo()
     }
 end
 
-include("LuaUI/Headers/msgs.h.lua")
+VFS.Include("LuaUI/Headers/msgs.h.lua")
 
 --Speedups
 local IsPosInLos = Spring.IsPosInLos

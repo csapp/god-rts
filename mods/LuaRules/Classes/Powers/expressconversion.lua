@@ -9,7 +9,7 @@ local function GetInfo()
     }
 end
 
-include("LuaUI/Headers/multipliers.h.lua")
+VFS.Include("LuaUI/Headers/multipliers.h.lua")
 
 ExpressConversion = PassivePower:Inherit{
     classname = "ExpressConversion",

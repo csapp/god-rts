@@ -18,33 +18,12 @@ if (gadgetHandler:IsSyncedCode()) then
 
 include("LuaUI/Headers/utilities.lua")
 include("LuaUI/Headers/msgs.h.lua")
+include("LuaUI/Headers/powers.h.lua")
 
 local InsertUnitCmdDesc = Spring.InsertUnitCmdDesc
 local god_unitdef_id = UnitDefNames["god"].id
 
 local listOfGodIDs = {}
-
-local POWERS_DIR = "LuaRules/Classes/Powers/"
-
-local power_bases = {
-    "power.lua",
-    "activepower.lua",
-    "passivepower.lua",
-    "rangedpower.lua",
-}
-
-local power_filepaths = {
-    "volcanicblast.lua",
-    "teleport.lua",
-    "metropolis.lua",
-    --"hermes.lua",
-    "expressconversion.lua",
-    "aphrodite.lua",
-	"zombie.lua",
-	"love.lua",
-	"bfb.lua",
-	"possession.lua",
-}
 
 local power_ids = {}
 local power_managers = {}
@@ -60,11 +39,11 @@ local function PopulatePowerManagers()
 end
 
 local function PopulatePowerTables()
-    for _, filepath in pairs(power_bases) do
-        VFS.Include(POWERS_DIR .. filepath)
+    for _, filepath in pairs(POWERS.FILES.BASES) do
+        VFS.Include(POWERS.POWERS_DIR .. filepath)
     end
-    for _, filepath in pairs(power_filepaths) do
-        local power = VFS.Include(POWERS_DIR .. filepath)
+    for _, filepath in pairs(POWERS.FILES.CLASSES) do
+        local power = VFS.Include(POWERS.POWERS_DIR .. filepath)
         power:SetUp()
         local id = power:GetID()
         Powers[id] = power

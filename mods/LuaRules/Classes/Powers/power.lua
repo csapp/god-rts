@@ -11,22 +11,15 @@ end
 
 
 -- Power functions are synced code
-include("LuaUI/Headers/customcmds.h.lua")
-
-POWERS = {
-    TYPES = {
-        OFFENSIVE = "Offensive",
-        DEFENSIVE = "Defensive",
-        PASSIVE = "Passive",
-    },
-    FULL_CHARGE = 1,
-}
+VFS.Include("LuaUI/Headers/customcmds.h.lua")
+VFS.Include("LuaUI/Headers/powers.h.lua")
 
 Power = Object:Inherit{
     classname = "Power",
     id = 0,
     powerName = "",
     powerType = "",
+    tooltip = "",
     teamID = -1,
     godID = -1,
 }
@@ -50,6 +43,7 @@ end
 function Power:GetID() return self.id end
 function Power:GetName() return self.powerName end
 function Power:GetType() return self.powerType end
+function Power:GetTooltip() return self.tooltip end
 
 function Power:GetTeamID()
     return self.teamID
@@ -63,5 +57,8 @@ function Power:SetGodID(id)
     self.godID = id
 end
 
+function Power:GetLargeIcon()
+    return "bitmaps/icons/"..self.classname:lower()..".png"
+end
 --function Power:Use()
 --end
