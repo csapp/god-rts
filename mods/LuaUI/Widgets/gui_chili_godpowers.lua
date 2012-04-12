@@ -33,6 +33,7 @@ local CMD_ICON_MAP = {
     [CMD_ZOMBIE] = imageDir.."zombie_apocalypse.png",
 	[CMD_BFB] = imageDir.."bfb.png",
 	[CMD_TELEPORT] = imageDir.."teleport.png",
+	[CMD_LOVE] = imageDir.."heart.png",
 }
 
 function widget:Initialize()

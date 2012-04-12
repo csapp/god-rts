@@ -33,6 +33,11 @@ local inherited = this.inherited
 function WholeLottaLove:GetRadius() return self.radius end
 function WholeLottaLove:SetRadius(r) self.radius = r end
 
+function WholeLottaLove:SetUp()
+    inherited.SetUp(self)
+    self:SetCustomCursor("cursorHeart")
+end
+
 function WholeLottaLove:HealUnit(unitID)
     _, maxHealth = GetUnitHealth(unitID)
     SetUnitHealth(unitID, maxHealth)
