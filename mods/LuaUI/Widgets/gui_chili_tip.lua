@@ -51,6 +51,7 @@ local color = {}
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
+include("units.h.lua")
 include("managers.h.lua")
 include("keysym.h.lua")
 local tildepressed, drawing, erasing
@@ -779,6 +780,9 @@ end
 
 local function MakeToolTip_Village(data, tooltip)
 	local unitID = data
+    if not Units.IsVillageUnit(unitID) then 
+        return 
+    end
 	local team, fullname
 	tt_unitID = unitID
 	team = spGetUnitTeam(tt_unitID) 
@@ -817,10 +821,10 @@ local function MakeTooltip()
 	
 	local cur_ttstr = screen0.currentTooltip or spGetCurrentTooltip()
 	local type, data = spTraceScreenRay(mx, my)
-	if (not changeNow) and cur_ttstr ~= '' and old_ttstr == cur_ttstr and old_data == data then
-		PlaceToolTipWindow2(mx+20,my-20)
-		return
-	end
+	--if (not changeNow) and cur_ttstr ~= '' and old_ttstr == cur_ttstr and old_data == data then
+		--PlaceToolTipWindow2(mx+20,my-20)
+		--return
+	--end
 	old_data = data
 	old_ttstr = cur_ttstr
 	
