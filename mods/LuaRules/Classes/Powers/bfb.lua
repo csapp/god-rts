@@ -93,7 +93,9 @@ function BFB:_Use(cmdParams, cmdOptions)
 	local maxImpulse = self:GetImpulse()
 	local affected_units = Spring.GetUnitsInSphere(center_x, center_y, center_z, radius)
 	
-    for _, affected_unit in pairs(affected_units) do  	  	 
+    for _, affected_unit in pairs(affected_units) do  	  
+		Spring.SpawnCEG("bombsmoke", center_x, center_y, center_z)
+		Spring.PlaySoundFile("sounds/explode1.wav")		
 	    if GetUnitTeam(affected_unit) ~= teamID then
 			unitX, unitY, unitZ = Spring.GetUnitPosition(affected_unit)
 			actualDamage = GetActualDamage(center_x, center_z, unitX, unitZ, radius, maxDamage)
