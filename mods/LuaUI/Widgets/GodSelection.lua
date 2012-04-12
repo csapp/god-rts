@@ -59,12 +59,37 @@ end
  function DrawButtons()
  	local selected = "unpressed"
  	godselLabel = Chili.Label:New{
- 		x = '150',
+ 		x = 50,
  		y = '10',
  		width = 12,
  		parent = godselWindow,
  		caption = "Choose your god powers",
  		fontsize = 30,
+ 	}
+	
+	Power1Label = Chili.Label:New{
+ 		x = '30',
+ 		y = '150',
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Power 1:",
+ 		fontsize = 24,
+ 	}
+	Power2Label = Chili.Label:New{
+ 		x = '30',
+ 		y = '420',
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Power 2:",
+ 		fontsize = 24,
+ 	}
+	Power2Label = Chili.Label:New{
+ 		x = '30',
+ 		y = '720',
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Power 3:",
+ 		fontsize = 24,
  	}
 	-- Row 1
 	
@@ -72,55 +97,136 @@ end
 	if(listOfPowers[1] == "Volcanic Blast") then selected = "pressed" end
 	local buttonVolcanicBlast = Chili.Button:New {
 		parent = godselWindow,
-		x = 30,
+		x = 130,
 		y = 40,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Volcanic Blast",
+		caption = "",
 		isDisabled = false,
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},
 		state = selected,
 		tooltip = "Cause massive fire damage to units within a certain radius.",
 	}
+	
+	Vimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/volcanicblast.png',
+		parent = buttonVolcanicBlast;
+	}
+	
+	VolcanicLabel = Chili.Label:New{
+ 		x = 132,
+ 		y = 130,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Volcanic Blast",
+ 		fontsize = 10,
+ 	}
+	
+	VolcanicCooldownLabel = Chili.Label:New{
+ 		x = 132,
+ 		y = 140,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Cooldown: 10s",
+ 		fontsize = 10,
+ 	}
 
 	selected = "unpressed"
 	if(listOfPowers[1] == "Zombie Apocalypse") then selected = "pressed" end
 	local buttonZombieApocalyspe = Chili.Button:New {
 		parent = godselWindow,
-		x = 180,
+		x = 240,
 		y = 40,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Zombie Apocalypse",
+		caption = "",
 		isDisabled = false,
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},
 		state = selected,
 		tooltip = "Spawn a wave of hungry zombies for a short time.",
 		}
+		
+	ZAimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/zombieapocalypse.png',
+		parent = buttonZombieApocalyspe;
+	}
+		
+	ZALabel = Chili.Label:New{
+ 		x = 242,
+ 		y = 130,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Zombie Apocalypse",
+ 		fontsize = 10,
+ 	}
+	
+	ZACooldownLabel = Chili.Label:New{
+ 		x = 242,
+ 		y = 140,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Cooldown: 10s",
+ 		fontsize = 10,
+ 	}
 
 	selected = "unpressed"
 	if(listOfPowers[1] == "Big Friendly Bomb") then selected = "pressed" end
 	local buttonBFB = Chili.Button:New {
 		parent = godselWindow,
-		x = 330,
+		x = 350,
 		y = 40,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Big Friendly Bomb",
+		caption = "",
 		isDisabled = false,
 		cmdid = 1,
 		OnMouseDown = {ClickFunc},
 		state = selected,
 		tooltip = "Explode a Massive Bomb causing knockback and damage within a certain radius.",
 		}
+		
+	ZAimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/bfb.png',
+		parent = buttonBFB;
+	}
+		
+	BFBLabel = Chili.Label:New{
+ 		x = 352,
+ 		y = 130,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Big Friendly Bomb",
+ 		fontsize = 10,
+ 	}
+	
+	BFBCooldownLabel = Chili.Label:New{
+ 		x = 352,
+ 		y = 140,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Cooldown: 10s",
+ 		fontsize = 10,
+ 	}
 
 --Row 2
 
@@ -128,13 +234,13 @@ end
 	if(listOfPowers[2] == "Teleport") then selected = "pressed" end
 	local buttonTeleport = Chili.Button:New {
 		parent = godselWindow,
-		x = 30,
-		y = 190,
+		x = 130,
+		y = 170,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Teleport",
+		caption = "",
 		isDisabled = false,
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},
@@ -142,18 +248,45 @@ end
 		tooltip = "Teleport to another location on the map.",
 	}
 	
+	teleportimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/teleport.png',
+		parent = buttonTeleport;
+	}
+	
+	TeleportLabel = Chili.Label:New{
+ 		x = 132,
+ 		y = 260,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Teleport",
+ 		fontsize = 10,
+ 	}
+	
+	TeleportCooldownLabel = Chili.Label:New{
+ 		x = 132,
+ 		y = 270,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Cooldown: 10s",
+ 		fontsize = 10,
+ 	}
+	
 
 	selected = "unpressed"
 	if(listOfPowers[2] == "Whole Lotta Love") then selected = "pressed" end
 	local buttonLove= Chili.Button:New {
 		parent = godselWindow,
-		x = 180,
-		y = 190,
+		x = 240,
+		y = 170,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Whole Lotta Love",
+		caption = "",
 		isDisabled = false,
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},
@@ -161,23 +294,77 @@ end
 		tooltip = "Revive units within a certain radius to full health.",
 		}
 		
+	wllimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/wholelottalove.png',
+		parent = buttonLove;
+	}
+		
+	WLLLabel = Chili.Label:New{
+ 		x = 242,
+ 		y = 260,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Whole Lotta Love",
+ 		fontsize = 10,
+ 	}
+	
+	WLLCooldownLabel = Chili.Label:New{
+ 		x = 242,
+ 		y = 270,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Cooldown: 10s",
+ 		fontsize = 10,
+ 	}
+		
 	selected = "unpressed"
 	if(listOfPowers[2] == "Possession") then selected = "pressed" end
 	local buttonPossession = Chili.Button:New {
 		parent = godselWindow,
-		x = 330,
-		y = 190,
+		x = 350,
+		y = 170,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Possession",
+		caption = "",
 		isDisabled = false,
 		cmdid = 2,
 		OnMouseDown = {ClickFunc},
 		state = selected,
 		tooltip = "Transfer all normal units within radius to your team.",
 		}
+		
+	possessionimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/possession.png',
+		parent = buttonPossession;
+	}
+		
+	PossessionLabel = Chili.Label:New{
+ 		x = 352,
+ 		y = 260,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Possession",
+ 		fontsize = 10,
+ 	}
+	
+	PossessionCooldownLabel = Chili.Label:New{
+ 		x = 352,
+ 		y = 270,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Cooldown: 10s",
+ 		fontsize = 10,
+ 	}
 
 
 --Row 3
@@ -204,61 +391,115 @@ end
     if(listOfPowers[3] == "Metropolis") then selected = "pressed" end
     local buttonSomething = Chili.Button:New {
         parent = godselWindow,
-        x = 30,
-        y = 340,
+        x = 130,
+        y = 300,
         padding = {5, 5, 5, 5},
         margin = {0, 0, 0, 0},
         minWidth = 90,
         minHeight = 90,
-        caption = "Metropolis",
+        caption = "",
         isDisabled = false,
         cmdid = 3,
         OnMouseDown = {ClickFunc},
         state = selected,
     }
+	
+	metropolisimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/metropolis.png',
+		parent = buttonSomething;
+	}
+	
+	MetropolisLabel = Chili.Label:New{
+ 		x = 132,
+ 		y = 390,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Metropolis",
+ 		fontsize = 10,
+ 	}
 
 	selected = "unpressed"
 	if(listOfPowers[3] == "Express Conversion") then selected = "pressed" end
 	local buttonExpress = Chili.Button:New {
 		parent = godselWindow,
-		x = 180,
-		y = 340,
+		x = 240,
+		y = 300,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Express Conversion",
+		caption = "",
 		isDisabled = false,
 		cmdid = 3,
 		OnMouseDown = {ClickFunc},
 		state = selected,
 		tooltip = "Halves the conversion time of villages.",
 		}
+		
+	ecimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/expressconversion.png',
+		parent = buttonExpress;
+	}
+		
+	ECLabel = Chili.Label:New{
+ 		x = 242,
+ 		y = 390,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Express Conversion",
+ 		fontsize = 10,
+ 	}
 
 	selected = "unpressed"
 	if(listOfPowers[3] == "Aphrodite") then selected = "pressed" end
 	local buttonAphrodite = Chili.Button:New {
 		parent = godselWindow,
-		x = 330,
-		y = 340,
+		x = 350,
+		y = 300,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 90,
 		minHeight = 90,
-		caption = "Aphrodite",
+		caption = "",
 		isDisabled = false,
 		cmdid = 3,
 		OnMouseDown = {ClickFunc},
 		state = selected,
 		tooltip = "Increase villager generation rate.",
 		}
+		
+	aphroditeimage = Chili.Image:New {
+		width="100%";
+		height="90%";
+		y="6%";
+		keepAspect = true,	--isState;
+		file = 'bitmaps/icons/aphrodite.png',
+		parent = buttonAphrodite;
+	}
+		
+	AphroditeLabel = Chili.Label:New{
+ 		x = 352,
+ 		y = 390,
+ 		width = 12,
+ 		parent = godselWindow,
+ 		caption = "Aphrodite",
+ 		fontsize = 10,
+ 	}
 
 --Done
 
 	local button = Chili.Button:New {
 		parent = godselWindow,
-		x = 380,
-		y = 470,
+		x = 370,
+		y = 415,
 		padding = {5, 5, 5, 5},
 		margin = {0, 0, 0, 0},
 		minWidth = 40,
@@ -312,8 +553,8 @@ end
  		dockable = true,
  		parent = screen0,
  		caption = "",
- 		clientWidth = 480,
- 		clientHeight = 520,
+ 		clientWidth = 450,
+ 		clientHeight = 465,
 		skinName  = "Godly",
  	}	
 	
