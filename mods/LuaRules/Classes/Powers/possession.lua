@@ -41,6 +41,11 @@ function Possession:GetPossessableClasses() return self.possessableClasses end
 function Possession:GetRadius() return self.radius end
 function Possession:SetRadius(r) self.radius = r end
 
+function Possession:SetUp()
+    inherited.SetUp(self)
+    self:SetCustomCursor("cursorPossession")
+end
+
 function Possession:TransferUnit(unitID)
     TransferUnit(unitID, self:GetTeamID(), false)
     local curX, curY, curZ = GetUnitBasePosition(unitID)

@@ -34,6 +34,7 @@ local CMD_ICON_MAP = {
 	[CMD_BFB] = imageDir.."bfb.png",
 	[CMD_TELEPORT] = imageDir.."teleport.png",
 	[CMD_LOVE] = imageDir.."heart.png",
+	[CMD_POSSESSION] = imageDir.."possession.png",
 }
 
 function widget:Initialize()
