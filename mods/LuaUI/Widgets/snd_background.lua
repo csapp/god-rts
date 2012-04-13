@@ -77,7 +77,12 @@ end
 local function PlayNewTrack()
 	Spring.StopSoundStream()
 	local newTrack = previousTrack
-    newTrack = 'music/springambient.ogg'
+    newTrack = 'music/Dogma.ogg'
+	
+	--XXXXIf God health less than 10% then
+	--	newTrack = 'music/Strategy.ogg'
+	--end
+	
 	-- for key, val in pairs(oggInfo) do
 		-- Spring.Echo(key, val)	
 	-- end
@@ -103,9 +108,9 @@ function widget:Update(dt)
 			seedInitialized=true
 		end
 		timeframetimer = timeframetimer + dt
-		if (timeframetimer > 1) then	-- every second
+		if (timeframetimer > 0.01) then	-- every second
 			timeframetimer = 0
-			newTrackWait = newTrackWait + 1
+			newTrackWait = newTrackWait + 0.01
 			
 			if (not firstTime) then
 				PlayNewTrack()
