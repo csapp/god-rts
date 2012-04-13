@@ -22,7 +22,7 @@ local unitDef  =  {
 	
 --Unit limitations and properties
     BuildTime = 5,
-    Description = "An awesomely powerful soldier",
+    Description = "Lava-spouting behemoth",
     MaxDamage = HP,
 	--mass = 500,
     RadarDistance = 0,

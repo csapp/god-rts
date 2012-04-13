@@ -40,7 +40,7 @@ local unitDef  =  {
     
 --Unit limitations and properties
     BuildTime = 5,
-    Description = "An awesome evangelist",
+    Description = "Well-groomed evangelist",
     MaxDamage = HP,
 	mass = 500,
     RadarDistance = 0,

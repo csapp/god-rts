@@ -37,7 +37,7 @@ local unitDef  =  {
     
 --Unit limitations and properties
     BuildTime = 5,
-    Description = "An awesomely powerful marksman",
+    Description = "Stealthy, accurate and well-dressed",
     MaxDamage = HP,
 	mass = 500,
     RadarDistance = 0,

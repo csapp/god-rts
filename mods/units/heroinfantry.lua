@@ -35,7 +35,7 @@ local unitDef  =  {
     
 --Unit limitations and properties
     BuildTime = 15,
-    Description = "An awesomely powerful soldier",
+    Description = "Sword-wielding brute",
     MaxDamage = HP,
     idleAutoHeal = 0,
 	mass = 500,
