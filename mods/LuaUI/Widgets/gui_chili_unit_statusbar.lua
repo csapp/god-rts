@@ -106,9 +106,12 @@ local function printVillageBuildingInfo(villageID)
 	local function cb(result)
 		local buildingInfoString = "Village Buildings:\n"
 		
-        for k,v in pairs(result) do 
-			Spring.Echo(k,v)
-			buildingInfoString = buildingInfoString .. v .. "\n"
+		if next(result) == nil then
+			buildingInfoString = buildingInfoString .. "None"
+		else
+			for k,v in pairs(result) do
+				buildingInfoString = buildingInfoString .. v .. "\n"
+			end
 		end
 		
 		buildingInfo:SetCaption(buildingInfoString)
@@ -247,9 +250,12 @@ function widget:CommandsChanged()
     --setUnitInfo(selected_units[1])
 	setUnitName(selected_units[1])
 	setUnitStats(selected_units[1])	
-    if string.find(printDescription(selected_units[1]), "Village") ~= nil then
+    --if string.find(printDescription(selected_units[1]), "Village") ~= nil then
+	if Units.IsVillageUnit(selected_units[1]) then
         printVillageBuildingInfo(selected_units[1])
-    end
+    else
+		buildingInfo:SetCaption("")
+	end
 	
 	resetWindow(imageWindow)
 	resetWindow(commandWindow)
