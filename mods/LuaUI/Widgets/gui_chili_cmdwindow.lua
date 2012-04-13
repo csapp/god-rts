@@ -31,6 +31,7 @@ local VILLAGECOMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait
 local VOLCANOCOMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu","firestate","movestate","repeat", "selfd", "patrol", "guard", "move", "fight", "wait", "stop"}
 local BUILDCOMMANDSTOEXCLUDE = {"building_Turret", "building_High Rise", "building_Training Facility", "building_Motel", "building_Shrine"}
 local GODPOWERS = {"VolcanicBlast", "Teleport", "WholeLottaLove"}
+local BUILDINGS = {"building_Shrine", "building_Training Facility", "building_High Rise", "building_Motel", "building_Turret"}
 local exclude
 local Chili
 local Powers
@@ -50,7 +51,7 @@ local buildQueueUnsorted = {}
 local spGetFullBuildQueue = Spring.GetFullBuildQueue
 local selectedFac 
 local spGetUnitDefID = Spring.GetUnitDefID
-local cmdtab = false
+local cmdtab = 'active'
 
 -- CONTROLS
 local spGetActiveCommand 	= Spring.GetActiveCommand
@@ -70,15 +71,25 @@ function LayoutHandler(xIcons, yIcons, cmdCount, commands)
 	return "", xIcons, yIcons, {}, customCmds, {}, {}, {}, {}, reParamsCmds, {[1337]=9001}
 end
 
-local function TabClick(button)
-	Spring.Echo("Click")
-	if(button.caption == "Build") then
-		cmdtab = true
-		loadPanel()
-	else
-		cmdtab = false
-		loadPanel()
-   end
+local function TabUnitsClick(button)
+	--Spring.Echo(cmdtab)
+	cmdtab = 'units'
+	--Spring.Echo(cmdtab)
+	loadPanel()
+end
+
+local function TabBuildingClick(button)
+	--Spring.Echo(cmdtab)
+	cmdtab = 'building'
+	--Spring.Echo(cmdtab)
+	loadPanel()
+end
+
+local function TabActiveClick(button)
+	--Spring.Echo(cmdtab)
+	cmdtab = 'active'
+	--Spring.Echo(cmdtab)
+	loadPanel()
 end
 
 function ClickFunc(button) 
@@ -101,6 +112,7 @@ function findButtonData(cmd)
 	local isState = (cmd.type == CMDTYPE.ICON_MODE and #cmd.params > 1)
 	local isBuild = ((cmd.id < 0))
 	local isPower = table.contains(GODPOWERS,cmd.action)
+	local isBuilding = table.contains(BUILDINGS,cmd.action)
 	local buttontext = ""
 	local texture = getTexture(cmd.action, cmd.id)--'bitmaps/icons/'..(cmd.action)..'.png'
 	local container
@@ -117,7 +129,7 @@ function findButtonData(cmd)
 	else
 		texture = cmd.texture
 	end
-	return buttontext, container, isState, isBuild, isPower, texture	
+	return buttontext, container, isState, isBuild, isPower, isBuilding, texture	
 end
 
 --sets texture to correct path depending on command. Yes I'm I know there is a "right" way to do this but it was taking forever to find
@@ -133,11 +145,14 @@ function createMyButton(cmd)
 	local tooltip = cmd.tooltip
 
 	if(type(cmd) == 'table')then
-		buttontext, container, isState, isBuild, isPower, texture = findButtonData(cmd)
+		buttontext, container, isState, isBuild, isPower, isBuilding, texture = findButtonData(cmd)
 		
-		if isBuild and not(cmdtab) then return end
+		if isBuild and not(cmdtab == 'units') then return end
 		
-		if not(isBuild) and cmdtab then return end
+		if isBuilding and not(cmdtab == 'building') then return end
+		
+		if (cmdtab == 'building' or cmdtab == 'units') and not(isBuild or isBuilding) then return end
+		
 		
 		local result = container.xstep % MAXBUTTONSONROW
 		container.xstep = container.xstep + 1
@@ -302,43 +317,65 @@ function loadPanel()
 	local commands = Spring.GetActiveCmdDescs()
 	commands = filterUnwanted(commands)
 	table.sort(commands,function(x,y) return x.action < y.action end)
+	if isVillageSelected() then
 	
-	local selected = "unpressed"
-	if cmdtab then selected = "pressed" end
-	local cmdtabbutton = Chili.Button:New {
-			parent = container,
-			x = -90,
-			y = 20,
-			padding = {5, 5, 5, 5},
-			margin = {0, 0, 0, 0},
-			Width = 100,
-			minHeight = 20,
-			caption = 'Build',
-			isDisabled = true,
-			state = selected,
-			OnMouseDown = {TabClick},
-			tooltip = "Build Units Tab",
-			cmdid = 1,
-			isDisabled = not(cmdtab),
-		}
-	selected = "unpressed"
-	if not(cmdtab) then selected = "pressed" end
-	local ActiveTabbutton = Chili.Button:New {
-			parent = container,
-			x = -90,
-			y = 60,
-			padding = {5, 5, 5, 5},
-			margin = {0, 0, 0, 0},
-			Width = 100,
-			minHeight = 20,
-			caption = 'Commands',
-			isDisabled = false,
-			state = selected,
-			OnMouseDown = {TabClick},
-			tooltip = "Active Commands Tab",
-			cmdid = 2,
-			isDisabled = cmdtab,
-		}
+		local selected = "unpressed"
+		if cmdtab == 'units' then selected = "pressed" end
+		local UnitTabbutton = Chili.Button:New {
+				parent = container,
+				x = -85,
+				y = 60,
+				padding = {5, 5, 5, 5},
+				margin = {0, 0, 0, 0},
+				Width = 120,
+				minHeight = 20,
+				caption = 'Units',
+				isDisabled = true,
+				state = selected,
+				OnMouseDown = {TabUnitsClick},
+				tooltip = "Build Units Tab",
+				cmdid = 1,
+				isDisabled = not(cmdtab),
+			}
+		selected = "unpressed"
+		if cmdtab == 'active' then selected = "pressed" end
+		local ActiveTabbutton = Chili.Button:New {
+				parent = container,
+				x = -85,
+				y = 20,
+				padding = {5, 5, 5, 5},
+				margin = {0, 0, 0, 0},
+				Width = 120,
+				minHeight = 20,
+				caption = 'Commands',
+				isDisabled = false,
+				state = selected,
+				OnMouseDown = {TabActiveClick},
+				tooltip = "Active Commands Tab",
+				cmdid = 2,
+				isDisabled = cmdtab,
+			}
+			
+		selected = "unpressed"
+		if cmdtab == 'building' then selected = "pressed" end
+		local BuildingTabbutton = Chili.Button:New {
+				parent = container,
+				x = -85,
+				y = 100,
+				padding = {5, 5, 5, 5},
+				margin = {0, 0, 0, 0},
+				Width = 120,
+				minHeight = 20,
+				caption = 'Buildings',
+				isDisabled = false,
+				state = selected,
+				OnMouseDown = {TabBuildingClick},
+				tooltip = "Active Commands Tab",
+				cmdid = 2,
+				isDisabled = cmdtab,
+			}
+			
+	end
 	
 	for cmdid, cmd in pairs(commands) do
 		rowcount = createMyButton(commands[cmdid]) 
@@ -490,7 +527,7 @@ end
 function widget:DrawScreen()
     if updateRequired then
         updateRequired = false
-		if not(isVillageSelected()) then cmdtab = false end
+		if not(isVillageSelected()) then cmdtab = 'active' end
 		loadPanel()
     end
 end
