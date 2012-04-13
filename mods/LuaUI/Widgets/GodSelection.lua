@@ -32,12 +32,7 @@ local PowerNames
 
 -- SCRIPT FUNCTIONS
 function selectPower(row, power, button)
-
     listOfPowers[row] = power
-
-    --Spring.Echo(listOfPowers[1], listOfPowers[2], listOfPowers[3])
-    --Highlight Button
-    --Set listofPowers
 end
 
 function done()
@@ -204,12 +199,14 @@ function loadPanel()
     DrawButtons()
 end
 
-function widget:DrawScreen()
-    --loadPanel()
-end
-
 function widget:Initialize()	
     if (not WG.Chili) then
+        widgetHandler:RemoveWidget()
+        return
+    end
+
+    local godUnitDefID = UnitDefNames["god"].id
+    if Spring.GetTeamUnitsSorted(Spring.GetMyTeamID())[godUnitDefID] then 
         widgetHandler:RemoveWidget()
         return
     end
