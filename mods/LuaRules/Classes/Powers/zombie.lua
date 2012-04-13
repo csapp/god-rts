@@ -21,6 +21,7 @@ ZombieApocalypse = RangedPower:Inherit{
     powerName = "Zombie Apocalypse",
     powerType = POWERS.TYPES.OFFENSIVE,
     rechargeRate = 1/300,
+    range = 400,
     zombieCount = 20,
     zombieLifetime = 75, -- i.e. zombies die after zombieLifetime seconds
 	radius = 50,

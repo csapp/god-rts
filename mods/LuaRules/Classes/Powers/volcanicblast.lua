@@ -21,6 +21,7 @@ VolcanicBlast = RangedPower:Inherit{
     powerName = "Volcanic Blast",
     powerType = POWERS.TYPES.OFFENSIVE,
 	volcanoLifetime = 20, 
+    range = 400,
     rechargeRate = 1/180,
     tooltip = "Cause massive fire damage to units within a certain radius",
     cmdType = CMDTYPE.ICON_MAP,

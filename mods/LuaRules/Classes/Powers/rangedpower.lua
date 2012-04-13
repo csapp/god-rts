@@ -49,7 +49,7 @@ function RangedPower:CanUse(cmdParams, cmdOptions)
 		if self:InRange(cmdParams) then
 			return true
 		else
-			reason = "You do not have line of sight in that area."
+			reason = "That area is outside the range of "..self:GetName()
 			LuaMessages.SendLuaUIMsg(MSG_TYPES.POWER_FAILED, {reason, teamID})
 			return false
 		end
