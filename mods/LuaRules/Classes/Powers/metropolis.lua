@@ -16,6 +16,7 @@ Metropolis = PassivePower:Inherit{
     classname = "Metropolis",
     powerName = "Metropolis",
     id = 50000,
+    tooltip = "+ Village supply cap\n+ Village XP\n- Village structure build time",
     multipliers = {
         [Multipliers.TYPES.XP] = {0.5, {Units.CLASSES.VILLAGE}},
         [Multipliers.TYPES.SUPPLY_CAP] = {0.2, {Units.CLASSES.VILLAGE}},

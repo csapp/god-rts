@@ -15,6 +15,7 @@ ExpressConversion = PassivePower:Inherit{
     classname = "ExpressConversion",
     powerName = "Express Conversion",
     id = 50001,
+    tooltip = "Decreases convert time and generates faith",
     multipliers = {
         [Multipliers.TYPES.CONVERT_TIME] = {0.5},
         [Multipliers.TYPES.FAITH] = {0.5}, -- generate 0.5 faith every 5 seconds

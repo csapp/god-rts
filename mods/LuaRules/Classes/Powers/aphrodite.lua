@@ -15,6 +15,7 @@ Aphrodite = PassivePower:Inherit{
     classname = "Aphrodite",
     powerName = "Aphrodite",
     id = 50002,
+    tooltip = "Increases villager generation rate",
     multipliers = {
         [Multipliers.TYPES.VILLAGER] = {1},
     },
