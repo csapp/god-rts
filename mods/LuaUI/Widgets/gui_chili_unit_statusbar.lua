@@ -177,7 +177,7 @@ function widget:Initialize()
 	buildingInfo = Label:New{
 		parent = statusBar,
 		x = 110,
-		y = 65,
+		y = 0,
 		width = 200,
 		height = "100%",
 		fontsize = 13,
@@ -248,13 +248,14 @@ function widget:CommandsChanged()
     -- XXX need to decide what to do if multiple units are selected
 	-- This just handles showing the first unit selected in a group
     --setUnitInfo(selected_units[1])
-	setUnitName(selected_units[1])
-	setUnitStats(selected_units[1])	
+	setUnitName(selected_units[1])	
     --if string.find(printDescription(selected_units[1]), "Village") ~= nil then
 	if Units.IsVillageUnit(selected_units[1]) then
+		unitStats:SetCaption("")
         printVillageBuildingInfo(selected_units[1])
     else
 		buildingInfo:SetCaption("")
+		setUnitStats(selected_units[1])
 	end
 	
 	resetWindow(imageWindow)
