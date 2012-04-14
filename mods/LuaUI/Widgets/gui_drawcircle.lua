@@ -16,21 +16,32 @@ local GetMyTeamID = Spring.GetMyTeamID
 include("Headers/utilities.lua")
 include("customcmds.h.lua")
 include("managers.h.lua")
+include("msgs.h.lua")
 
+local godID
 local radius = 0
-local circleOn = false
-local circleCmds = {CMD_BFB, CMD_LOVE, CMD_POSSESSION}
+local circleUnitOn = false
+local circleMouseOn = false
+local circleUnitCmds = {CMD_VOLCANIC_BLAST, CMD_ZOMBIE}
+local circleMouseCmds = {CMD_BFB, CMD_LOVE, CMD_POSSESSION}
 local currentCmd
 
 function widget:GameFrame(n) 
 	local index, cmdID = Spring.GetActiveCommand()
     if currentCmd == cmdID then return end
     currentCmd = cmdID
-    if table.contains(circleCmds, cmdID) then
+    if table.contains(circleMouseCmds, cmdID) then
         WG.GadgetQuery.CallManagerElementFunction(
             function (r) radius = r end, 
             Managers.TYPES.POWER, cmdID, "GetRadius")
-        circleOn = true
+        circleMouseOn = true
+		circleUnitOn = false
+	elseif table.contains(circleUnitCmds, cmdID) then
+		WG.GadgetQuery.CallManagerElementFunction(
+            function (r) radius = r end, 
+            Managers.TYPES.POWER, cmdID, "GetRange")
+		circleUnitOn = true
+		circleMouseOn = false
 	elseif cmdID == CMD_RESURRECT then	
 		--needs special case because resurrect isn't defined 
 		--as a god power, can't access radius unless we go through params
@@ -38,9 +49,11 @@ function widget:GameFrame(n)
 		if cmdDesc ~= nil then
 			radius = cmdDesc.params[1]
 		end
-		circleOn = true
+		circleMouseOn = true
+		circleUnitOn = false
 	else
-        circleOn = false
+		circleUnitOn = false
+        circleMouseOn = false
         radius = 0
 	end
 end
@@ -54,10 +67,20 @@ function getMouseCursorLocation()
 end
 
 function widget:DrawWorld()
-	if circleOn then
+	if circleMouseOn then
 		local mouseX, mouseZ = getMouseCursorLocation()
 		if (mouseX ~= nil and mouseZ ~= nil) then
 			gl.DrawGroundCircle(mouseX,0, mouseZ, radius, 100)
 		end
+	elseif circleUnitOn then
+		local x,y,z = Spring.GetUnitBasePosition(godID)
+		gl.DrawGroundCircle(x,0,z, radius, 100)
+	end
+end
+
+function widget:RecvLuaMsg(msg, params)	
+	local msg_type, params = LuaMessages.deserialize(msg)
+	if msg_type == MSG_TYPES.GOD_CREATED then
+		godID = params[1]
 	end
 end
