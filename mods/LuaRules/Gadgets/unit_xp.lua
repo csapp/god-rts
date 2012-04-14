@@ -90,7 +90,7 @@ local function AddXP(unitID, xp)
         if not Units.IsVillageUnit(unitID) then
             Morph(unitID)--, unitDef.customParams.morph_into, teamID)
         else
-            local village = _G.VillageManager:GetElement(unitID)
+            local village = _G.UnitManager:GetVillageManager():GetElement(unitID)
             village:ReadyToFortify()
         end
     end
