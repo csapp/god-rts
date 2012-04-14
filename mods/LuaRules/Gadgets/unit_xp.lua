@@ -33,6 +33,10 @@ local xpMultipliers = {}
 
 -- Based on a morphing function written by trepan in Expand and Exterminate (unit_morph) 
 local function Morph(unitID, noCopyCmds, noCopyStates)--, morphInto, teamID)
+    -- XXX this gets called twice if we call it from RecvLuaMsg
+    -- because i don't understand how the damn message stuff works
+    if not Spring.ValidUnitID(unitID) then return end 
+
     local morphInto = UnitDefs[GetUnitDefID(unitID)].customParams.morph_into
     local teamID = GetUnitTeam(unitID)
     local myX, myY, myZ = Spring.GetUnitBasePosition(unitID)
