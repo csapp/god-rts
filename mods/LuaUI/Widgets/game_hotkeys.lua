@@ -42,7 +42,7 @@ end
 function widget:RecvLuaMsg(msg, playerID)
 	--Get us the God unitID
 	local msg_type, params = LuaMessages.deserialize(msg)
-	if msg_type == MSG_TYPES.GOD_CREATED then
+	if msg_type == MSG_TYPES.GOD_CREATED and Spring.GetUnitTeam(params[1]) == Spring.GetLocalTeamID() then
 		godID = params[1]
 		getGodPowers()
 	end
