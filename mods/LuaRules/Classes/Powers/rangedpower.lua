@@ -27,7 +27,9 @@ function RangedPower:GetRange() return self.range end
 
 function RangedPower:InRange(point)
     local x,y,z = unpack(point)
-    local allyID = 0 -- XXX why does this work
+    --local allyID = 0 -- XXX why does this work
+	local godID = self:GetGodID()
+	local allyID = Spring.GetUnitAllyTeam(godID)
     if not IsPosInLos(x, y, z, allyID) then
         return false
     end
