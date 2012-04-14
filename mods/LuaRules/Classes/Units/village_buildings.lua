@@ -99,12 +99,21 @@ function Building:AddResearchUpgrade(upgrade)
     self.researchUpgrades[upgrade:GetKey()] = upgrade
 end
 
-function Building:Apply()
+
+function Building:ApplyVillageUpgrades()
+end
+
+function Building:ApplyMultipliers()
     local am = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager()
     for key, multiplier in pairs(self:GetMultipliers()) do
         local value, classes = unpack(multiplier)
         am:AddMultiplier(key, value, classes)
     end
+end
+
+function Building:Apply()
+    self:ApplyMultipliers()
+    self:ApplyVillageUpgrades()
 end
 
 function Building:Unapply(oldTeam)
@@ -164,7 +173,7 @@ Turret = Building:Inherit{
     tooltip = "Allows village to attack",
 }
 
-function Turret:Apply()
+function Turret:ApplyVillageUpgrades()
     Spring.UnitScript.GetScriptEnv(self:GetUnitID()).Upgrade()
 end
 
@@ -221,7 +230,7 @@ HighRise = Building:Inherit{
 function HighRise:GetHPBonus() return self.hpBonus end
 function HighRise:GetSupplyCapBonus() return self.supplyCapBonus end
 
-function HighRise:Apply()
+function HighRise:ApplyVillageUpgrades()
     local unitID = self:GetUnitID()
     local hpBonus = self:GetHPBonus()
     local health, maxHealth = GetUnitHealth(unitID)
@@ -305,7 +314,7 @@ function Upgrade:Research()
         self:GetBuilding():AddResearchUpgrade(self)
         village:SetBusy(false)
     end
-    local function _cancelled() self:SetBusy(false) end
+    local function _cancelled() village:SetBusy(false) end
     GG.ProgressBars.AddProgressBar(self:GetUnitID(), "Researching " .. self:GetName() .. "...", 
                                    self:GetResearchTime(), _done, _cancelled)
 end
@@ -388,7 +397,7 @@ function TrainingFacility:GetCmds()
     return cmds
 end
 
-function TrainingFacility:Apply()
+function TrainingFacility:ApplyVillageUpgrades()
     local unitID = self:GetUnitID()
     for cmdID, upgrade in pairs(self:GetAvailableUpgrades()) do
         Spring.InsertUnitCmdDesc(unitID, cmdID, upgrade:GetCmdDesc())

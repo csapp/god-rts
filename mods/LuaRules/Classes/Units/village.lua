@@ -58,6 +58,14 @@ function Village:New(unitID)
     return obj
 end
 
+function Village:LevelUp(newUnitID)
+    local vm = _G.UnitManager:GetVillageManager()
+    vm:AddElement(newUnitID, self)
+    vm:RemoveElement(self:GetUnitID())
+    inherited.LevelUp(self, newUnitID)
+    self:CallOnAll("ApplyVillageUpgrades")
+end
+
 function Village:GetSupplyCap()
     local am = _G.TeamManagers[self:GetTeamID()]:GetAttributeManager()
     local mult = am:GetSupplyCapMultiplier():GetValue(self:GetUnitID())
