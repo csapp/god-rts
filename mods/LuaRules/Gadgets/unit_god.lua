@@ -80,8 +80,18 @@ local function DestroyPlayer(teamID)
 			Spring.DestroyUnit(uID)
 		end
 	end
+	--Really quick hack
 	local allyTeamList = Spring.GetAllyTeamList()
-	table.remove(allyTeamList, teamID)
+	local teamList = {}
+	for i, allyTeamID in pairs(allyTeamList) do
+		teamList = Spring.GetTeamList(allyTeamID)
+			for j,tID in pairs(teamList) do
+				if tID ~= teamID then
+					table.remove(allyTeamList, i)
+				end
+			end
+	end
+	--end of really quick hack
 	Spring.KillTeam(teamID)
 end
 
