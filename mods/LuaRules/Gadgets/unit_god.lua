@@ -73,16 +73,15 @@ local function DestroyPlayer(teamID)
 	--Destroy all units on team
 	local listOfUnits = Spring.GetTeamUnits(teamID)
 	local listOfVillageUnitDefIDs = {UnitDefNames["smallvillage"].id, UnitDefNames["mediumvillage"].id, UnitDefNames["largevillage"].id}
-	Spring.Echo("B")
 	for i, uID in pairs(listOfUnits) do
 		if table.contains(listOfVillageUnitDefIDs, Spring.GetUnitDefID(uID)) then
-			Spring.Echo("C")
 			Spring.TransferUnit(uID, Spring.GetGaiaTeamID())	--transfer villages to neutral team
 		else
 			Spring.DestroyUnit(uID)
 		end
 	end
-
+	local allyTeamList = Spring.GetAllyTeamList()
+	table.remove(allyTeamList, teamID)
 	Spring.KillTeam(teamID)
 end
 
@@ -136,7 +135,6 @@ function gadget:UnitDestroyed(unitID, unitDefID, teamID, attackerID, attackerDef
 		if listOfGodIDs[i] == unitID then
 			table.remove(listOfGodIDs, i)
 			if #listOfGodIDs > 1 then
-				Spring.Echo("A")
 				DestroyPlayer(teamID)
 			else
 				EndGame(attackerTeamID)
