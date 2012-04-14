@@ -53,8 +53,12 @@ function VolcanicBlast:_Use(cmdParams, cmdOptions)
     local center_x, center_y, center_z = unpack(cmdParams)
     local teamID = self:GetTeamID()
     Spring.PlaySoundFile("sounds/avalancheshort.wav")
-	Spring.SpawnCEG("dust", center_x, center_y, center_z)
 	volcanoID = CreateUnit("Volcano", center_x, center_y, center_z, 0, teamID)
+	for i = 0, 120 do
+		if i % 30 == 0 then
+			Spring.SpawnCEG("dust", center_x, center_y, center_z)
+		end
+	end
 	GG.Delay.CallLater(self.volcanoLifetime, self._DestroyVolcano, {self})
 end
 

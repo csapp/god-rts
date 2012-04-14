@@ -46,7 +46,6 @@ function ZombieApocalypse:_SpawnZombie(x, y, z, teamID)
 		zombieID = CreateUnit("Zombie", x+randomNumX, y, z+randomNumZ, 0, teamID)
         table.insert(listOfZombies, zombieID)
     end
-	
 end
 
 function ZombieApocalypse:_KillZombies()
@@ -63,6 +62,11 @@ function ZombieApocalypse:_Use(cmdParams, cmdOptions)
     local x, y, z = unpack(cmdParams)
 	local teamID = self:GetTeamID()
 	self:_SpawnZombie(x,y,z,teamID)
+	for i = 0, 300 do
+		if i % 30 == 0 then
+			Spring.SpawnCEG("dust", x, y, z)
+		end
+	end
     GG.Delay.CallLater(self.zombieLifetime, self._KillZombies, {self})
 end
 
