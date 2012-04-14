@@ -20,6 +20,7 @@ local resources =
             hearts = 'effects/hearts.png',
 			bombsmoke = 'effects/smoke00.tga',
 			fireball = 'effects/fireball.tga',
+			rune = 'effects/rune.png',
             --lightb2 = 'effects/lightningball2.tga',
             --cloudexplo = 'effects/cloudexplo.tga',
             --flowexplo = 'effects/flowexplo.tga',

@@ -15,6 +15,7 @@ local hero_infantry_id = UnitDefNames["heroinfantry"].id
 local hero_ranged_id = UnitDefNames["heroranged"].id
 local hero_cavalry_id = UnitDefNames["herocavalry"].id
 
+local drawCEG = false
 local GetUnitDefID = Spring.GetUnitDefID
 
 function getHeroInfo()
@@ -31,8 +32,12 @@ function getHeroInfo()
 end
 
 
-function applyHeroBonus(listOfHeroInfo)
+function applyHeroBonus(listOfHeroInfo, n)
 	local affectedUnits = {}
+	local unitX, unitY, unitZ
+	if n % 150 == 0 then
+		drawCEG = true
+	end
 	
 	for i, heroInfo in pairs(listOfHeroInfo) do
 		local unitList = Spring.GetUnitsInSphere(heroInfo[1], heroInfo[2], heroInfo[3], 100, heroInfo[5]) --Get units on same team around Hero within radius
@@ -40,7 +45,12 @@ function applyHeroBonus(listOfHeroInfo)
 			if w == heroInfo[4] then
 				table.remove(unitList, j) -- remove the Hero from this list since he doesn't get affected by the bonus
 			end
+			if drawCEG == true then
+				unitX, unitY, unitZ = Spring.GetUnitBasePosition(w)
+				Spring.SpawnCEG("aura", unitX, unitY, unitZ)
+			end
 		end
+		drawCEG = false
 		table.insert(affectedUnits, unitList) -- gather a list of lists containing all units near heroes
 	end
 	GG.InfluencedUnits = affectedUnits	--post this to the global list 'GG', so that the attribute system can handle applying bonuses
@@ -49,7 +59,7 @@ end
 function gadget:GameFrame(n)
 	local heroInfo = getHeroInfo()
 	if heroInfo ~= nil then
-		applyHeroBonus(heroInfo)
+		applyHeroBonus(heroInfo, n)
 	end
 
 end

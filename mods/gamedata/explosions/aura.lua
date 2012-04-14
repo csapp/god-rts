@@ -1,0 +1,33 @@
+return {
+	["aura"] = {
+	tpsmallsmoke = {
+		air = true,
+		class= [[CSimpleParticleSystem]],
+		count = 1,
+		water = true, 
+		ground = true,
+		properties = {
+			alwaysVisible = 0,
+			explosiongenerator = [[custom:aura]],
+			sizegrowth=0.2,
+			sizemod=1.0,
+			pos=[[0, 0, 0]],
+			emitvector=[[0, 1, 0]],
+			gravity=[[0, -0.05, 0]],
+			colormap= [[0.8745 1 0.1568 0.05	0.8745 1 0.1568 0.05		0.2 1 0 0.05	0 0 0 0.01]], 
+			airdrag=0.93,
+			particlelife=25,
+			particlelifespread=15,
+			numParticles=4,
+			particlespeed=[[2 i-0.5]],
+			particlespeedspread=0.25,
+			particlesize=[[1.0 i0.4]],
+			particlesizespread=0.25,
+			emitrot=10,
+			emitrotspread=30,
+			directional=false,
+			texture=[[rune]],
+		},
+	  },
+  },
+}

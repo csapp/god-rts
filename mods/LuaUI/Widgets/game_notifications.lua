@@ -14,6 +14,7 @@ function widget:GetInfo()
     }
 end
 
+include("units.h.lua")
 include("customcmds.h.lua")
 include("msgs.h.lua")
 
@@ -93,6 +94,13 @@ function widget:RecvLuaMsg(msg, playerID)
 			--Apparently the teamID being passed in isn't actually an integer, so floor it!
 			if math.floor(params[2]) == Spring.GetLocalTeamID() then
 				Spring.Echo(params[1])
+			end
+		elseif msg_type == MSG_TYPES.CONVERT_FINISHED then 
+			Spring.Echo("A new village has been converted.")
+		elseif msg_type == MSG_TYPES.UNIT_LEVELLED_UP then
+			local oldUnitID, newUnitID = unpack(params)
+			if Units.IsVillageUnit(newUnitID) then
+				Spring.Echo("Your village has been fortified!")
 			end
 		end
 	end
