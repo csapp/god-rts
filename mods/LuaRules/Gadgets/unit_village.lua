@@ -124,7 +124,8 @@ function gadget:RecvLuaMsg(msg, playerID)
     if msgtype == MSG_TYPES.UNIT_LEVELLED_UP then
         local oldUnitID, newUnitID = tonumber(params[1]), tonumber(params[2])
         if Units.IsVillageUnit(newUnitID) then
-            GetVillage(oldUnitID):LevelUp(newUnitID)
+            local v = GetVillage(oldUnitID)
+            if v then v:LevelUp(newUnitID) end
         end
     end
 end
