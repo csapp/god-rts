@@ -13,7 +13,6 @@ end
 local SpawnCEG = Spring.SpawnCEG
 local CreateUnit = Spring.CreateUnit
 local DestroyUnit = Spring.DestroyUnit
-local listOfZombies = {}
 
 ZombieApocalypse = RangedPower:Inherit{
     classname = "ZombieApocalypse",
@@ -24,6 +23,7 @@ ZombieApocalypse = RangedPower:Inherit{
     range = 400,
     zombieCount = 20,
     zombieLifetime = 75, -- i.e. zombies die after zombieLifetime seconds
+    listOfZombies = {},
 	radius = 50,
     tooltip = "Spawn a wave of hungry zombies for a short time",
     cmdType = CMDTYPE.ICON_MAP,
@@ -44,7 +44,7 @@ function ZombieApocalypse:_SpawnZombie(x, y, z, teamID)
 		randomNumX = math.random(0,self.radius)
 		randomNumZ = math.random(0,self.radius)
 		zombieID = CreateUnit("Zombie", x+randomNumX, y, z+randomNumZ, 0, teamID)
-        table.insert(listOfZombies, zombieID)
+        table.insert(self.listOfZombies, zombieID)
     end
 end
 
@@ -52,10 +52,10 @@ function ZombieApocalypse:_KillZombies()
     Spring.PlaySoundFile("sounds/Manscreaming1.wav")
     Spring.PlaySoundFile("sounds/Manscreaming2.wav")
     Spring.PlaySoundFile("sounds/Manscreaming3.wav")
-	for i=1, #listOfZombies do
-		DestroyUnit(listOfZombies[i])
+	for i=1, #self.listOfZombies do
+		DestroyUnit(self.listOfZombies[i])
 	end
-    listOfZombies = {}
+    self.listOfZombies = {}
 end
 
 function ZombieApocalypse:_Use(cmdParams, cmdOptions)
