@@ -88,7 +88,7 @@ local function FinishConvert(clergyID)
     local oldVillageTeam = GetUnitTeam(villageID)
     Spring.TransferUnit(villageID, GetUnitTeam(clergyID))
     Spring.SetUnitNeutral(villageID, false)
-    LuaMessages.SendLuaRulesMsg(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID, oldVillageTeam})
+    LuaMessages.SendMsgToAll(MSG_TYPES.CONVERT_FINISHED, {clergyID, villageID, oldVillageTeam})
 end
 
 local function GetConvertTime(clergyID, villageID)
