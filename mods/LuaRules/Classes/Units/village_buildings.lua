@@ -298,7 +298,7 @@ function Upgrade:GetCmdDesc()
     return {
         id = self:GetCmdID(),
         name = "Research " .. name .. " Upgrade",
-        action = "researching_" .. name,
+        action = "research_" .. self.classname,
         type = self.cmdType,
         tooltip = self:GetTooltip(),
         params = {},
