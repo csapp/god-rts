@@ -62,7 +62,7 @@ function Building:GetCmdDesc()
         name = "Build " .. name,
         action = "building_" .. name,
         type = self.cmdType,
-        tooltip = "Build a " .. name .. " in this village",
+        tooltip = self:GetName()..": "..self:GetTooltip(),
         params = {},
     }
 end
@@ -224,7 +224,7 @@ HighRise = Building:Inherit{
     buildTime = 150,
     hpBonus = 500,
     supplyCapBonus = 200,
-    tooltip = "Provides a 500 HP bonus and increases villager cap",
+    tooltip = "Provides a 500 HP bonus to the village and increases villager cap",
 }
 
 function HighRise:GetHPBonus() return self.hpBonus end
@@ -313,6 +313,8 @@ function Upgrade:Research()
         self:Apply()
         self:GetBuilding():AddResearchUpgrade(self)
         village:SetBusy(false)
+        --Spring.RemoveUnitCmdDesc(self:GetUnitID(), self:GetCmdID())
+        --self:GetBuilding():RemoveUpgrade(self:GetCmdID())
     end
     local function _cancelled() village:SetBusy(false) end
     GG.ProgressBars.AddProgressBar(self:GetUnitID(), "Researching " .. self:GetName() .. "...", 
@@ -387,7 +389,14 @@ function TrainingFacility:New(village)
     }
     return obj
 end
-function TrainingFacility:GetAvailableUpgrades() return self.availableUpgrades end
+
+function TrainingFacility:GetAvailableUpgrades() 
+    return self.availableUpgrades 
+end
+
+function TrainingFacility:RemoveUpgrade(id)
+    self.availableUpgrades[id] = nil
+end
 
 function TrainingFacility:GetCmds()
     local cmds = {}
