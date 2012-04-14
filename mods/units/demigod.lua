@@ -66,6 +66,7 @@ local unitDef  =  {
     workerTime = 1,
     CanRepair = true,
     CanReclaim = false,
+    CanRestore = false,
     RepairSpeed = 1, 
     canAttack = true,
 	canFight = true,
