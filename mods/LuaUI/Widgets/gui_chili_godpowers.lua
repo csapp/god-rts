@@ -133,7 +133,7 @@ end
 function widget:RecvLuaMsg(msg, playerID)
     if playerID ~= MY_PLAYER_ID then return end
     local msg_type, params = LuaMessages.deserialize(msg)
-    if msg_type == MSG_TYPES.GOD_CREATED then
+    if msg_type == MSG_TYPES.GOD_CREATED and Spring.GetUnitTeam(params[1]) == Spring.GetLocalTeamID() then
         window:RemoveChild(noPowerLabel)
         WG.GadgetQuery.CallManagerFunctionOnAll(
                 PopulatePowerWindow, Managers.TYPES.POWER, "GetCharge")
