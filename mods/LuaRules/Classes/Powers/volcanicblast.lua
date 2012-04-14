@@ -21,6 +21,7 @@ VolcanicBlast = RangedPower:Inherit{
     powerName = "Volcanic Blast",
     powerType = POWERS.TYPES.OFFENSIVE,
 	volcanoLifetime = 20, 
+    volcanoID = nil,
     range = 400,
     rechargeRate = 1/180,
     tooltip = "Cause massive fire damage to units within a certain radius",
@@ -29,7 +30,6 @@ VolcanicBlast = RangedPower:Inherit{
 
 local this = VolcanicBlast
 local inherited = this.inherited
-local volcanoID
 
 function VolcanicBlast:SetUp()
     inherited.SetUp(self)
@@ -46,14 +46,14 @@ end
 
 function VolcanicBlast:_DestroyVolcano()
     Spring.PlaySoundFile("sounds/avalancheshort3.wav")
-	DestroyUnit(volcanoID)
+	DestroyUnit(self.volcanoID)
 end
 
 function VolcanicBlast:_Use(cmdParams, cmdOptions)
     local center_x, center_y, center_z = unpack(cmdParams)
     local teamID = self:GetTeamID()
     Spring.PlaySoundFile("sounds/avalancheshort.wav")
-	volcanoID = CreateUnit("Volcano", center_x, center_y, center_z, 0, teamID)
+	self.volcanoID = CreateUnit("Volcano", center_x, center_y, center_z, 0, teamID)
 	for i = 0, 120 do
 		if i % 30 == 0 then
 			Spring.SpawnCEG("dust", center_x, center_y, center_z)
