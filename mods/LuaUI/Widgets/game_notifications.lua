@@ -96,12 +96,16 @@ function widget:RecvLuaMsg(msg, playerID)
 				Spring.Echo(params[1])
 			end
 		elseif msg_type == MSG_TYPES.CONVERT_FINISHED then 
-			Spring.Echo("A new village has been converted.")
+			if Spring.GetUnitTeam(params[1]) == Spring.GetLocalTeamID() then
+				Spring.Echo("A new village has been converted.")
+			end
 		elseif msg_type == MSG_TYPES.UNIT_LEVELLED_UP then
 			local oldUnitID, newUnitID = unpack(params)
-			if Units.IsVillageUnit(newUnitID) then
+			if Units.IsVillageUnit(newUnitID) and Spring.GetUnitTeam(newUnitID) == Spring.GetLocalTeamID() then
 				Spring.Echo("Your village has been fortified!")
 			end
+		elseif msg_type == MSG_TYPES.BUILDING_COMPLETE then and params[2] == Spring.GetLocalTeamID() then
+			Spring.Echo("The " .. params[1] .." has been built.")
 		end
 	end
 end

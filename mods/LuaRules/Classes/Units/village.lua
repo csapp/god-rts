@@ -160,6 +160,7 @@ function Village:AddBuilding(key)
     local function _done()
         self.buildings[key] = building
         building:Apply()
+		LuaMessages.SendLuaUIMsg(MSG_TYPES.BUILDING_COMPLETE,{building:GetName(), self:GetTeamID()})
         self:SetBusy(false)
     end
     local function _cancelled() self:SetBusy(false) end

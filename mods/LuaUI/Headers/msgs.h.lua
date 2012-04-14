@@ -14,6 +14,9 @@ MSG_TYPES = {
 
 	BUILD_UNIT_FAILED = "build_unit_failed",
 	
+	BUILDING_COMPLETE = "building_complete",
+	UPGRADE_COMPLETE = "upgrade_complete",
+	
     CONVERT_FINISHED = "convert_finished",
 	CONVERT_FAILED = "convert_failed",
 
@@ -25,7 +28,7 @@ MSG_TYPES = {
 
     UNIT_LEVELLED_UP = "unit_levelled_up",
     MORPH = "MORPH",
-
+ 
     GADGET_STATE_QUERY = "GADGET_STATE_QUERY",
     GADGET_STATE_REPLY = "GADGET_STATE_REPLY",
 
