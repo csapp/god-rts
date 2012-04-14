@@ -80,12 +80,9 @@ local function PopulatePowerWindow(initialCharges)
     local count = 0
     local y
     for k, charge in pairs(initialCharges) do
-        Spring.Echo(k, charge)
         y = p(100/bars*count+5)
         powerImages[k] = Chili.Image:New{
             parent = window,
-            --width = barheight,
-            --height = barheight,
             width = 25,
             height = 25,
             x = 40,

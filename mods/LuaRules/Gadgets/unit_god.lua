@@ -122,7 +122,7 @@ function gadget:UnitCreated(unitID, unitDefID, unitTeam, builderID)
         return
     end
 
-    local teamID = Spring.GetUnitTeam(unitID)
+    local teamID = unitTeam
     for powerID, power in pairs(power_managers[teamID]:GetElements()) do
         power:SetGodID(unitID)
         if power:GetType() ~= POWERS.TYPES.PASSIVE then 
@@ -151,6 +151,7 @@ function gadget:RecvLuaMsg(msg, playerID)
     local msg_type, params = LuaMessages.deserialize(msg)
 	if msg_type == MSG_TYPES.GOD_SELECTED then
         local _, _, _, teamID = Spring.GetPlayerInfo(playerID)
+        Spring.Echo('RecvLuaMsg', teamID)
         for i=1,#params do
             AddPower(teamID, params[i])
         end
