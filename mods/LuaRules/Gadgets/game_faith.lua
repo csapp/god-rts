@@ -126,11 +126,13 @@ local function UpdateFaithMultipliers(teamID)
 end
 
 local function AddFaith(teamID, amt)
+    if not amt then return end
     AddTeamResource(teamID, "energy", amt)
     UpdateFaithMultipliers(teamID)
 end
 
 local function RemoveFaith(teamID, amt)
+    if not amt then return end
     UseTeamResource(teamID, "energy", amt)
     UpdateFaithMultipliers(teamID)
 end
