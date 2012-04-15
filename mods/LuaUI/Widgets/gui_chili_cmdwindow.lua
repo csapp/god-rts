@@ -101,7 +101,6 @@ function ClickFunc(button)
 	local _,_,left,_,right = Spring.GetMouseState()
 	local alt,ctrl,meta,shift = Spring.GetModKeyState()
 	local index = Spring.GetCmdDescIndex(button.cmdid)
-	Spring.Echo(index)
 	if index == 16 or index == 17 or index == 18 or index == 19 or index == 20 then
 		disableVillage = true
 		loadPanel()
