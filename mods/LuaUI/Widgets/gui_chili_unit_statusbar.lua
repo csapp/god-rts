@@ -21,6 +21,7 @@ end
 
 -- INCLUDES
 VFS.Include("LuaUI/Headers/utilities.lua")
+include("godlycolors.h.lua")
 include("msgs.h.lua")
 include("managers.h.lua")
 include("units.h.lua")
@@ -38,7 +39,7 @@ local orange = '\255\240\68\32'
 
 -- MEMBERS
 
-local commandWindow
+--local commandWindow
 
 -- CONTROLS
 local spGetModKeyState			= Spring.GetModKeyState
@@ -56,11 +57,15 @@ local unitPic
 
 local updateRequired = true
 local progressBars = {}
-local statusBar = nil
+local statusBar
 local pbarWindow = nil
 local current_progress_bar = nil
 local multipliers = {}
 local powerNames = {}
+local healthBar
+local xpBar
+local xpImage
+--local xpLabel
 
 -- SCRIPT FUNCTIONS
 
@@ -105,7 +110,8 @@ function setUnitStats2(unit)
 end
 
 function resetWindow(container)
-	container:ClearChildren()
+    container:ClearChildren()
+    --container:Hide()
 	container.xstep = 1
 	container.ystep = 1
 end
@@ -129,6 +135,28 @@ local function printVillageBuildingInfo(villageID)
                                               villageID, "CallOnAll", {"GetName"})
 end
 
+local function ShowHealth()
+    healthBar:Show()
+    healthImage:Show()
+end
+
+local function HideHealth()
+    healthBar:Hide()
+    healthImage:Hide()
+end
+
+local function ShowXP()
+    xpBar:Show()
+    xpImage:Show()
+    --xpLabel:Show()
+end
+
+local function HideXP()
+    xpBar:Hide()
+    xpImage:Hide()
+    --xpLabel:Hide()
+end
+
 function widget:Initialize()
 	if (not WG.Chili) then
 		widgetHandler:RemoveWidget()
@@ -148,7 +176,7 @@ function widget:Initialize()
 		x = 0,
 		y = -250,
 		width = 350,
-		height = 250,
+		height = 300,
 		draggable = false,
 		resizable = false,
 		dragUseGrip = false,		
@@ -156,6 +184,74 @@ function widget:Initialize()
 		skinName  = "Godly",
 		--children = {unitInfo,imageWindow,[>unitStats<]},
 	}
+
+    local barwidth = 140
+    local barheight = 20
+
+    healthBar = Chili.DynamicProgressbar:New{
+        parent = statusBar,
+        height = barheight,
+        width = barwidth,
+        right  = 45,
+        max = 1,
+        value = 0,
+        y = 50,
+        font = {
+            color = {1,1,1,1},
+            outlineColor = {0,0,0,0.7}, 
+            size = 12,
+        },
+    }
+
+    healthImage = Chili.Image:New{
+        parent = statusBar,
+        width = barheight,
+        height = barheight,
+        right = healthBar.right + healthBar.width + 5,
+        y = healthBar.y,
+        file = "bitmaps/icons/healthsmall.png",
+    }
+
+    xpBar = Chili.Progressbar:New{
+        parent = statusBar,
+        height = barheight,
+        width = barwidth,
+        right  = 45,
+        max = 1,
+        value = 0,
+        y = healthBar.y + barheight + 5,
+        color = GodlyColors.LIGHT_YELLOW,
+        font = {
+            color = {1,1,1,1},
+            outlineColor = {0,0,0,0.7},
+            size = 12,
+        },
+    }
+
+    xpImage = Chili.Image:New{
+        parent = statusBar,
+        width = barheight,
+        height = barheight,
+        right = xpBar.right + xpBar.width + 5,
+        y = xpBar.y,
+        file = "bitmaps/icons/xpsmall.png",
+    }
+
+    --xpLabel = Chili.Label:New{
+        --parent = statusBar,
+        --x = 118,
+        --y = 73,
+        --font = {
+            --color = GodlyColors.ORANGE,
+            --size = 8,
+        --},
+        --caption = "XP",
+    --}
+    --xpLabel:BringToFront()
+
+    HideXP()
+    HideHealth()
+    
 	unitInfo = Label:New{
 		parent = statusBar,
 		x = 110,
@@ -227,24 +323,25 @@ function widget:Initialize()
 		margin = {0, 0, 0, 0},
 	}
 	
-	commandWindow = Chili.Control:New{
-		parent = statusBar,
-		x = 200,
-		y = 0,
-		width = "20%",
-		height = "100%",
-		xstep = 1,
-		ystep = 1,
-		draggable = false,
-		resizable = false,
-		dragUseGrip = false,
-		caption = "Commands",
-	}
+	--commandWindow = Chili.Control:New{
+		--parent = statusBar,
+		--x = 200,
+		--y = 0,
+		--width = "20%",
+		--height = "100%",
+		--xstep = 1,
+		--ystep = 1,
+		--draggable = false,
+		--resizable = false,
+		--dragUseGrip = false,
+		--caption = "Commands",
+	--}
 end
 
 function widget:GameStart()
     game_start = true
 end
+
 
 function widget:CommandsChanged()
     local selected_units = Spring.GetSelectedUnits()
@@ -262,11 +359,15 @@ function widget:CommandsChanged()
 		unitStats1:SetCaption("")
 		unitStats2:SetCaption("")
 		buildingInfo:SetCaption("")
-		resetWindow(imageWindow)
-		resetWindow(commandWindow)
+        resetWindow(imageWindow)
+        HideXP()
+        HideHealth()
+		--resetWindow(commandWindow)
 		
         return
     end
+
+    local unitID = selected_units[1]
 
 	setUnitName(selected_units[1])
 	
@@ -280,8 +381,20 @@ function widget:CommandsChanged()
 			setUnitStats2(selected_units[1])
 	end
 	
-	resetWindow(imageWindow)
-	resetWindow(commandWindow)
+    local _, maxHealth = spGetUnitHealth(unitID)
+    ShowHealth()
+    --healthBar:SetMax(maxHealth)
+
+    local maxXP = Units.GetMaxXP(unitID)
+    if maxXP then
+        ShowXP()
+    else
+        HideXP()
+    end
+
+    resetWindow(imageWindow)
+    --resetWindow(statusBar)
+	--resetWindow(commandWindow)
 	drawPortrait()
     
     if current_progress_bar ~= nil then
@@ -378,32 +491,33 @@ function printUnitName(unitID)
 end
 
 function printUnitHealth(unitID)
-	local health, maxHealth, _, _, _ = spGetUnitHealth(unitID)
+	local health, maxHealth = spGetUnitHealth(unitID)
 	
 	if health and health ~= nil then
-		healthString = "HP: " .. math.floor(health) .. " / " .. math.floor(maxHealth)
-		if multipliers["HEALTH"] ~= 1 and multipliers["HEALTH"] ~= nil then
-			healthString = healthString .. green .. '+' .. string.format("%.1f", multipliers["HEALTH"]) .. yellow
-		end
-		return healthString
-	else
-		return ""
-	end
+		healthString = math.floor(health) .. " / " .. math.floor(maxHealth)
+        healthBar:SetCaption(healthString)
+        healthBar:SetValue(health/maxHealth)
+
+		--if multipliers["HEALTH"] ~= 1 and multipliers["HEALTH"] ~= nil then
+			--healthString = healthString .. green .. '+' .. string.format("%.1f", multipliers["HEALTH"]) .. yellow
+		--end
+    end
+    return ""
 end
 
 function printEXP(unitID)
 	local currentXP = Spring.GetUnitExperience(unitID)
-	local maxXP = UnitDefs[Spring.GetUnitDefID(unitID)].customParams.max_xp
+	local maxXP = Units.GetMaxXP(unitID)
 	
 	if currentXP ~= nil and maxXP ~= nil then
-		expString = "Experience Points: " .. math.floor(currentXP) .. " / " .. math.floor(maxXP)
-		if multipliers["XP"] ~= 1 and multipliers["XP"] ~= nil then
-			expString = expString .. green .. '+' .. string.format("%.1f", multipliers["XP"]) .. yellow
-		end
-		return expString
-	else
-		return ""
-	end
+		expString = math.floor(currentXP) .. " / " .. math.floor(maxXP)
+        xpBar:SetCaption(expString)
+        xpBar:SetValue(currentXP/maxXP)
+		--if multipliers["XP"] ~= 1 and multipliers["XP"] ~= nil then
+			--expString = expString .. green .. '+' .. string.format("%.1f", multipliers["XP"]) .. yellow
+		--end
+    end
+    return ""
 end
 
 function printDescription(unitID)

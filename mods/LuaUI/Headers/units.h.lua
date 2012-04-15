@@ -35,6 +35,10 @@ local function GetCustomParam(unitID, param)
     return UnitDefs[GetUnitDefID(unitID)].customParams[param]
 end
 
+function Units.GetMaxXP(unitID)
+    return tonumber(GetCustomParam(unitID, 'max_xp'))
+end
+
 function Units.GetSpeed(unitID)
     return tonumber(GetCustomParam(unitID, 'real_speed'))
 end

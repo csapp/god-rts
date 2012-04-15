@@ -362,6 +362,7 @@ end
 
 
 function Object:SetVisibility(visible)
+  if visible == self.visible then return end
   if (visible) then
     self.parent:ShowChild(self)
   else
