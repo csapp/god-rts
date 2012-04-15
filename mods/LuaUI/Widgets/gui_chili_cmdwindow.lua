@@ -58,6 +58,7 @@ local spGetActiveCommand 	= Spring.GetActiveCommand
 local spGetActiveCmdDesc 	= Spring.GetActiveCmdDesc
 local spGetSelectedUnits    = Spring.GetSelectedUnits
 local spSendCommands        = Spring.SendCommands
+local spPlaySoundFile       = Spring.PlaySoundFile
 
 
 -- SCRIPT FUNCTIONS
@@ -93,6 +94,7 @@ local function TabActiveClick(button)
 end
 
 function ClickFunc(button) 
+    spPlaySoundFile("sounds/button.wav")
 	local _,_,left,_,right = Spring.GetMouseState()
 	local alt,ctrl,meta,shift = Spring.GetModKeyState()
 	local index = Spring.GetCmdDescIndex(button.cmdid)

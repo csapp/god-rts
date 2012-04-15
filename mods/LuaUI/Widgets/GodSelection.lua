@@ -48,8 +48,10 @@ end
 function ClickFunc(button) 
     if(button.cmdid == 4) then
         done()
+        Spring.PlaySoundFile("sounds/buttonconfirm.wav")
         return
     end
+    Spring.PlaySoundFile("sounds/button.wav")
     selectPower(button.cmdid, button.caption, button)
     loadPanel()
 
