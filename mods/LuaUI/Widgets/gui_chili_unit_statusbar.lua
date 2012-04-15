@@ -63,9 +63,10 @@ local current_progress_bar = nil
 local multipliers = {}
 local powerNames = {}
 local healthBar
+local healthLabel
 local xpBar
 local xpImage
---local xpLabel
+local xpLabel
 
 -- SCRIPT FUNCTIONS
 
@@ -138,23 +139,28 @@ end
 local function ShowHealth()
     healthBar:Show()
     healthImage:Show()
+    healthLabel.y = 53 -- XXX otherwise it moves down for some reason??
+    healthLabel:Show()
 end
 
 local function HideHealth()
     healthBar:Hide()
     healthImage:Hide()
+    healthLabel:Hide()
 end
 
 local function ShowXP()
     xpBar:Show()
     xpImage:Show()
-    --xpLabel:Show()
+    xpLabel.y = 78 -- XXX otherwise it moves down for some reason??
+    xpLabel:Show()
+
 end
 
 local function HideXP()
     xpBar:Hide()
     xpImage:Hide()
-    --xpLabel:Hide()
+    xpLabel:Hide()
 end
 
 function widget:Initialize()
@@ -212,6 +218,17 @@ function widget:Initialize()
         file = "bitmaps/icons/healthsmall.png",
     }
 
+    healthLabel = Chili.Label:New{
+        parent = statusBar,
+        right = 5,
+        y = 50,
+        font = {
+            color = GodlyColors.LIGHT_CREAM,
+            size = 14,
+        },
+        caption = "\1770",
+    }
+
     xpBar = Chili.Progressbar:New{
         parent = statusBar,
         height = barheight,
@@ -237,17 +254,17 @@ function widget:Initialize()
         file = "bitmaps/icons/xpsmall.png",
     }
 
-    --xpLabel = Chili.Label:New{
-        --parent = statusBar,
-        --x = 118,
-        --y = 73,
-        --font = {
-            --color = GodlyColors.ORANGE,
-            --size = 8,
-        --},
-        --caption = "XP",
-    --}
-    --xpLabel:BringToFront()
+    xpLabel = Chili.Label:New{
+        parent = statusBar,
+        right = 5,
+        y = 73,
+        font = {
+            color = GodlyColors.LIGHT_CREAM,
+            size = 14,
+        },
+        caption = "\1770",
+    }
+
 
     HideXP()
     HideHealth()
@@ -456,8 +473,9 @@ function widget:DrawScreen()
 end
 	
 function widget:Shutdown()
-  widgetHandler:ConfigLayoutHandler(nil)
-  Spring.ForceLayoutUpdate()
+    statusBar:Dispose()
+  --widgetHandler:ConfigLayoutHandler(nil)
+  --Spring.ForceLayoutUpdate()
 end
 
 function setUnitName(unitID)
@@ -493,14 +511,19 @@ end
 function printUnitHealth(unitID)
 	local health, maxHealth = spGetUnitHealth(unitID)
 	
-	if health and health ~= nil then
-		healthString = math.floor(health) .. " / " .. math.floor(maxHealth)
-        healthBar:SetCaption(healthString)
-        healthBar:SetValue(health/maxHealth)
+    if not health then return "" end
+    healthString = math.floor(health) .. " / " .. math.floor(maxHealth)
+    healthBar:SetCaption(healthString)
+    healthBar:SetValue(health/maxHealth)
 
-		--if multipliers["HEALTH"] ~= 1 and multipliers["HEALTH"] ~= nil then
-			--healthString = healthString .. green .. '+' .. string.format("%.1f", multipliers["HEALTH"]) .. yellow
-		--end
+    local multType = "HEALTH"
+    if not multipliers[multType] then return "" end
+    if multipliers[multType] > 1 then
+        healthLabel:SetCaption(green..'+' .. string.format("%.1f", multipliers[multType]-1))
+    elseif multipliers[multType] < 1 then
+        healthLabel:SetCaption(orange..string.format("%.1f", multipliers[multType]-1))
+    else
+        healthLabel:SetCaption(yellow.."\1770")
     end
     return ""
 end
@@ -509,13 +532,18 @@ function printEXP(unitID)
 	local currentXP = Spring.GetUnitExperience(unitID)
 	local maxXP = Units.GetMaxXP(unitID)
 	
-	if currentXP ~= nil and maxXP ~= nil then
-		expString = math.floor(currentXP) .. " / " .. math.floor(maxXP)
-        xpBar:SetCaption(expString)
-        xpBar:SetValue(currentXP/maxXP)
-		--if multipliers["XP"] ~= 1 and multipliers["XP"] ~= nil then
-			--expString = expString .. green .. '+' .. string.format("%.1f", multipliers["XP"]) .. yellow
-		--end
+    if not maxXP or not currentXP then return "" end
+    expString = math.floor(currentXP) .. " / " .. math.floor(maxXP)
+    xpBar:SetCaption(expString)
+    xpBar:SetValue(currentXP/maxXP)
+    local multType = "XP"
+    if not multipliers[multType] then return "" end
+    if multipliers[multType] > 1 then
+        xpLabel:SetCaption(green..'+' .. string.format("%.1f", multipliers[multType]-1))
+    elseif multipliers[multType] < 1 then
+        xpLabel:SetCaption(orange..string.format("%.1f", multipliers[multType]-1))
+    else
+        xpLabel:SetCaption(yellow.."\1770")
     end
     return ""
 end
