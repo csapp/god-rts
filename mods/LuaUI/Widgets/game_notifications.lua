@@ -110,6 +110,10 @@ function widget:RecvLuaMsg(msg, playerID)
 			Spring.Echo("The " .. params[1] .." has been built.")
 		elseif msg_type == MSG_TYPES.UPGRADE_COMPLETE and math.floor(params[2]) == Spring.GetLocalTeamID() then
 			Spring.Echo(params[1] .. " has been researched.")
+		elseif msg_type == MSG_TYPES.MULTIPLIER_ADDED and math.floor(params[2]) == Spring.GetLocalTeamID() then
+			Spring.Echo(params[1] .. " has been added.")
+		elseif msg_type == MSG_TYPES.MULTIPLIER_REMOVED and math.floor(params[2]) == Spring.GetLocalTeamID() then
+			Spring.Echo(params[1] .. " has been removed.")
 		end
 	end
 end

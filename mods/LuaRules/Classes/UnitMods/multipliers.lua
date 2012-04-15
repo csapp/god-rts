@@ -10,6 +10,7 @@ local function GetInfo()
 end
 
 include("LuaUI/Headers/units.h.lua")
+include("LuaUI/Headers/msgs.h.lua")
 include("LuaUI/Headers/utilities.lua")
 
 local GetTeamUnits = Spring.GetTeamUnits
@@ -29,6 +30,7 @@ Multiplier = Object:Inherit{
     globalValue = 1,
     teamID = -1,
     classValues = {},
+	inverted = false,
 }
 
 function Multiplier:New(teamID)
@@ -68,9 +70,19 @@ end
 function Multiplier:Add(value, classes)
     if not classes or table.isempty(classes) then
         self:AddGlobalValue(value)
+		if self.inverted == false and value <= 0 then
+			LuaMessages.SendLuaUIMsg(MSG_TYPES.MULTIPLIER_REMOVED, {self.classname, self.teamID})
+		else
+			LuaMessages.SendLuaUIMsg(MSG_TYPES.MULTIPLIER_ADDED, {self.classname, self.teamID})
+		end
     else
         for _, class in pairs(classes) do
             self:AddClassValue(class, value)
+			if self.inverted == false and value <= 0 then
+				LuaMessages.SendLuaUIMsg(MSG_TYPES.MULTIPLIER_REMOVED, {self.classname, self.teamID})
+			else
+				LuaMessages.SendLuaUIMsg(MSG_TYPES.MULTIPLIER_ADDED, {self.classname, self.teamID})
+			end
         end
     end
 end
@@ -105,7 +117,8 @@ SupplyCapMultiplier = EventMultiplier:Inherit{
 -- BUILDING TIME MULTIPLIER
 ------------------------------------------------------------
 BuildingTimeMultiplier = EventMultiplier:Inherit{
-    classname = "BuildingTimeMultiplier"
+    classname = "BuildingTimeMultiplier",
+	inverted = true,
 }
 
 function BuildingTimeMultiplier:Add(value)
@@ -197,6 +210,7 @@ end
 
 ConvertTimeMultiplier =  EventMultiplier:Inherit{
     classname = "ConvertTimeMultiplier",
+	inverted = true,
 }
 
 function ConvertTimeMultiplier:Add(value)
@@ -295,7 +309,8 @@ end
 ------------------------------------------------------------
 
 AttackSpeedMultiplier = PersistentMultiplier:Inherit{
-    classname = "AttackSpeedMultiplier"
+    classname = "AttackSpeedMultiplier",
+	inverted = true,
 }
 
 function AttackSpeedMultiplier:GetValue(unitID)

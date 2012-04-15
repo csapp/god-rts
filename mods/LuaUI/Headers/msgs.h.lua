@@ -31,6 +31,9 @@ MSG_TYPES = {
  
     GADGET_STATE_QUERY = "GADGET_STATE_QUERY",
     GADGET_STATE_REPLY = "GADGET_STATE_REPLY",
+	
+	MULTIPLIER_ADDED = "multiplier_added",
+	MULTIPLIER_REMOVED = "multiplier_removed",
 
     ADD_FAITH = "ADD_FAITH",
 }
