@@ -245,17 +245,15 @@ function widget:CommandsChanged()
 		
         return
     end
-    -- XXX need to decide what to do if multiple units are selected
-	-- This just handles showing the first unit selected in a group
-    --setUnitInfo(selected_units[1])
-	setUnitName(selected_units[1])	
-    --if string.find(printDescription(selected_units[1]), "Village") ~= nil then
+
+	setUnitName(selected_units[1])
+	
 	if Units.IsVillageUnit(selected_units[1]) then
-		unitStats:SetCaption("")
-        printVillageBuildingInfo(selected_units[1])
-    else
-		buildingInfo:SetCaption("")
-		setUnitStats(selected_units[1])
+			unitStats:SetCaption("")
+			printVillageBuildingInfo(selected_units[1])
+	else
+			buildingInfo:SetCaption("")
+			setUnitStats(selected_units[1])
 	end
 	
 	resetWindow(imageWindow)
@@ -294,6 +292,14 @@ function widget:Update(dt)
 	
 	if selected_units[1] ~= nil then
 		setUnitInfo(selected_units[1])
+	--[[
+		if Units.IsVillageUnit(selected_units[1]) then
+			unitStats:SetCaption("")
+			printVillageBuildingInfo(selected_units[1])
+		else
+			buildingInfo:SetCaption("")
+			setUnitStats(selected_units[1])
+		end ]]
 	end
 end
 
@@ -353,7 +359,7 @@ function printUnitHealth(unitID)
 	if health and health ~= nil then
 		healthString = "HP: " .. math.floor(health) .. " / " .. math.floor(maxHealth)
 		if multipliers["HEALTH"] ~= 1 and multipliers["HEALTH"] ~= nil then
-			healthString = healthString .. '+' .. multipliers["HEALTH"]
+			healthString = healthString .. '+' .. string.format("%.1f", multipliers["HEALTH"])
 		end
 		return healthString
 	else
@@ -366,9 +372,9 @@ function printEXP(unitID)
 	local maxXP = UnitDefs[Spring.GetUnitDefID(unitID)].customParams.max_xp
 	
 	if currentXP ~= nil and maxXP ~= nil then
-		expString = "Experience Points: " .. math.floor(currentXP) .. " / " .. maxXP
+		expString = "Experience Points: " .. math.floor(currentXP) .. " / " .. math.floor(maxXP)
 		if multipliers["XP"] ~= 1 and multipliers["XP"] ~= nil then
-			expString = expString .. '+' .. multipliers["XP"]
+			expString = expString .. '+' .. string.format("%.1f", multipliers["XP"])
 		end
 		return expString
 	else
@@ -392,7 +398,7 @@ function printVelocity(unitID)
 	if speed ~= nil then
 		speedString = "Speed: " .. speed
 		if multipliers["MOVE_SPEED"] ~= 1 and multipliers["MOVE_SPEED"] ~= nil then
-			speedString = speedString .. '+' .. multipliers["MOVE_SPEED"]
+			speedString = speedString .. '+' .. string.format("%.1f", multipliers["MOVE_SPEED"])
 		end
 		return speedString
 	else
@@ -412,7 +418,7 @@ function printDamage(unitID)
 	if damage ~= nil then
 		damageString = "Damage: " .. damage
 		if multipliers["DAMAGE"] ~= 1 and multipliers["DAMAGE"] ~= nil then
-			damageString = damageString .. '+' .. multipliers["DAMAGE"]
+			damageString = damageString .. '+' .. string.format("%.1f", multipliers["DAMAGE"])
 		end
 		return damageString
 	else
@@ -432,7 +438,7 @@ function printRange(unitID)
 	if range ~= nil then
 		rangeString = "Range: " .. range
 		if multipliers["ATTACK_RANGE"] ~= 1 and multipliers["ATTACK_RANGE"] ~= nil then
-			rangeString = rangeString .. '+' .. multipliers["ATTACK_RANGE"]
+			rangeString = rangeString .. '+' .. string.format("%.1f", multipliers["ATTACK_RANGE"])
 		end
 		return rangeString
 	else
@@ -452,7 +458,7 @@ function printAttSpeed(unitID)
 	if attSpeed ~= nil then
 		aspeedString = "Attack Speed: " .. attSpeed
 		if multipliers["ATTACK_SPEED"] ~= 1 and multipliers["ATTACK_SPEED"] ~= nil then
-			aspeedString = aspeedString .. '+' .. multipliers["ATTACK_SPEED"]
+			aspeedString = aspeedString .. '+' .. string.format("%.1f", multipliers["ATTACK_SPEED"])
 		end
 		return aspeedString
 	else
