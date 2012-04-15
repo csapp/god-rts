@@ -95,7 +95,7 @@ local function PlayNewTrack()
 		-- Spring.Echo("Song changed but unable to get the artist and title info")
 	-- end
 	curTrack = newTrack
-	Spring.PlaySoundStream(newTrack,WG.music_volume or 0.5)
+	Spring.PlaySoundStream(newTrack,WG.music_volume or 0.25)
 	playing = true
 	
 	WG.music_start_volume = WG.music_volume

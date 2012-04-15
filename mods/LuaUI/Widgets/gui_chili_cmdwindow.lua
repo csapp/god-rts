@@ -23,6 +23,8 @@ end
 VFS.Include("LuaUI/Headers/utilities.lua")
 include("managers.h.lua")
 include("powers.h.lua")
+include("msgs.h.lua")
+include("villages.h.lua")
 
 -- CONSTANTS
 local MAXBUTTONSONROW = 4
@@ -36,6 +38,7 @@ local exclude
 local Chili
 local Powers
 local PowerNames
+local disableVillage = false
 
 -- MEMBERS
 local x
@@ -98,6 +101,17 @@ function ClickFunc(button)
 	local _,_,left,_,right = Spring.GetMouseState()
 	local alt,ctrl,meta,shift = Spring.GetModKeyState()
 	local index = Spring.GetCmdDescIndex(button.cmdid)
+	Spring.Echo(index)
+	if index == 16 or index == 17 or index == 18 or index == 19 or index == 20 then
+		disableVillage = true
+		loadPanel()
+	end
+	
+	if index == 1 then 
+		disableVillage = false
+		loadPanel()
+	end
+	
 	if (left) then
 		if DEBUG then Spring.Echo("active command set to ", button.cmdid) end
 		Spring.SetActiveCommand(index,1,left,right,alt,ctrl,meta,shift)
@@ -148,6 +162,8 @@ function createMyButton(cmd)
 
 	if(type(cmd) == 'table')then
 		buttontext, container, isState, isBuild, isPower, isBuilding, texture = findButtonData(cmd)
+		local selected = "unpressed"
+		local disabled = false
 		
 		if isBuild and not(cmdtab == 'units') then return end
 		
@@ -155,6 +171,12 @@ function createMyButton(cmd)
 		
 		if (cmdtab == 'building' or cmdtab == 'units') and not(isBuild or isBuilding) then return end
 		
+		if isVillageSelected() and disableVillage and not(cmdtab == 'active') then--(isVillageSelected() and not(disableVillage)) and not(cmdtab == 'active') then
+			
+			selected = "pressed"
+			disabled = true
+			
+		end
 		
 		local result = container.xstep % MAXBUTTONSONROW
 		container.xstep = container.xstep + 1
@@ -181,7 +203,8 @@ function createMyButton(cmd)
 			Width = 68,
 			minHeight = 68,
 			caption = '',
-			isDisabled = false,
+			isDisabled = disabled,
+			state = selected,
 			cmdid = cmd.id,
 			OnMouseDown = {ClickFunc},
 			tooltip = tooltip,
@@ -538,4 +561,12 @@ function widget:Shutdown()
   widgetHandler:ConfigLayoutHandler(nil)
   Spring.ForceLayoutUpdate()
   spSendCommands({"tooltip 1"})
+end
+
+function widget:RecvLuaMsg(msg, playerID)
+    if playerID ~= MY_PLAYER_ID then return end
+    local msg_type, params = LuaMessages.deserialize(msg)
+	if msg_type == MSG_TYPES.BUILDING_COMPLETE then
+		disableVillage = false
+	end
 end
