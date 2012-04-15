@@ -90,13 +90,18 @@ function LayoutHandler(xIcons, yIcons, cmdCount, commands)
 end
 
 
-function setUnitStats(unit)
+function setUnitStats1(unit)
 	local unitStatString = printVelocity(unit) .. "\n" ..
-						   printDamage(unit) .. "\n" ..
-						   printRange(unit) .. "\n" ..
+						   printDamage(unit)
+	
+	unitStats1:SetCaption(unitStatString)
+end
+
+function setUnitStats2(unit)
+	local unitStatString = printRange(unit) .. "\n" ..
 						   printAttSpeed(unit)
 	
-	unitStats:SetCaption(unitStatString)
+	unitStats2:SetCaption(unitStatString)
 end
 
 function resetWindow(container)
@@ -164,10 +169,23 @@ function widget:Initialize()
 		caption = "",
 	}
 
-	unitStats = Label:New{
+	unitStats1 = Label:New{
 		parent = statusBar,
-		x = 110,
-		y = 0,
+		x = 2,
+		y = 2,
+		width = 00,
+		height = "100%",
+		fontsize = 13,
+		autosize = false,
+		autoObeyLineHeight = true,
+		anchors = {left=true,bottom=true,right=false,top=false},
+		caption = "",
+	}
+	
+	unitStats2 = Label:New{
+		parent = statusBar,
+		x = 100,
+		y = 2,
 		width = 00,
 		height = "100%",
 		fontsize = 13,
@@ -179,8 +197,8 @@ function widget:Initialize()
 	
 	buildingInfo = Label:New{
 		parent = statusBar,
-		x = 110,
-		y = 0,
+		x = 2,
+		y = 2,
 		width = 200,
 		height = "100%",
 		fontsize = 13,
@@ -192,7 +210,7 @@ function widget:Initialize()
 	
 	imageWindow = Control:New{
         parent = statusBar,
-		x = 10,
+		x = 2,
 		width = 96,
 		height = 96,
 		padding = {0, 0, 0, 0},
@@ -241,7 +259,8 @@ function widget:CommandsChanged()
             current_progress_bar = nil
         end
         unitInfo:SetCaption("")
-		unitStats:SetCaption("")
+		unitStats1:SetCaption("")
+		unitStats2:SetCaption("")
 		buildingInfo:SetCaption("")
 		resetWindow(imageWindow)
 		resetWindow(commandWindow)
@@ -252,11 +271,13 @@ function widget:CommandsChanged()
 	setUnitName(selected_units[1])
 	
 	if Units.IsVillageUnit(selected_units[1]) then
-			unitStats:SetCaption("")
+			unitStats1:SetCaption("")
+			unitStats2:SetCaption("")
 			printVillageBuildingInfo(selected_units[1])
 	else
 			buildingInfo:SetCaption("")
-			setUnitStats(selected_units[1])
+			setUnitStats1(selected_units[1])
+			setUnitStats2(selected_units[1])
 	end
 	
 	resetWindow(imageWindow)
