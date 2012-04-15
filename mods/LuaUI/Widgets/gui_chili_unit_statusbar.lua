@@ -480,7 +480,7 @@ function printAttSpeed(unitID)
     local attSpeed = WeaponDefs[weapons[1].weaponDef].reload
 	
 	if attSpeed ~= nil then
-		aspeedString = "Attack Speed: " .. attSpeed
+		aspeedString = "Attack Speed: " .. math.floor(attSpeed)
 		if multipliers["ATTACK_SPEED"] ~= 1 and multipliers["ATTACK_SPEED"] ~= nil then
 			aspeedString = aspeedString .. green .. '+' .. string.format("%.1f", multipliers["ATTACK_SPEED"]) .. yellow
 		end
