@@ -32,6 +32,9 @@ local Window
 local MAXBUTTONSONROW = 3
 local COMMANDSTOEXCLUDE = {"timewait","deathwait","squadwait","gatherwait","loadonto","nextmenu","prevmenu"}
 local MY_PLAYER_ID = Spring.GetMyPlayerID()
+local green = '\255\105\135\41'
+local yellow = '\255\191\182\112'
+local orange = '\255\240\68\32'
 
 -- MEMBERS
 
@@ -64,7 +67,7 @@ local powerNames = {}
 -- Returns the caption, parent container and commandtype of the button	
 function setUnitInfo(unit)
 	local unitInfoString = --printUnitName(unit) .. "\n"..
-                           printDescription(unit) .. "\n"..
+                           orange .. printDescription(unit) .. yellow .. "\n"..
                            printUnitLevel(unit) .. "\n"..
                            printUnitHealth(unit) .. "\n"..
                            printEXP(unit)
@@ -359,7 +362,7 @@ function printUnitHealth(unitID)
 	if health and health ~= nil then
 		healthString = "HP: " .. math.floor(health) .. " / " .. math.floor(maxHealth)
 		if multipliers["HEALTH"] ~= 1 and multipliers["HEALTH"] ~= nil then
-			healthString = healthString .. '+' .. string.format("%.1f", multipliers["HEALTH"])
+			healthString = healthString .. green .. '+' .. string.format("%.1f", multipliers["HEALTH"]) .. yellow
 		end
 		return healthString
 	else
@@ -374,7 +377,7 @@ function printEXP(unitID)
 	if currentXP ~= nil and maxXP ~= nil then
 		expString = "Experience Points: " .. math.floor(currentXP) .. " / " .. math.floor(maxXP)
 		if multipliers["XP"] ~= 1 and multipliers["XP"] ~= nil then
-			expString = expString .. '+' .. string.format("%.1f", multipliers["XP"])
+			expString = expString .. green .. '+' .. string.format("%.1f", multipliers["XP"]) .. yellow
 		end
 		return expString
 	else
@@ -398,7 +401,7 @@ function printVelocity(unitID)
 	if speed ~= nil then
 		speedString = "Speed: " .. speed
 		if multipliers["MOVE_SPEED"] ~= 1 and multipliers["MOVE_SPEED"] ~= nil then
-			speedString = speedString .. '+' .. string.format("%.1f", multipliers["MOVE_SPEED"])
+			speedString = speedString .. green .. '+' .. string.format("%.1f", multipliers["MOVE_SPEED"]) .. yellow
 		end
 		return speedString
 	else
@@ -418,7 +421,7 @@ function printDamage(unitID)
 	if damage ~= nil then
 		damageString = "Damage: " .. damage
 		if multipliers["DAMAGE"] ~= 1 and multipliers["DAMAGE"] ~= nil then
-			damageString = damageString .. '+' .. string.format("%.1f", multipliers["DAMAGE"])
+			damageString = damageString .. green .. '+' .. string.format("%.1f", multipliers["DAMAGE"]) .. yellow
 		end
 		return damageString
 	else
@@ -438,7 +441,7 @@ function printRange(unitID)
 	if range ~= nil then
 		rangeString = "Range: " .. range
 		if multipliers["ATTACK_RANGE"] ~= 1 and multipliers["ATTACK_RANGE"] ~= nil then
-			rangeString = rangeString .. '+' .. string.format("%.1f", multipliers["ATTACK_RANGE"])
+			rangeString = rangeString .. green .. '+' .. string.format("%.1f", multipliers["ATTACK_RANGE"]) .. yellow
 		end
 		return rangeString
 	else
@@ -458,7 +461,7 @@ function printAttSpeed(unitID)
 	if attSpeed ~= nil then
 		aspeedString = "Attack Speed: " .. attSpeed
 		if multipliers["ATTACK_SPEED"] ~= 1 and multipliers["ATTACK_SPEED"] ~= nil then
-			aspeedString = aspeedString .. '+' .. string.format("%.1f", multipliers["ATTACK_SPEED"])
+			aspeedString = aspeedString .. green .. '+' .. string.format("%.1f", multipliers["ATTACK_SPEED"]) .. yellow
 		end
 		return aspeedString
 	else
