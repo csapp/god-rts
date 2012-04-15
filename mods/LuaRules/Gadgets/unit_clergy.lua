@@ -33,6 +33,18 @@ local GetUnitDefID = Spring.GetUnitDefID
 local GetUnitHealth = Spring.GetUnitHealth
 local GetUnitTeam = Spring.GetUnitTeam
 
+local clergyCmds = {
+    CMD.MOVE,
+    CMD.STOP,
+    CMD.WAIT,
+    CMD.PATROL,
+    CMD.REPAIR,
+    CMD.ATTACK,
+    CMD.FIGHT,
+    CMD_CONVERT,
+    CMD_RESURRECT,
+}
+
 local convertCmd = {
       id      = CMD_CONVERT,
       name    = "Convert",
@@ -154,26 +166,13 @@ function gadget:UnitDestroyed(unitID, unitDefID, teamID)
     end
 end
 
-
-function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
-    if not Units.IsClergyUnit(unitID) then
-        return true
-    end
-
-    if cmdID ~= CMD_CONVERT then
-        CancelConvert(unitID)
-    end
-
-    return true
-end
-
 local function CanConvert(clergyID, villageID)
 	local reason
 	local teamID = Spring.GetUnitTeam(clergyID)
 	
     if converting[villageID] then
-	--	reason = "This village is already being converted."
-	--	LuaMessages.SendLuaUIMsg(MSG_TYPES.CONVERT_FAILED, {reason, teamID})
+        reason = "This village is already being converted."
+        LuaMessages.SendLuaUIMsg(MSG_TYPES.CONVERT_FAILED, {reason, teamID})
         return false
     end
 
@@ -218,28 +217,33 @@ local function StartResurrect(unitID,  resurrectPosition, radius)
 		end
 end
 
-function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
+
+function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
+    if not Units.IsClergyUnit(unitID) then
+        return false
+    end
+
     if cmdID == CMD_CONVERT then
         local villageID = cmdParams[1]
-        if Units.IsVillageUnit(unitID) then
-            return false
-        end
-
         if not CanConvert(unitID, villageID) then 
             return false 
         end
-
         local villageX, villageY, villageZ = Spring.GetUnitBasePosition(villageID)
-
         if utils.distance_between_units(unitID, villageID) < CONVERT_DISTANCE then
             StartConvert(unitID, villageID)
+            return false
         else
-            Spring.SetUnitMoveGoal(unitID, villageX, villageY, villageZ)
+            --Spring.SetUnitMoveGoal(unitID, villageX, villageY, villageZ)
+            GiveOrderToUnit(unitID, CMD.MOVE, {villageX, villageY, villageZ}, {CMD_OPTS.ALLOW})
             convert_pending[unitID] = villageID
+            return false
         end
-        return true, false
-	
-	elseif cmdID == CMD_RESURRECT then
+	elseif table.contains(clergyCmds, cmdID) and cmdOptions[1] ~= CMD_OPTS.ALLOW then
+        CancelConvert(unitID)
+        return true
+    end
+
+    if cmdID == CMD_RESURRECT then
 		local x,y,z = Spring.GetUnitBasePosition(unitID)
 		local center_x, center_y, center_z = unpack(cmdParams)
 		local unitPosition = {x,y,z}
@@ -247,25 +251,29 @@ function gadget:CommandFallback(unitID, unitDefID, teamID, cmdID, cmdParams, cmd
 		
 		if utils.distance_between_points(unitPosition, resurrectPosition) < RESURRECT_DISTANCE then
 			StartResurrect(unitID, resurrectPosition)
+            return false
 		else
 			GiveOrderToUnit(unitID, CMD.MOVE, resurrectPosition, {})
 			resurrect_pending[unitID] = resurrectPosition
+            return false
 		end
 	end
+
+    return true
 end
     
 function gadget:GameFrame(n)
-    if n % 30 ~= 0 then
+    if n % 15 ~= 0 then
         return
     end
     for clergyID, villageID in pairs(convert_pending) do
         if utils.distance_between_units(clergyID, villageID) < CONVERT_DISTANCE then
+            GiveOrderToUnit(clergyID, CMD.STOP, {}, {CMD_OPTS.ALLOW}) 
             if not CanConvert(clergyID, villageID) then
                 CancelConvert(clergyID)
             else
                 StartConvert(clergyID, villageID)
             end
-            GiveOrderToUnit(clergyID, CMD.STOP, {}, {}) 
         end
     end
 	for unitID, resurrectPosition in pairs(resurrect_pending) do
