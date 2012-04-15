@@ -11,7 +11,7 @@ local resources =
 		
 		projectiletextures =  
 		{
---			flare  =  'flare.tga',
+			flare  =  'flare.tga',
 --			lightning  =  'lightning.tga',
 --			flame  =  'flame.tga',
             cartooncloud = 'effects/cartooncloud.png',
@@ -22,6 +22,8 @@ local resources =
 			fireball = 'effects/fireball.tga',
 			rune = 'effects/rune.png',
 			blackfire = 'effects/blackfire.png',
+			largelaser= "gpl/largelaserfalloff.png",
+			smallflare= "gpl/smallflare.tga",
             --lightb2 = 'effects/lightningball2.tga',
             --cloudexplo = 'effects/cloudexplo.tga',
             --flowexplo = 'effects/flowexplo.tga',
