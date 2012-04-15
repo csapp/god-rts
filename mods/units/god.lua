@@ -82,6 +82,7 @@ local unitDef  =  {
 	
 	weaponDefs = {
 	ARM = {
+        soundStart = "punch2.wav",
 		avoidFriendly = 1,
 		areaofeffect = 8,
 		collideFriendly = false,
