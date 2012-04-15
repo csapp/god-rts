@@ -372,7 +372,7 @@ function loadPanel()
 				isDisabled = false,
 				state = selected,
 				OnMouseDown = {TabBuildingClick},
-				tooltip = "Active Commands Tab",
+				tooltip = "Build Buildings Tab",
 				cmdid = 2,
 				isDisabled = cmdtab,
 			}
