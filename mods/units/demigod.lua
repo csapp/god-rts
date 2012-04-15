@@ -162,6 +162,12 @@ local unitDef  =  {
 		weaponAcceleration=200,
 		damage = {
 			default = ATKDMG,
+			infantry = ATKDMG,
+			ranged   = ATKDMG,
+			cavalry  = ATKDMG,
+			hero     = ATKDMG,
+			clergy   = ATKDMG,
+			god 	 = 1.5*ATKDMG,
 		},	
 		
 	},
