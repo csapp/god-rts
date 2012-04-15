@@ -24,6 +24,7 @@ local resources =
 			blackfire = 'effects/blackfire.png',
 			largelaser= "gpl/largelaserfalloff.png",
 			smallflare= "gpl/smallflare.tga",
+			skullandbones = "effects/possession.png",
             --lightb2 = 'effects/lightningball2.tga',
             --cloudexplo = 'effects/cloudexplo.tga',
             --flowexplo = 'effects/flowexplo.tga',

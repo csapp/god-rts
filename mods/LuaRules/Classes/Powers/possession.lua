@@ -61,6 +61,7 @@ function Possession:_Use(cmdParams, cmdOptions)
         if (GetUnitTeam(unitID) ~= teamID and 
             table.contains(possessableClasses, Units.GetClass(unitID))) then
             self:TransferUnit(unitID)
+			Spring.SpawnCEG("skull",x,y,z)
         end
     end
     --Spring.PlaySoundFile("sounds/harp.wav")

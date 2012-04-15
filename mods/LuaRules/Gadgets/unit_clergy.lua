@@ -171,11 +171,11 @@ local function CanConvert(clergyID, villageID)
 	local reason
 	local teamID = Spring.GetUnitTeam(clergyID)
 	
-    if converting[villageID] then
+   --[[ if converting[villageID] then
 		reason = "This village is already being converted."
 		LuaMessages.SendLuaUIMsg(MSG_TYPES.CONVERT_FAILED, {reason, teamID})
         return false
-    end
+    end]]--
 
     -- FIXME this is throwing a weird error sometimes for some reason
     if GetUnitTeam(clergyID) == GetUnitTeam(villageID) then
