@@ -51,11 +51,10 @@ function widget:Initialize()
 
     window = Chili.Window:New{
         parent = screen0,
-		x = 0,
-        y = screenh-250-winh,
+        y = screenh-300-winh,
         height = winh,
         width = winw,
-        --right = 0,
+        right = 0,
         draggable = true,
         resizable = false,
         dragUseGrip = true,        

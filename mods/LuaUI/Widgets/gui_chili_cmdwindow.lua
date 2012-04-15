@@ -166,9 +166,9 @@ function createMyButton(cmd)
 
 		local y_axis = 0;
 		if not texture then
-			y_axis = 77 * (container.ystep-1)
+			y_axis = 77 * (container.ystep-1) + 45
 		else
-			y_axis = 77 * (container.ystep-1)
+			y_axis = 77 * (container.ystep-1) + 45
 		end
 		
 		local color = {0,0,0,1}
@@ -325,12 +325,12 @@ function loadPanel()
 		if cmdtab == 'units' then selected = "pressed" end
 		local UnitTabbutton = Chili.Button:New {
 				parent = container,
-				x = -85,
-				y = 60,
+				x = -300,
+				y = 1,
 				padding = {5, 5, 5, 5},
 				margin = {0, 0, 0, 0},
-				Width = 120,
-				minHeight = 20,
+				width = 90,
+				minHeight = 30,
 				caption = 'Units',
 				isDisabled = true,
 				state = selected,
@@ -343,12 +343,12 @@ function loadPanel()
 		if cmdtab == 'active' then selected = "pressed" end
 		local ActiveTabbutton = Chili.Button:New {
 				parent = container,
-				x = -85,
-				y = 20,
+				x = -200,
+				y = 1,
 				padding = {5, 5, 5, 5},
 				margin = {0, 0, 0, 0},
-				Width = 120,
-				minHeight = 20,
+				width = 90,
+				minHeight = 30,
 				caption = 'Commands',
 				isDisabled = false,
 				state = selected,
@@ -362,12 +362,12 @@ function loadPanel()
 		if cmdtab == 'building' then selected = "pressed" end
 		local BuildingTabbutton = Chili.Button:New {
 				parent = container,
-				x = -85,
-				y = 100,
+				x = -100,
+				y = 1,
 				padding = {5, 5, 5, 5},
 				margin = {0, 0, 0, 0},
-				Width = 120,
-				minHeight = 20,
+				width = 90,
+				minHeight = 30,
 				caption = 'Buildings',
 				isDisabled = false,
 				state = selected,
@@ -440,10 +440,10 @@ function widget:Initialize()
 	}		
 	
 	window0 = Chili.Window:New{
-		x = -450,
-		y = -250,	
-		width = 450,
-		height = 250,
+		x = -350,
+		y = -300,	
+		width = 350,
+		height = 300,
 		dockable = true,
 		parent = screen0,
 		textColor = {0.83,0.8,0.52,1},
