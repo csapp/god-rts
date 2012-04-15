@@ -37,39 +37,6 @@ local CMD_ICON_MAP = {
 	[CMD_POSSESSION] = imageDir.."possession.png",
 }
 
-function widget:Initialize()
-    if (not WG.Chili) then
-        widgetHandler:RemoveWidget()
-        return
-    end
-
-    Chili = WG.Chili
-    local screen0 = Chili.Screen0
-    local screenw, screenh = Spring.GetWindowGeometry()
-    local winh = 100
-    local winw = 350
-
-    window = Chili.Window:New{
-        parent = screen0,
-        y = screenh-300-winh,
-        height = winh,
-        width = winw,
-        right = 0,
-        draggable = true,
-        resizable = false,
-        dragUseGrip = true,        
-        children = {},
-    }
-
-    noPowerLabel = Chili.Label:New{
-        parent = window,
-        y="40%",
-        x=winw*0.2,
-        fontsize = 14,
-        caption = "No God powers selected yet.",
-    }
-
-end
 
 local function PopulatePowerWindow(initialCharges)
     local function p(a) return tostring(a).."%" end
@@ -97,7 +64,7 @@ local function PopulatePowerWindow(initialCharges)
             width = barwidth,
             right  = 40,
             x      = 100,
-            value = math.floor((tonumber(charge) or 1)*100),
+            value = math.floor((tonumber(charge) or 0)*100),
             y = y,
             font   = {color = {1,1,1,1}, outlineColor = {0,0,0,0.7}, },
         }
@@ -116,6 +83,47 @@ local function QueryPowerCharge(id)
     WG.GadgetQuery.CallManagerElementFunction(
        function(value) UpdatePowerBar(id, tonumber(value)*100) end,
        Managers.TYPES.POWER, id, "GetCharge")
+end
+
+function widget:Initialize()
+    if (not WG.Chili) then
+        widgetHandler:RemoveWidget()
+        return
+    end
+
+    Chili = WG.Chili
+    local screen0 = Chili.Screen0
+    local screenw, screenh = Spring.GetWindowGeometry()
+    local winh = 100
+    local winw = 350
+
+    window = Chili.Window:New{
+        parent = screen0,
+        y = screenh-300-winh,
+        height = winh,
+        width = winw,
+        right = 0,
+        draggable = true,
+        resizable = false,
+        dragUseGrip = true,        
+        children = {},
+    }
+
+    local godUnitDefID = UnitDefNames["god"].id
+    if Spring.GetTeamUnitsSorted(Spring.GetMyTeamID())[godUnitDefID] then 
+        WG.GadgetQuery.CallManagerFunctionOnAll(
+                PopulatePowerWindow, Managers.TYPES.POWER, "GetCharge")
+        return
+    end
+
+    noPowerLabel = Chili.Label:New{
+        parent = window,
+        y="40%",
+        x=winw*0.2,
+        fontsize = 14,
+        caption = "No God powers selected yet.",
+    }
+
 end
 
 function widget:GameFrame(n)
