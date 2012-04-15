@@ -220,7 +220,7 @@ end
 
 function gadget:AllowCommand(unitID, unitDefID, teamID, cmdID, cmdParams, cmdOptions, cmdTag)
     if not Units.IsClergyUnit(unitID) then
-        return false
+        return true
     end
 
     if cmdID == CMD_CONVERT then
