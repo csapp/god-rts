@@ -206,8 +206,8 @@ local mapinfo = {
 	},
 
 	teams = {
-		[0] = {startPos = {x = 450, z = 450}},--player1
-		[1] = {startPos = {x = 3646, z = 3646}},--player2
+		[0] = {startPos = {x = 480, z = 480}},--player1
+		[1] = {startPos = {x = 3600, z = 3600}},--player2
 	--	[2] = {startPos = {x = 305, z = 3896}},--hidden
 	---	[3] = {startPos = {x = 3846, z = 300}},--hidden
 	--	[4] = {startPos = {x = 2560, z = 3846}},--player2 close base
