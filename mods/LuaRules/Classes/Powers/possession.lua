@@ -20,11 +20,11 @@ local TransferUnit = Spring.TransferUnit
 
 Possession = RangedPower:Inherit{
     classname = "Possession",
-    radius = 150,
+    radius = 100,
     id = CMD_POSSESSION,
     powerName = "Possession",
     powerType = POWERS.TYPES.DEFENSIVE,
-    rechargeRate = 1/300,
+    rechargeRate = 1/180,
     possessableClasses = {
         Units.CLASSES.INFANTRY,
         Units.CLASSES.CAVALRY,

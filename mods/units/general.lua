@@ -22,7 +22,7 @@ local unitDef  =  {
         level = 3,
         supply_cost = 3,
         morph_into = "heroinfantry",
-        max_xp = 2000,
+        max_xp = 1000,
     },
 
     sounds = {

@@ -20,7 +20,7 @@ local unitDef  =  {
         real_speed = 90,
         class = "infantry",
         morph_into = "general",
-        max_xp = 1000,
+        max_xp = 500,
         level = 2,
         supply_cost = 2,
     },

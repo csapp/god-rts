@@ -20,7 +20,7 @@ local unitDef  =  {
         real_speed = 90,
         class = "ranged",
         morph_into = "marksman",
-        max_xp = 500,
+        max_xp = 100,
         level = 1,
         supply_cost = 1,
     },

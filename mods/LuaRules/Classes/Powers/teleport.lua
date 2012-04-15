@@ -18,7 +18,7 @@ Teleport = RangedPower:Inherit{
     id = CMD_TELEPORT,
     powerName = "Teleport",
     powerType = POWERS.TYPES.DEFENSIVE,
-    rechargeRate = 1/30,
+    rechargeRate = 1/60,
     cmdType = CMDTYPE.ICON_MAP,
     tooltip = "Teleport to another location on the map",
 }

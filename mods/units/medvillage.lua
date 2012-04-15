@@ -60,7 +60,7 @@ local unitDef =
         convert_time = 60,
         convert_xp = 750,
         level = 2,
-        max_xp = 5000,
+        max_xp = 1000,
         morph_into = "largevillage",
     },
     sounds = {

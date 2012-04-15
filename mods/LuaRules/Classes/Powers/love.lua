@@ -18,11 +18,11 @@ local GetUnitTeam = Spring.GetUnitTeam
 
 WholeLottaLove = RangedPower:Inherit{
     classname = "WholeLottaLove",
-    radius = 150,
+    radius = 100,
     id = CMD_LOVE,
     powerName = "Whole Lotta Love",
     powerType = POWERS.TYPES.DEFENSIVE,
-    rechargeRate = 1/300,
+    rechargeRate = 1/120,
     cmdType = CMDTYPE.ICON_MAP,
     tooltip = "Revive units within a certain radius to full health",
 }

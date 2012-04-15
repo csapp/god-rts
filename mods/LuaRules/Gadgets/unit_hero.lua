@@ -11,6 +11,8 @@ function gadget:GetInfo()
     }
 end
 
+include "LuaUI/Headers/units.h.lua"
+
 local hero_infantry_id = UnitDefNames["heroinfantry"].id
 local hero_ranged_id = UnitDefNames["heroranged"].id
 local hero_cavalry_id = UnitDefNames["herocavalry"].id
@@ -42,7 +44,7 @@ function applyHeroBonus(listOfHeroInfo, n)
 	for i, heroInfo in pairs(listOfHeroInfo) do
 		local unitList = Spring.GetUnitsInSphere(heroInfo[1], heroInfo[2], heroInfo[3], 100, heroInfo[5]) --Get units on same team around Hero within radius
 		for j,w in pairs(unitList) do
-			if w == heroInfo[4] then
+			if Units.IsHeroUnit(w) then
 				table.remove(unitList, j) -- remove the Hero from this list since he doesn't get affected by the bonus
 			end
 			if drawCEG == true then

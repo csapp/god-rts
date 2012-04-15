@@ -60,7 +60,7 @@ local unitDef =
         convert_time = 30,
         convert_xp = 500,
         level = 1,
-        max_xp = 2000,
+        max_xp = 500,
         morph_into = "mediumvillage",
     },
     sounds = {

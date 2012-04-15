@@ -1,9 +1,9 @@
 local unitName  =  "zombie"
 
 --Attribute Defintions
-local HP = 100
+local HP = 50
 local ATKDMG = 10
-local ATKSPD = 0.5
+local ATKSPD = 1
 local ATKRNG = 20
 local MOVESPD = {0.25,0.15} -- {walkspeed, acceleration}
 
