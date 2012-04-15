@@ -83,6 +83,21 @@ local function generateVillagers(teamID)
 	return villagersGenerated 
 end
 
+local function reduceFaith(teamID)
+    -- Each timestamp, a team will lose faith according to this formula:
+    -- faithReduced = sum(GetLevel(v)*GetMultiplierValue(v) for v in ownedVillages(teamID))
+	local faithReduced = 0
+	
+    for _, unitID in pairs(GetTeamUnits(teamID)) do
+        if Units.IsVillageUnit(unitID) then
+            faithReduced = faithReduced + 1
+        end
+    end
+	
+	return faithReduced/2 
+
+end
+
 function gadget:GameFrame(n)
 	if (n % timeInterval == 0) then --denotes one second
 		counter = counter + 1
@@ -90,6 +105,7 @@ function gadget:GameFrame(n)
 	if (counter == counterMaxValue) then --every five seconds generate resources
 		for i=1, #teams do
 			AddTeamResource(teams[i], "metal", generateVillagers(teams[i]))
+			UseTeamResource(teams[i], "energy", reduceFaith(teams[i]))
 			if DEBUG then getResources(teams[i]) end
 		end
 		counter = 0
